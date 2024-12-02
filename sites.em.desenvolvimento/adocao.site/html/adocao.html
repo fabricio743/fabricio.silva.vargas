@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/index.css">
+    <title>Recapitulação</title>
+</head>
+<body>
+    <!--Parte do formulario-->
+    <div class="forme">
+        <!-- Botão para fechar e abrir-->
+        <div class="buttonX" onclick="clicado()"></div>
+        <div class="text-form">
+                <h1>Você esta querendo adotar esse cachorro:</h1>
+            </div>
+        <form action="">
+                <p><label for="nome">Qual é o seu nome?</label> <br> 
+                <input type="text" name="inome" id="nome">
+                </p>
+
+                <p><label for="city">Qual é a cidade que você mora?</label> <br> <input type="text" name="icity" id="city">
+                </p>
+
+                <p><label for="numb">Qual é seu número de telefone?  <br> (Whatssap) </label><br> 
+                <input type="number" name="inumb" id="numb"></p>
+
+                <button><input type="submit" value="Confirmar"></button>
+            </form>
+    </div>    
+    <section id="info1">
+        <h1>Planeta animal</h1>
+        <div class="org-inf">
+            
+            <a href="https://www.instagram.com/clinicavet.planetaanimal/" target="_blank"><img src="../img/planeta-animal.jpg" alt="foto-local"></a>
+            
+            <p>Conheça o nosso universo de serviços especializados, onde cada detalhe é importante para nós!</p>
+        
+            <p>🩺 Na nossa clínica veterinária, oferecemos cuidados médicos excepcionais para os seus pets, além de contar com terapias complementares como cromoterapia e Reiki Animal.</p>
+
+            <p>🛍️No nosso petshop você encontrará produtos de qualidade para satisfazer todas as necessidades dos seus companheiros peludos.</p>
+
+            <p>✂️Além disso, aproveite a experiência de beleza com os nossos serviços de estética animal, projetados para deixar seus pets radiantes como estrelas.</p>
+        </div>
+    </section>
+    <section id="anim2">
+    <!--Cachorros--> 
+        <article>
+            <div id="dog1">
+                 <ul>
+                    <li>Nome: Alfredo.</li>
+                    <li>Raça: Boxer.</li>
+                    <li>Idade: 2 anos.</li>
+                 </ul>
+            </div>
+            <button > <a href="https://api.whatsapp.com/send/?phone=554998176946&text=Eu+gostaria+de+adotar+um+cachorro.&type=phone_number&app_absent=0" target="_blank">Tenho interesse 📩</a></button>
+        </article>
+
+        <article>
+            <div id="dog2">
+                 <ul>
+                    <li>Nome: Gengibre.</li>
+                    <li>Raça: Buldogue;</li>
+                    <li>Idade: 6 meses.</li>
+                 </ul>
+            </div>
+            <button onclick="clicado1()">Tenho interesse 📩</button>
+        </article>
+
+        <article>
+            <div id="dog3">
+                 <ul>
+                    <li>Nome: Laika.</li>
+                    <li>Raça: Labrador.</li>
+                    <li>Idade: 1 ano.</li>
+                 </ul>
+            </div>
+            <button onclick="clicado1()">Tenho interesse 📩</button>
+        </article>
+
+        <article>
+            <div id="dog4">
+                 <ul>
+                    <li>Nome: Milk.</li>
+                    <li>Raça: Labrador.</li>
+                    <li>Idade: 3 anos.</li>
+                 </ul>
+            </div>
+            <button onclick="clicado1()">Tenho interesse 📩</button>
+        </article>
+
+        <article>
+            <div id="dog5">
+                 <ul>
+                    <li>Nome: Lobo.</li>
+                    <li>Raça: Pastor-Alemão</li>
+                    <li>Idade: 1 ano.</li>
+                 </ul>
+            </div>
+            <button onclick="clicado1()">Tenho interesse 📩</button>
+        </article>
+
+        <article>
+            <div id="dog6">
+                 <ul>
+                    <li>Nome: Matador.</li>
+                    <li>Raça: Pitbull.</li>
+                    <li>Idade: 8 meses.</li>
+                 </ul>
+            </div>
+            <button onclick="clicado1()">Tenho interesse 📩</button>
+        </article>
+
+        <article>
+            <div id="dog7">
+                 <ul>
+                    <li>Nome: Pão.</li>
+                    <li>Raça: Pug.</li>
+                    <li>Idade: 5 meses.</li>
+                 </ul>
+            </div>
+            <button onclick="clicado1()">Tenho interesse 📩</button>
+        </article>
+
+        <article>
+            <div id="dog8">
+                 <ul>
+                    <li>Nome: (sem nome)</li>
+                    <li>Raça: Rottweiler.</li>
+                    <li>Idade: 7 meses.</li>
+                 </ul>
+            </div>
+            <button onclick="clicado1()">Tenho interesse 📩</button>
+        </article>
+    </section>
+    <section id="maps3">
+        <article><iframe class="mapa" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2801.1500816222006!2d-53.001492013144365!3d-27.08413016413862!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94fb3f6d3e9d7f6d%3A0xd4c083e24d39576a!2sPlaneta%20Animal!5e0!3m2!1spt-BR!2sbr!4v1722470422797!5m2!1spt-BR!2sbr" width="80%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></article>
+        <article>
+            <p>Número de telefone: (49)3325-4060</p>
+            <p>Whatssap: (49)98503-9277</p>
+        </article>
+    </section>
+    <script src="../js/index.js"></script>
+</body>

@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Concert+One&family=Frank+Ruhl+Libre:wght@300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Concert+One&family=Frank+Ruhl+Libre:wght@300..900&family=PT+Sans+Narrow:wght@400;700&display=swap');
+*{
+    padding: 0%;
+    margin: 0%;
+    font: 24px, arial, sans-serif ;
+}
+
+body{
+    background-image: url(../img/gramado.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+/*Aqui é a parte da interatividade do forme*/
+.forme{
+    background-color: rgba(255, 209, 25, 0.818);
+    position: fixed;
+    width: 80%;
+    min-height: 70%;
+    top: 10%;
+    left: 10%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    display: none;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.157);
+} 
+/*Botão para fechar e abrir*/
+.forme > .buttonX{
+    position: absolute;
+    right: 2%;
+    top: 2%;
+    background:url(../img/botao-fechar.png);
+    background-position: center center;
+    background-size: contain;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}
+.forme > .text-form{
+    padding: 15px;
+    margin-bottom: 6%;
+    text-align: center;
+}
+.forme > .text-form > h1{
+    margin-bottom: 15px;
+}
+.forme > form{
+    display: flex;
+    flex-flow: column;
+    background-color: #f0cc3db8;
+    width: 80%;
+    text-align: center;
+    padding: 75px 0px;
+    border-radius: 10px;
+}
+.forme > form > p {
+    margin-bottom: 40px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+.forme > form > p > input{
+    margin: 15px 0px;
+    padding: 3px;
+    height: 30px;
+    background-color: white;
+}
+.forme > form > button{
+    width: 150px;
+    height: 40px;
+    align-self: center;    
+}
+.forme > form > button > input{
+    cursor: pointer;
+    width: 140px;
+    height: 30px;
+    border: none;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+@media (max-width:1200px) {
+    .forme{
+        width: 90%;   
+        padding: 10px;    
+        left: 3%;
+        top: 10%;
+    } 
+    .forme > form{
+        width: 80%;
+        padding: 20px 0px;
+    }
+    .forme > form > p {
+        margin: 1px;
+    }
+}
+/*Parte1*/
+#info1{
+    width: 100%;
+    padding-bottom: 20px;
+    text-align: center;    
+    background-color: rgba(245, 222, 179, 0.179);
+}
+#info1 > h1{
+    display: flex;
+    height: 20vh;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5em;
+    font-variant: small-caps;
+    color: white;
+    letter-spacing: 5px;
+    padding: 15px;
+    background-color: #F0903D;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.269);
+}
+#info1 > .org-inf{
+    height: 85%;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 15px;
+}
+#info1 > .org-inf > a{
+    margin-top: 10%;
+}
+#info1 > .org-inf > a > img{
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+}
+#info1 > .org-inf > p{
+    width: 800px;
+    padding: 13px;
+    margin-top: 2%;
+    background-color: rgba(255, 255, 255, 0.764);
+    border-radius: 15px 15px 0px 15px;
+    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.333);
+    font-family: "PT Sans Narrow", sans-serif;
+    font-weight: 320;
+    font-size: 28px;
+    
+
+}
+/* Parte 1 pronta para celular*/
+@media (max-width: 850px)  {
+    #info1{
+        width: 100%;
+        min-height: 100vh;
+        text-align: center;    
+        background-color: rgba(245, 222, 179, 0.313);
+    }
+    #info1 > .org-inf > a > img{
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        margin-bottom: 10%;
+    }
+    #info1 > .org-inf > p{
+        width: 80%;
+        font-size: 24px;
+    }
+}
+@media (max-width: 650px)  {
+    #info1 > .org-inf > p{
+        font-size: 20px;
+    }
+}
+/*Parte 2*/
+#anim2{
+    display: flex;
+    flex-flow: row wrap;
+    background-color: #1e574e7e;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 5%;
+    min-height: 100vh;
+}
+#anim2 > article{
+    width: 500px;
+    height: 450px;
+    display: flex;
+    flex-flow: column;
+    margin: 30px 0px;
+}
+#anim2 > article > div{
+    height: 90%;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.727);    
+}
+#anim2 > article > div > ul{
+    list-style: none;
+    background-color: rgba(0, 0, 0, 0.204);
+    width: 40%;
+    padding: 5px;
+}
+#anim2 > article > div > ul > li{
+    color: white;
+}
+#anim2 > article > button{
+    width: 34%;
+    height: 70px;
+    padding: 4px;
+    margin-top: 10px;
+    border-radius: 5px;
+    align-self: center;
+    background-color: rgba(245, 222, 179, 0.735);
+    font-size: 22px;
+}
+#anim2 > article > button:hover{
+    background-color: rgba(0, 0, 0, 0.648);
+    color: white;
+}
+/*Versão para celular parte 2*/
+@media (max-width: 700px) {
+    #anim2{
+        padding: 3% 0%;
+    }
+    #anim2 > article{
+        width: 270px;
+        height: 450px;
+        margin: 60px 0px;
+    }
+    #anim2 > article > div > ul{
+        width: 70%;
+    }
+    #anim2 > article > button{
+        width: 80%;
+        height: 50px;
+        font-size: 18px;
+    }
+}
+#dog1{
+    background: url(../img/boxer.jpg);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#dog2{
+    background: url(../img/Buldogue.jpg);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#dog3{
+    background: url(../img/labrador-es.jpg);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#dog4{
+    background: url(../img/labrador.jpg);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#dog5{
+    background: url(../img/pastoralemao.jpg);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#dog6{
+    background: url(../img/pitbull.jpg);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#dog7{
+    background: url(../img/pug.jpg);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+#dog8{
+    background: url(../img/Rottweiler.jpg);
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+/*Parte 3*/
+#maps3{
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.26);
+    display: flex;
+    min-height: 50vh;
+    justify-content: center;
+    align-items: center;
+}
+#maps3 > .mapa{
+    width: 700px;
+}
+#maps3 > article{
+    width: 50%;
+    text-align: center;
+}
+#maps3 > article > p{
+    color: white;
+    font-size: 1.3em;
+    font-family: "Concert One", sans-serif;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.511);
+}
+@media (max-width:1200px) {
+    #maps3{
+        display: flex;
+        flex-flow: column;
+        padding: 15px 0px;
+    }
+    #maps3 > article{
+        width: 100%;
+        margin: 30px;
+        text-align: center;
+    }
+}

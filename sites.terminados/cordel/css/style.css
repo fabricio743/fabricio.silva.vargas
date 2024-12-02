@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Dancing+Script:wght@400;500;600;700&family=Josefin+Sans:ital,wght@0,300;0,400;0,500;1,300;1,500&family=Kalam:wght@300;400;700&family=Merienda:wght@300;400;500;600;700;800;900&family=Mukta:wght@200;300;400;500;600;700;800&family=Ultra&display=swap');
+
+:root{
+--fonte-padrao: arial,verdana,'sans-serif';
+--fonte-destaque:'Kalam', 'cursive';
+}
+
+*{
+    margin: 0%;
+    padding: 0%;
+}
+
+html, body{
+    min-height: 100vh;
+    background-color: wheat;
+}
+a{
+    color: white;
+   
+    text-decoration: none;
+}
+a:hover{
+    color: red;
+    text-decoration: underline;
+}
+p{
+    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.525);
+    font-family: var(--fonte-destaque);
+    font-size: 1.5em;
+    line-height: 2em;
+}
+
+header{
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 50px 0px;
+}
+
+header h1{
+    font-variant: small-caps;
+}
+header a{
+     font-size: 16px;
+}
+
+section{
+    padding-top: 20vh;
+    padding-bottom: 20vh;
+    padding-left: 30px;
+    line-height: 2em;
+    box-shadow: inset 6px 6px 13px 0px black;    background-size: cover;
+    background-attachment: fixed;
+}
+section.semfoto{
+    background-color: white;
+    color: black;
+}
+
+section.comfoto{
+    background-color: blueviolet;
+    color: white;
+}
+section.comfoto p{
+    padding: 20px;
+    background-color:rgba(0, 0, 0, 0.61);
+    width: 300px;
+}
+section#img01{
+    background-image: url(../imagens/imgcordel01.png);
+    background-position:  center top;
+
+
+}
+section#img02{
+    background-image: url(../imagens/cordel03.jpeg);
+    background-position:  center top;
+}
+footer{
+    background-color: rgb(0, 0, 0);
+    color: white;
+    text-align: center;
+    padding: 30px 0px;
+}

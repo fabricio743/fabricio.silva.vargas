@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>treino2</title>
+</head>
+<body>
+    <main>
+        <section id="titulo">
+            <h1>Banco de dados</h1> <br>
+            <h1>Amigos</h1>
+        </section>
+        <section id="formulario">
+            <form action="index.php" autocomplete="off" >
+                <p> 
+                    <label for="nomeid">Nome - </label>
+                    <input type="text" name="nome" id="nomeid" required>
+                </p>
+                <p>
+                    <label for="dataid">Data de nascimento - </label>
+                    <input type="date" name="data" id="dataid" required>
+                </p>
+                <p>
+                    <label for="est_nascid">Estado de nascimento - </label>
+                    <input type="text" name="est_nasc" id="est_nascid" required>
+                </p>
+                <p>
+                    <label for="cid_nascid">Cidade de nascimento - </label>
+                    <input type="text" name="cid_nasc" id="cid_nascid" required>
+                </p>
+                <p id="button">
+                    <input type="submit" value="Enviar">
+                    <input type="reset" value="Limpar">
+                </p>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

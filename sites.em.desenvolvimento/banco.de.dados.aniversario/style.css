@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Frank+Ruhl+Libre:wght@300..900&display=swap');
+*{
+    margin: 0%;
+    padding: 0%;
+    font-family: frank;
+}
+.anton-regular {
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  
+header{
+    text-align: center;
+    padding: 20px;
+}
+header > h1{
+    font-family: anton;
+    letter-spacing: 4px;
+    text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.281);
+}
+main{
+    width: 100%;
+    height: 86vh;
+    background: url(pexels-ilia-bronskiy-1137858493-21802601.jpg);
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    justify-content: center top;
+}
+form{
+    background-color: rgba(255, 255, 255, 0.856);
+    width: 500px;
+    margin-top: 100px;
+    padding: 30px;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    border-radius: 24px;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.342);
+}
+form> P{
+    margin: 20px 5px;
+}
+form > #buttons{
+    margin: auto; 
+}
+form > #buttons > input{
+    background-color: rgba(0, 0, 0, 0.829);
+    width: 90px;
+    height: 45px;
+    border-radius: 24px;
+    color: white;
+    cursor: pointer;
+}
+form > #buttons > input:hover{
+    color: rgb(255, 0, 0);
+}
+section{
+    margin-top: 50px;
+    background-color: rgba(255, 255, 255, 0.911); 
+    border-radius: 24px;   
+    padding: 12px;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.342);
+}
+section > a{
+    text-decoration: none;
+    color: black;
+}
+section > a:hover{
+    text-decoration: none;
+    color: rgb(255, 0, 0);
+}

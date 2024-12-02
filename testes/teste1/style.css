@@ -1,0 +1,75 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    font-family: monospace;
+}
+header{
+    width: 99.3%;
+    background-color: aquamarine;
+    display: flex;
+    justify-content: space-between;
+
+}
+header h1{
+
+}
+ul{
+    margin: auto;
+    width: 800px;
+    text-align: center;
+    list-style: none;
+    background-color: rgb(45, 45, 51);
+}
+ul li {
+    display: inline-block;
+    position: relative;
+}
+ul li a{
+    display: block;
+    padding: 20px 25px;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-size: 20px;
+}
+ul li ul.drop li{
+    display: block;
+}
+ul >li > .drop > li{
+    background-color: rgb(0, 0, 0);
+}
+ul > li > .drop > li > a{
+    color: aquamarine;
+    padding: 22px 0px;
+}
+ul li ul.drop {
+    width: 100%;
+
+    position: absolute;
+    display: none;
+}
+ul li a:hover{
+    background-color: brown;
+}
+ul li:hover ul.drop{
+    display: block;
+}
+main{
+    background-color: rgb(45, 45, 51);
+    max-width: 800px;
+    padding: 30px 0px;
+    margin: auto;
+}
+main section{
+    text-align: center;
+}
+main section p{
+    color: white;
+    max-width: 70%;
+    text-align: center;
+    margin: auto;
+}
+main section h1{
+    color: white;
+    margin: 20px;
+}

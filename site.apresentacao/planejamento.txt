@@ -1,0 +1,13 @@
+Desenvolvimento do site
+
+Primeira parte
+-Uma foto minha.
+-Breve explicação de com oque trabalho e quais linguagens estou me especializando.
+
+Segunda parte
+-Mostrar os sites criados sem Js.
+-Mostrar os sites criado com Js.
+-Mostrar os sites criados com o PHP integrando o SQL(banco de dados).
+
+Terceira parte
+-Explicação final e links para rede social.

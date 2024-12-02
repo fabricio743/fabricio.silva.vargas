@@ -1,0 +1,21 @@
+Site para adoção de cachorros....
+
+Site divisão:
+
+1-informativo da ong.
+2-Os animais.
+3-Mapa de onde é a ong.
+4-Mais informações.
+5-Parte que diz contatos e pararam...
+
+Detalhando as divisões:
+
+1-Vai falar sobre como foi criada, a maneira de como funciona todos os processos de adoção e doação.
+
+2-Conter a foto dos animais, nome(não necessário), raça, idade(não necessário).
+
+3-Mapa de algum petshop da cidade.
+
+4-Comentário de pessoas, falar dos veterinários que trabalharam de graça por amor pararam, falar das pessoas que auxiliam com doações ou serviço voluntário.
+
+5-Parte com número de telefone(fixo e whatssap), e-mail e Cep.

@@ -1,0 +1,7 @@
+Site de cadastro de pessoas:
+
+*Objetivo: Criar um site que deva servir para armazenar as informações das pessoas.
+
+*Descrição dos principais pontos da criação: A estrutura do site deve ser simples e conter a area para digitação, um botão para guardar, um para limpar oque já foi digitado e um para ter acesso a uma parte onde mostre as informações já armazenadas.
+
+(Ver como vou desenvolver a parte onde armazena os dados, se dentro de um banco de dados sql ou dentro do próprio site

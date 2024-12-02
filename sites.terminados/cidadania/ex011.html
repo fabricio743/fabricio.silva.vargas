@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pais</title>
+    <style>
+        body{
+            text-align: center;
+            background-color: rgb(46, 192, 129);
+            font: normal 17pt arial;
+        }
+    </style>
+</head>
+<body>
+    <h1>Identificação de cidadania</h1>
+    Você nasceu em qual Pais? <input type="text" name="fromxt" id="fromxt">
+    <input type="button" value="enviar" onclick="relatorio()">
+    <div id="res">
+
+    </div>
+    <script>
+        function relatorio(){
+            var pais = window.document.getElementById('fromxt')
+            var res = window.document.querySelector('div#res')
+            var p = String(pais.value)
+            
+            if (p == 'Brasil' || 'brasil'){
+                res.innerHTML += `<p>Você é brasileiro pois nasceu no ${p}</p>`
+            }else{
+                res.innerHTML += `<p>Você é estrangeiro pois nasceu no/a ${p}</p>`
+            }
+        }
+    </script>
+</body>
+</html>
