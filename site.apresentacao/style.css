@@ -20,7 +20,6 @@ header{
 main{
     background-color: #6F80DC;
     padding: 60px 60px;
-
 }
 main > h1{
     text-align: center;
@@ -43,6 +42,9 @@ main > #p_intro > p{
     line-height: 42px;
 }
 @media (max-width:1065px){
+    main{
+        padding: 5px;
+    }
     main > #p_intro{
         flex-flow: column;
     }
