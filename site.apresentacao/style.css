@@ -33,10 +33,10 @@ main > #p_intro{
     margin: 60px 0px;
 }
 main > #p_intro > img{
-    border-radius: 10px;
+    border-radius: 30%;
 }
 main > #p_intro > p{
-    width: 625px;
+    max-width: 625px;
     margin-left: 54px;
     font-size: 26px;
     line-height: 42px;
