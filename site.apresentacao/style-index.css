@@ -1,0 +1,165 @@
+*{  margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+body{
+    background-color: aquamarine;
+}
+
+/*
+PRIMEIRA PARTE
+*/
+nav{
+    display: flex;
+    background-color: hsl(0, 0%, 54%);
+    align-items: center;
+    max-width: 2500px;
+}
+nav > h1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40%;
+    height: 80px;
+    color: white;
+    background: linear-gradient(to right , black 85% ,  rgb(89, 89, 89));
+    text-align: center;
+}
+#aqui{
+    width: 60%;
+    height: 80px;
+    background-color: rgb(89, 89, 89);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+nav >#aqui > ul{
+    display: flex;
+    list-style: none;
+}
+nav >#aqui > ul > li{
+    margin: 0px 15px;
+}
+nav >#aqui > ul > li > a{
+    color: white;
+    text-decoration: none;
+}
+nav >#aqui > ul > li > a:hover{
+    color: rgb(255, 200, 0);
+}
+/*
+SEGUNDA PARTE
+*/
+header{
+    background-color: rgb(89, 89, 89);
+    display: flex;
+    flex-flow: row wrap;
+    max-width: 2500px;
+}
+header > #text{
+    background: linear-gradient(to right , black 85% ,  rgb(89, 89, 89));
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    height: 1200px;
+}
+header > #text > h2{
+    text-align: right;
+    color: white;
+}
+header > #box-img{
+    width: 60%;
+    height: 1200px;
+    background: url(img/eu\ black\ corpo.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+@media (max-width: 1200px) {
+    /* Primeira parte*/
+
+    nav {
+        flex-flow: column wrap;
+    }
+    nav > h1 {
+        width: 100%;
+        height: 80px;
+        padding-top: 20px;
+        background: black;
+    }
+    #aqui{
+        width: 100%;
+        background: linear-gradient(black 35%,  rgb(89, 89, 89));
+    }
+    /*Segunda parte*/
+    header{
+        flex-flow: column wrap;
+        align-items: center;
+    }
+    header > #text{
+        background: rgb(89, 89, 89) ;
+        width: 100%;
+        height: 400px;
+    }
+    header > #text > h2{
+        text-align: center;
+        color: rgb(0, 0, 0);
+    }
+    header > #box-img{
+        width: 90%;
+        height: 900px;
+        background: url(img/eu\ black\ corpo.jpg);
+        background-repeat: no-repeat;
+        background-size: contain ;
+    }
+}
+
+main{
+    max-width: 2500px;
+    display: flex;
+    flex-flow: column;
+}
+#colun1{
+    display: flex;
+}
+#colun1 > #arti-img {
+    width: 40%;
+    height: 800px;
+    background: url(img/eu\ black\ perfil.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#colun1 > #arti-text{
+    background-color: rgb(89, 89, 89);
+    width: 60%;
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#colun1 > #arti-text > h2{
+    margin-bottom: 30px;
+}
+#colun1 > #arti-text > h2,p{
+    color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 10px;
+}
+#colun2{
+    width: 100%;
+    height: 700px;
+    background-color: black;
+    text-align: center;
+}
+#colun2 > h1{
+    color: white;
+    margin: 40px;
+}
+#colun2 > article{
+    width: 100%;
+    height: 500px;
+    background-color: tomato;
+}
