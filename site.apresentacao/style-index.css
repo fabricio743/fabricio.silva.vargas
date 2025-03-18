@@ -60,6 +60,16 @@ nav > section > ul > li > a:hover{
     color: white;
     text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.689)
 }
+nav > section > ul > li > #whatsapp:hover{
+    text-shadow: 1px 1px 6px rgba(0, 128, 0, 0.755);
+}
+nav > section > ul > li > #linkedin:hover{
+    text-shadow: 1px 1px 8px rgba(12, 12, 229, 0.878);
+}
+nav > section > ul > li > #instagram:hover{
+    text-shadow: 1px 1px 6px rgba(255, 0, 128, 0.419);
+}
+
 /*
 SEGUNDA PARTE
 */
