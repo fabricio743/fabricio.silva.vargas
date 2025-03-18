@@ -185,8 +185,15 @@ main{
     text-shadow: 1px 1px 6px rgba(255, 255, 255, 0.5);
 }
 #colun3{
+    display: flex;
+    flex-flow: column;
     color: white;
-    
+    justify-content: space-between;
+    padding-bottom: 40px;
+}
+#colun3 > div > p{
+    color: rgb(183, 182, 182);
+    text-shadow: 1px 5px 3px rgba(255, 255, 255, 0.142);
 }
 /*monitor-menor*/
 @media (max-width: 1200px) {
