@@ -1,11 +1,11 @@
 Melhorias do site:
 
-1-Terminar de escrever a parte onde eu falo quem eu sou.
+1-            Terminar de escrever a parte onde eu falo quem eu sou.
 
-2-Diminuir as letras dos links das redes sociais (arrumar as redes sociais).
+2- arrumar as redes sociais
 
-3-Trocar o fundo cinza por algo mais agradável aos olhos.
+3-        Trocar o fundo cinza por algo mais agradável aos olhos.
 
-4-Incluir uma parte dedicada a mostrar trabalhos como técnico de infotmatica.
+4-Incluir uma parte dedicada a mostrar trabalhos como técnico de informatica, colocar fotos e serviços prestados
+.
 
-Tenho 22 anos e sou natural de São Paulo "capital", moro em Santa Catarina a 9 anos já e sou formado em Desenvolvimento Web. Também tenho curso de Informatica e excel. Faço trabalhos como técnico de informatica nas horas livres. 

@@ -95,10 +95,92 @@ header > section > #box-img{
     background-repeat: no-repeat;
     background-size: cover;
 }
-
+/*
+TERCEIRA PARTE
+*/
+main{
+    max-width: 2462px;
+    display: flex;
+    flex-flow: column;
+    text-align: center;
+}
+#colun1{
+    width: 100%;
+    height: 740px;
+    padding: 0px 0px 30px 0px;
+    background-color: black;
+    text-align: center;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+#colun1 > h1{
+    color: white;
+    font-size: 2em;
+    margin: 40px;
+}
+#colun1 > article{
+    width: 100%;
+    height: 500px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+}
+#colun1 > article > .caixa{
+    min-width: 200px;
+    max-height: 40px;
+}
+#colun1 > article > .caixa > a{
+    text-decoration: none;
+    color: rgb(89, 89, 89);
+}
+#colun1 > article > .caixa > a:hover{
+    color: rgb(255, 255, 255);
+}
+#colun1 > a{
+    color: rgba(255, 255, 255, 0.698);
+    text-decoration: none;
+}
+#colun1 > a:hover{
+    color: rgb(186, 46, 46);
+}
+#colun2{
+    display: flex;
+}
+#colun2 > #arti-img {
+    width: 40%;
+    height: 800px;
+    background: url(img/eu\ black\ perfil.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#colun2 > #arti-text{
+    background: url(img/pexels-scottwebb-593158.jpg);
+    background-position: center;
+    background-size: cover;
+    width: 60%;
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+#colun2 > #arti-text > h2{
+    margin-bottom: 30px;
+}
+#colun2 > #arti-text > h2,p{
+    color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 10px;
+    text-shadow: 1px 1px 6px rgba(255, 255, 255, 0.5);
+}
+#colun3{
+    color: white;
+    
+}
+/*monitor-menor*/
 @media (max-width: 1200px) {
     /* Primeira parte*/
-
     nav > section {
         flex-flow: column ;
         height: 100%;
@@ -112,13 +194,11 @@ header > section > #box-img{
     }
     nav > section > ul{
         width: 100%;
-        background-color: black;
     }
     nav > section > ul > li > a{
         text-decoration: none;
         color: black;
     }
-
     /*Segunda parte*/
     header > section{
         flex-flow: column wrap;
@@ -129,7 +209,7 @@ header > section > #box-img{
         padding-bottom: 20px;
     }
     header > section > #text{
-        background: url(img/pexels-scottwebb-593158.jpg);
+        background: #56606b93;
         background-size: cover;
         background-position: center;
         width: 100%;
@@ -141,90 +221,20 @@ header > section > #box-img{
         color: rgb(0, 0, 0);
     }
     header > section > #box-img{
-        max-width: 600px;
-        height: 500px;
-        background: url(img/eu\ black\ corpo.jpg);
-        background-repeat: no-repeat;
-        background-size: cover ;
-        background-position: center;
-
+        display: none;
     }
 }
-/*
-TERCEIRA PARTE
-*/
-main{
-    max-width: 2462px;
-    display: flex;
-    flex-flow: column;
-}
-#colun1{
-    display: flex;
-}
-#colun1 > #arti-img {
-    width: 40%;
-    height: 800px;
-    background: url(img/eu\ black\ perfil.jpg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-#colun1 > #arti-text{
-    background: url(img/pexels-scottwebb-593158.jpg);
-    background-position: center;
-    background-size: cover;
-    width: 60%;
-    height: 800px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-#colun1 > #arti-text > h2{
-    margin-bottom: 30px;
-}
-#colun1 > #arti-text > h2,p{
-    color: rgb(0, 0, 0);
-    text-align: center;
-    padding: 10px;
-    text-shadow: 1px 1px 6px rgba(255, 255, 255, 0.5);
-}
-#colun2{
-    width: 100%;
-    height: 740px;
-    padding: 0px 0px 30px 0px;
-    background-color: black;
-    text-align: center;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-between;
-}
-#colun2 > h1{
-    color: white;
-    font-size: 2em;
-    margin: 40px;
-}
-#colun2 > article{
-    width: 100%;
-    height: 500px;
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-evenly;
-}
-#colun2 > article > .caixa{
-    min-width: 200px;
-    max-height: 40px;
-}
-#colun2 > article > .caixa > a{
-    text-decoration: none;
-    color: rgb(89, 89, 89);
-}
-#colun2 > article > .caixa > a:hover{
-    color: rgb(255, 255, 255);
-}
-#colun2 > a{
-    color: rgba(255, 255, 255, 0.698);
-    text-decoration: none;
-}
-#colun2 > a:hover{
-    color: rgb(186, 46, 46);
+/*tela-celular*/
+@media (max-width: 1000px){
+    main > #colun2{
+        flex-flow: column;
+    }
+    #colun2 > #arti-img{
+        width: 100%;
+        height: 500px;
+    }
+    #colun2 > #arti-text{
+        width: 100%;
+        height: 100%;
+    }
 }
