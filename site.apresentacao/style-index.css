@@ -58,11 +58,11 @@ nav > section > #desktop-redesocial > li > a{
 }
 nav > section > #bottom{
     display: none;
-    border: inset  1px white;
-    color: white;
+    color: rgb(137, 137, 137);
     width: 70%;
     height: 30px;
     text-align: center;
+    color: rgb(131, 0, 0);
 }
 nav > section > #mobile-redesocial{
     display: none;
@@ -73,9 +73,7 @@ nav > section > #mobile-redesocial{
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    background: url(img/pexels-scottwebb-593158.jpg) ;
-    background-size: cover;
-    background-position: center;
+    background-color: #56606B;
     margin: 0%;
     padding: 10px 0px;
 }
@@ -212,7 +210,7 @@ main{
     color: rgb(0, 0, 0);
     text-align: center;
     padding: 10px;
-    text-shadow: 1px 1px 6px rgba(255, 255, 255, 0.5);
+    text-shadow: 1px 1px 6px rgba(255, 255, 255, 0.072);
 }
 #colun3{
     display: flex;
@@ -245,7 +243,6 @@ main{
     nav > section > #desktop-redesocial{
         display: none;
     }
-
     /*Segunda parte*/
     header > section{
         flex-flow: column wrap;
