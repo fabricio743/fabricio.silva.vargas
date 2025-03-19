@@ -33,7 +33,7 @@ nav > section > h1{
     font-size: 1.5em;
     text-shadow: 1px 1px 6px rgba(255, 255, 255, 0.113);
 }
-nav > section > ul{
+nav > section > #desktop-redesocial{
     width: 60%;
     height: 80px;
     list-style: none;
@@ -47,29 +47,59 @@ nav > section > ul{
     margin: 0%;
     color: rgb(74, 87, 97);
 }
-nav > section > ul > li{
+nav > section > #desktop-redesocial > li{
     margin: 0px 20px;
 }
-nav > section > ul > li > a{
+nav > section > #desktop-redesocial > li > a{
     color: black;
     font-size: 26px;
     text-decoration: none;
     text-shadow: 1px 1px 6px rgba(255, 255, 255, 0.467);
 }
-nav > section > ul > li > a:hover{
+nav > section > #bottom{
+    display: none;
+    border: inset  1px white;
     color: white;
-    text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.689)
+    width: 70%;
+    height: 30px;
+    text-align: center;
+}
+nav > section > #mobile-redesocial{
+    display: none;
+    flex-flow: column;
+    color: white;
+    width: 100%;
+    list-style: none;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background: url(img/pexels-scottwebb-593158.jpg) ;
+    background-size: cover;
+    background-position: center;
+    margin: 0%;
+    padding: 10px 0px;
+}
+nav > section > #mobile-redesocial > li{
+    margin: 10px 0px;
+}
+nav > section > #mobile-redesocial > li > a{
+    color: black;
+    font-size: 26px;
+    text-decoration: none;
+    text-shadow: 1px 1px 6px rgba(255, 255, 255, 0.467);
 }
 nav > section > ul > li > #whatsapp:hover{
-    text-shadow: 1px 1px 6px rgba(0, 128, 0, 0.755);
+    text-shadow: 1px 1px 6px rgba(0, 128, 0, 0.131);
 }
 nav > section > ul > li > #linkedin:hover{
-    text-shadow: 1px 1px 8px rgba(12, 12, 229, 0.878);
+    text-shadow: 1px 1px 8px rgba(12, 12, 229, 0.139);
 }
 nav > section > ul > li > #instagram:hover{
-    text-shadow: 1px 1px 6px rgba(255, 0, 128, 0.419);
+    text-shadow: 1px 1px 6px rgba(255, 0, 128, 0.131);
 }
-
+nav > section > ul > li > #telegram:hover{
+    text-shadow: 1px 1px 8px rgba(80, 188, 255, 0.107)
+}
 /*
 SEGUNDA PARTE
 */
@@ -209,13 +239,13 @@ main{
         height: 100px;
         background: black;
     }
-    nav > section > ul{
-        width: 100%;
+    nav > section > #bottom{
+        display: inline;
     }
-    nav > section > ul > li > a{
-        text-decoration: none;
-        color: black;
+    nav > section > #desktop-redesocial{
+        display: none;
     }
+
     /*Segunda parte*/
     header > section{
         flex-flow: column wrap;
