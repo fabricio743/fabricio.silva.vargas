@@ -59,7 +59,8 @@ header p{
 
 nav{
     background-color: var(--color5);
-    padding: 10px;
+    padding: 20px;
+    text-align: center;
     box-shadow: 0px 7px 7px black;
 }
 nav a {
