@@ -1,0 +1,29 @@
+* {padding: 0%;}
+    body{
+        background: url(Background.png);
+        background-position: center;
+    }
+    main {
+        display: flex;
+        width: 60%;
+        height: 700px;
+                font-family: "Roboto", sans-serif;
+        background-color: #013243;
+    }
+    main > #l1{
+        width: 50%;
+        height: 100%;
+        text-align: center;
+        background-image: url(iPhone\ Mockup.png);
+        background-size: cover;
+    }
+    main > #l1 > h1{
+        color: white;
+        font-size: 3.5em;
+        margin-bottom: 0px;
+    }
+    main > #l2{       
+        width: 50%;
+        height: 100%;
+        background-color: white;
+    }
