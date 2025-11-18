@@ -90,7 +90,53 @@
         color: rgba(169, 169, 169, 0.962);
         background-color: #052934;   
     }
-       @media (max-width: 800px) {
+    @media (max-width: 1400px) { /*modo para tablet*/
+        body{
+        height: 100%;
+        padding: 40px 0px;
+        margin: 0%;
+        }   
+        main{
+        width: 650px;
+        height: 1400px;
+        flex-direction: column;
+        border-radius: 0%;
+        }    
+        main > #l1{
+        width: 100%;
+        height: 50%;
+        text-align: center;
+        background-image: url(iPhone\ Mockup.png);
+        background-size: contain;
+        background-position: bottom;
+        background-repeat: no-repeat;
+        }
+        main > #box{
+        width: 100%;
+        height: 50%;
+        display: flex;
+        justify-content: center;
+        }
+        main > #box > #l2{       
+        display: flex;
+        flex-direction: column;
+        width: 650px;
+        height: 100%; 
+        background-color: white;
+        border-top: 1px solid black;
+        border-radius: 0%;
+        }
+        main > #box > #l2 > h1{
+        margin: 50px 0px 0px 22%;
+        }
+        main > #box > #l2 > form{
+        margin: auto;
+        }
+        main > #box > #l2 > button{
+        margin: auto;
+        }
+    } 
+    @media (max-width: 800px) { /*modo para celular*/
         body{
         height: 100%;
         padding: 0%;
@@ -111,10 +157,10 @@
         background-position: center;
         }
         main > #box{
-            width: 100%;
-            height: 45%;
-            display: flex;
-            justify-content: center;
+        width: 100%;
+        height: 45%;
+        display: flex;
+        justify-content: center;
         }
         main > #box > #l2{       
         display: flex;
@@ -124,7 +170,7 @@
         background-color: white;
         border-top: 1px solid black;
         border-radius: 0%;
-       }
+        }
         main > #box > #l2 > h1{
         margin: 50px 0px 0px 50px;
         }
@@ -134,4 +180,4 @@
         main > #box > #l2 > button{
         margin: auto;
         }
-}
+    }
