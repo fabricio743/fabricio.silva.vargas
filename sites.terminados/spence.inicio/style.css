@@ -1,0 +1,23 @@
+    .body{
+        display: grid;
+        grid-template-columns: 1fr 1f;
+        grid-template-rows: 500px 500px;
+        justify-content: center;
+        background-color: wheat;
+    }
+    #anuncio{
+        
+    background-color: green;
+    }
+    nav{
+
+    background-color: red;
+    }
+    main{
+
+    background-color: blue;
+    }
+    footer{
+
+    background-color: yellow;
+    }
