@@ -52,7 +52,6 @@ nav > #botoes > #start{
     background-color: black;
 }
 main{
-    display: ;
 }
 main > #section1{
     display: flex;
@@ -125,7 +124,11 @@ main > #section3{
     width: 80%;
     height: 600px;
     margin: auto;
-    background-image: url(Spense\ Starter\ Files/);
+    padding-left: 60px;
+    background-image: url(Assets/Phone\ Mockup\ \(Desktop\).png);
+    background-size: contain;
+    background-position: right ;
+    background-repeat: no-repeat;
 }
 main > #section3 > h1{
     font-size: 3em;
