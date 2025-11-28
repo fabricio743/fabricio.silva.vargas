@@ -3,7 +3,6 @@
     margin: 0%;
 }
 body{
-
 }
 #anuncio{
     color: white;
@@ -13,7 +12,10 @@ body{
     width: 100%;
     padding: 10px 0px;
 }
-nav{
+#mainn{
+    background-color: rgb(234, 234, 234);   
+}
+#mainn > nav{
     display: flex;
     width: 80%;
     height: 140px;
@@ -21,22 +23,22 @@ nav{
     justify-content: space-between;
     align-items: center;
 }
-nav > p {
+#mainn > nav > p {
     font-size: 22px;
 }
-nav > ul{
+#mainn > nav > ul{
     display: flex;
     list-style: none;
 }
-nav > ul > li{
+#mainn > nav > ul > li{
     font-size: 22px;
     margin: 0px 10px 0px 10px;
 }
-nav > ul > li > a{
+#mainn > nav > ul > li > a{
     color: black;
     text-decoration: none;
 } 
-nav > #botoes > button{
+#mainn > nav > #botoes > button{
     width: 100px;
     height: 60px;
     border: none;
@@ -46,14 +48,12 @@ nav > #botoes > button{
     font-size: 18px;
     background-color: white;
 }
-nav > #botoes > #start{
+#mainn > nav > #botoes > #start{
     width: 130px;
     color: white;
     background-color: black;
 }
-main{
-}
-main > #section1{
+#mainn > #section1{
     display: flex;
     margin: auto;
     width: 80%;
@@ -61,29 +61,29 @@ main > #section1{
     justify-content: space-between;
     align-items: center;
 }
-main > #section1 > article{
+#mainn > #section1 > article{
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 750px;
 }
-main > #section1 > article > h1{
+#mainn > #section1 > article > h1{
     font-size: 4em;
     margin-left: 10px;
     margin-bottom: 5px;
 }
-main > #section1 > article > p{
+#mainn > #section1 > article > p{
     font-size: 22px;
     word-spacing: 2px;
     margin: 5px;
 }
-main > #section1 > article > p > img{
+#mainn > #section1 > article > p > img{
     margin-right: 15px;
 }
-main> #section1 > article > form{
+#mainn> #section1 > article > form{
     width: 500px;
 }
-main > #section1 > article > form > input{
+#mainn > #section1 > article > form > input{
     width: 200px;
     height: 60px;
     margin: 5px;
@@ -92,12 +92,12 @@ main > #section1 > article > form > input{
     border-radius: 5px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.189);
 }
-main > #section1 > article > form > #submit{
+#mainn > #section1 > article > form > #submit{
     width: 150px;
     color: white;
     background-color: black;
 }
-main > #section1 > article > img{
+#mainn > #section1 > article > img{
     width: 600px;
     height: 100%;
     margin: 0px 0px 0px 75px;
@@ -122,21 +122,23 @@ main > #section3{
     align-items: start;
     justify-content: center; 
     width: 80%;
-    height: 600px;
+    height: 700px;
     margin: auto;
     padding-left: 60px;
     background-image: url(Assets/Phone\ Mockup\ \(Desktop\).png);
     background-size: contain;
     background-position: right ;
     background-repeat: no-repeat;
+    background-color: rgb(234, 234, 234);
 }
 main > #section3 > h1{
-    font-size: 3em;
+    font-size: 4em;
 }
 main > #section3 > p{
-    font-size: 22px;
+    font-size: 26px;
     word-spacing: 2px;
-    margin: 10px;
+    line-height: 45px;
+    margin: 30px;
 }
 main > #section3 > p > a{
     color: black;
