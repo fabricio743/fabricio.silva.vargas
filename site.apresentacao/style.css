@@ -64,6 +64,18 @@ ul li {
     border-left: 3px solid #38bdf8;
 }
 
+.exemplos > h2{
+    color: #09bada;
+}
+
+.exemplos ul li a {
+    color: #dbff5a;
+    text-decoration: none;
+}
+.exemplos ul li a:hover {
+    text-decoration: underline;
+}
+
 .contato p {
     margin: 10px 0;
 }
