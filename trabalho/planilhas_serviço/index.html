@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Ordem de Serviço</title>
-
+  <link rel="shortcut icon" href="settings.png" type="image/x-icon">
   <style>
 
     *{
@@ -163,7 +163,14 @@
     <button class="btn-servico" type="button" onclick="adicionarServico()">
       Adicionar Outro Serviço
     </button>
-
+    <input
+      type="number"
+      id="desconto"
+      placeholder="Desconto (R$)"
+      min="0"
+      step="0.01"
+      value="0"
+    >
     <div class="totais">
 
       <div>
@@ -194,8 +201,12 @@
 <script>
 
 
-  const API_URL = "https://script.google.com/macros/s/AKfycbwHn57Z1Bh11ylvFBxA66KBr9qa9ikBhjvD41fpu6CtpMJUAIqasFkEesuVxSzlGhzP/exec";
-
+  const API_URL = "https://script.google.com/macros/s/AKfycbwJ5Ri28tweKUrcPVSrKJvbTysKTMov90u_j04cL8MBzgZ8NVbO225fL_bHnmrrDb6K/exec";
+  
+  document.getElementById("desconto")
+  document
+  .getElementById("desconto")
+  .addEventListener("input", atualizarTotais);
 
   function abrirFormulario(){
 
@@ -251,7 +262,7 @@
 
       let valorPeca = parseFloat(inputPeca.value) || 0;
 
-      let valorServico = valorPeca * 0.5;
+      let valorServico = valorPeca * 0.35;
 
       if(valorServico < 80){
         valorServico = 80;
@@ -265,95 +276,170 @@
 
   }
 
-  function atualizarTotais(){
+ function atualizarTotais(){
 
-    let totalPecas = 0;
-    let totalServicos = 0;
+  let totalPecas = 0;
+  let totalServicos = 0;
 
-    document.querySelectorAll(".peca").forEach(campo => {
-      totalPecas += parseFloat(campo.value) || 0;
-    });
+  document.querySelectorAll(".peca").forEach(campo => {
+    totalPecas += parseFloat(campo.value) || 0;
+  });
 
-    document.querySelectorAll(".servico").forEach(campo => {
-      totalServicos += parseFloat(campo.value) || 0;
-    });
+  document.querySelectorAll(".servico").forEach(campo => {
+    totalServicos += parseFloat(campo.value) || 0;
+  });
 
-    const total = totalPecas + totalServicos;
+  const desconto =
+    parseFloat(
+      document.getElementById("desconto").value
+    ) || 0;
 
-    document.getElementById("totalPecas").innerText =
-      totalPecas.toFixed(2);
+  let total =
+    totalPecas +
+    totalServicos -
+    desconto;
 
-    document.getElementById("totalServicos").innerText =
-      totalServicos.toFixed(2);
-
-    document.getElementById("valorTotal").innerText =
-      total.toFixed(2);
-
+  if(total < 0){
+    total = 0;
   }
+
+  document.getElementById("totalPecas").innerText =
+    totalPecas.toFixed(2);
+
+  document.getElementById("totalServicos").innerText =
+    totalServicos.toFixed(2);
+
+  document.getElementById("valorTotal").innerText =
+    total.toFixed(2);
+
+}
 
   async function salvarOrdem(){
 
-    const cpf = document.getElementById("cpf").value;
-    const nome = document.getElementById("nome").value;
-    const tipo = document.getElementById("tipo").value;
+  const cpf =
+    document.getElementById("cpf").value;
 
-    const descricoes =
-      document.querySelectorAll(".descricao");
+  const nome =
+    document.getElementById("nome").value;
 
-    const pecas =
-      document.querySelectorAll(".peca");
+  const tipo =
+    document.getElementById("tipo").value;
 
-    const servicos =
-      document.querySelectorAll(".servico");
+  const desconto =
+    parseFloat(
+      document.getElementById("desconto").value
+    ) || 0;
 
-    try{
+  const dataAtual =
+    new Date().toLocaleDateString("pt-BR");
 
-      for(let i = 0; i < descricoes.length; i++){
+  const descricoes =
+    document.querySelectorAll(".descricao");
 
-        const descricao = descricoes[i].value;
+  const pecas =
+    document.querySelectorAll(".peca");
 
-        const valorPeca =
-          parseFloat(pecas[i].value) || 0;
+  const servicos =
+    document.querySelectorAll(".servico");
 
-        const valorServico =
-          parseFloat(servicos[i].value) || 0;
+  // =========================
+  // CALCULA TOTAL GERAL
+  // =========================
 
-        const valorTotal =
-          valorPeca + valorServico;
+  let somaTotal = 0;
 
-        await fetch(API_URL, {
+  for(let i = 0; i < descricoes.length; i++){
 
-          method: "POST",
+    const valorPeca =
+      parseFloat(pecas[i].value) || 0;
 
-          body: JSON.stringify({
+    const valorServico =
+      parseFloat(servicos[i].value) || 0;
 
-            cpf: cpf,
-            nome: nome,
-            tipo: tipo,
-            servico: descricao,
-            valorPeca: valorPeca,
-            valorServico: valorServico,
-            valorTotal: valorTotal
+    somaTotal +=
+      valorPeca + valorServico;
 
-          })
+  }
 
-        });
+  // =========================
+  // TOTAL FINAL
+  // =========================
 
-      }
+  let valorFinal =
+    somaTotal - desconto;
 
-      alert("Ordem salva com sucesso!");
+  if(valorFinal < 0){
+    valorFinal = 0;
+  }
 
-      limparFormulario();
+  // =========================
+  // ENVIA PARA GOOGLE SHEETS
+  // =========================
 
-    }catch(erro){
+  try{
 
-      console.error(erro);
+    for(let i = 0; i < descricoes.length; i++){
 
-      alert("Erro ao salvar na planilha.");
+      const descricao =
+        descricoes[i].value;
+
+      const valorPeca =
+        parseFloat(pecas[i].value) || 0;
+
+      const valorServico =
+        parseFloat(servicos[i].value) || 0;
+
+      await fetch(API_URL, {
+
+        method: "POST",
+
+        body: JSON.stringify({
+
+          data: dataAtual,
+
+          cpf: cpf,
+
+          nome: nome,
+
+          tipo: tipo,
+
+          servico: descricao,
+
+          valorPeca: valorPeca,
+
+          valorServico: valorServico,
+
+          // APENAS PRIMEIRA LINHA
+          desconto:
+            i === 0
+              ? desconto
+              : "",
+
+          // APENAS PRIMEIRA LINHA
+          valorTotal:
+            i === 0
+              ? valorFinal
+              : ""
+
+        })
+
+      });
 
     }
 
+    alert("Ordem salva com sucesso!");
+
+    limparFormulario();
+
+  }catch(erro){
+
+    console.error(erro);
+
+    alert("Erro ao salvar na planilha.");
+
   }
+
+}
 
 function limparFormulario(){
 
