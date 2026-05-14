@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ordem de Serviço</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background:#111;
+      color:#fff;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:20px;
+    }
+
+    .container{
+      width:100%;
+      max-width:850px;
+      background:#1d1d1d;
+      padding:30px;
+      border-radius:18px;
+      box-shadow:0 0 25px rgba(0,0,0,0.5);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:30px;
+      font-size:38px;
+      color:#ffc400;
+    }
+
+    .topo{
+      display:flex;
+      justify-content:center;
+      margin-bottom:25px;
+    }
+
+    button{
+      border:none;
+      padding:14px 24px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:bold;
+      transition:0.3s;
+      font-size:15px;
+    }
+
+    .btn-add{
+      background:#ffc400;
+      color:#000;
+    }
+
+    .btn-add:hover{
+      transform:scale(1.03);
+    }
+
+    .formulario{
+      display:none;
+      flex-direction:column;
+      gap:15px;
+    }
+
+    input, select{
+      width:100%;
+      padding:13px;
+      border:none;
+      border-radius:10px;
+      font-size:15px;
+      outline:none;
+    }
+
+    .servico-box{
+      background:#262626;
+      padding:15px;
+      border-radius:12px;
+      margin-bottom:15px;
+    }
+
+    .linha{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px;
+      margin-top:10px;
+    }
+
+    .totais{
+      background:#222;
+      padding:15px;
+      border-radius:12px;
+      line-height:32px;
+      margin-top:10px;
+    }
+
+    .btn-servico{
+      background:#333;
+      color:#fff;
+      margin-top:10px;
+    }
+
+    .btn-servico:hover{
+      background:#444;
+    }
+
+    .btn-salvar{
+      background:#00c853;
+      color:#fff;
+      margin-top:10px;
+    }
+
+    .btn-salvar:hover{
+      background:#00e676;
+    }
+
+    @media(max-width:600px){
+
+      .linha{
+        grid-template-columns:1fr;
+      }
+
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Ordem de Serviço</h1>
+
+  <div class="topo">
+    <button class="btn-add" onclick="abrirFormulario()">
+      Adicionar
+    </button>
+  </div>
+
+  <div class="formulario" id="formulario">
+
+    <input type="text" id="cpf" placeholder="CPF">
+
+    <input type="text" id="nome" placeholder="Nome">
+
+    <select id="tipo">
+      <option value="">Selecione o tipo</option>
+      <option value="Celular">Celular</option>
+      <option value="PC">PC</option>
+      <option value="Notebook">Notebook</option>
+      <option value="Outro">Outro</option>
+    </select>
+
+    <div id="listaServicos"></div>
+
+    <button class="btn-servico" type="button" onclick="adicionarServico()">
+      Adicionar Outro Serviço
+    </button>
+
+    <div class="totais">
+
+      <div>
+        <strong>Total Peças:</strong>
+        R$ <span id="totalPecas">0.00</span>
+      </div>
+
+      <div>
+        <strong>Total Serviços:</strong>
+        R$ <span id="totalServicos">0.00</span>
+      </div>
+
+      <div>
+        <strong>Total Geral:</strong>
+        R$ <span id="valorTotal">0.00</span>
+      </div>
+
+    </div>
+
+    <button class="btn-salvar" onclick="salvarOrdem()">
+      Salvar Ordem
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+
+  const API_URL = "/*==========================\nCOLE SUA URL DO APPS SCRIPT\n==========================*/";
+
+
+  function abrirFormulario(){
+
+    document.getElementById("formulario").style.display = "flex";
+
+    if(document.getElementById("listaServicos").children.length === 0){
+      adicionarServico();
+    }
+
+  }
+
+  function adicionarServico(){
+
+    const div = document.createElement("div");
+
+    div.classList.add("servico-box");
+
+    div.innerHTML = `
+
+      <input
+        type="text"
+        class="descricao"
+        placeholder="O que foi feito"
+      >
+
+      <div class="linha">
+
+        <input
+          type="number"
+          class="peca"
+          placeholder="Valor da peça"
+          min="0"
+          step="0.01"
+        >
+
+        <input
+          type="number"
+          class="servico"
+          placeholder="Valor do serviço"
+          readonly
+        >
+
+      </div>
+
+    `;
+
+    document.getElementById("listaServicos").appendChild(div);
+
+    const inputPeca = div.querySelector(".peca");
+    const inputServico = div.querySelector(".servico");
+
+    inputPeca.addEventListener("input", () => {
+
+      let valorPeca = parseFloat(inputPeca.value) || 0;
+
+      let valorServico = valorPeca * 0.5;
+
+      if(valorServico < 80){
+        valorServico = 80;
+      }
+
+      inputServico.value = valorServico.toFixed(2);
+
+      atualizarTotais();
+
+    });
+
+  }
+
+  function atualizarTotais(){
+
+    let totalPecas = 0;
+    let totalServicos = 0;
+
+    document.querySelectorAll(".peca").forEach(campo => {
+      totalPecas += parseFloat(campo.value) || 0;
+    });
+
+    document.querySelectorAll(".servico").forEach(campo => {
+      totalServicos += parseFloat(campo.value) || 0;
+    });
+
+    const total = totalPecas + totalServicos;
+
+    document.getElementById("totalPecas").innerText =
+      totalPecas.toFixed(2);
+
+    document.getElementById("totalServicos").innerText =
+      totalServicos.toFixed(2);
+
+    document.getElementById("valorTotal").innerText =
+      total.toFixed(2);
+
+  }
+
+  async function salvarOrdem(){
+
+    const cpf = document.getElementById("cpf").value;
+    const nome = document.getElementById("nome").value;
+    const tipo = document.getElementById("tipo").value;
+
+    const descricoes =
+      document.querySelectorAll(".descricao");
+
+    const pecas =
+      document.querySelectorAll(".peca");
+
+    const servicos =
+      document.querySelectorAll(".servico");
+
+    try{
+
+      for(let i = 0; i < descricoes.length; i++){
+
+        const descricao = descricoes[i].value;
+
+        const valorPeca =
+          parseFloat(pecas[i].value) || 0;
+
+        const valorServico =
+          parseFloat(servicos[i].value) || 0;
+
+        const valorTotal =
+          valorPeca + valorServico;
+
+        await fetch(API_URL, {
+
+          method: "POST",
+
+          body: JSON.stringify({
+
+            cpf: cpf,
+            nome: nome,
+            tipo: tipo,
+            servico: descricao,
+            valorPeca: valorPeca,
+            valorServico: valorServico,
+            valorTotal: valorTotal
+
+          })
+
+        });
+
+      }
+
+      alert("Ordem salva com sucesso!");
+
+      limparFormulario();
+
+    }catch(erro){
+
+      console.error(erro);
+
+      alert("Erro ao salvar na planilha.");
+
+    }
+
+  }
+
+function limparFormulario(){
+
+  // LIMPA CAMPOS
+  document.getElementById("cpf").value = "";
+  document.getElementById("nome").value = "";
+  document.getElementById("tipo").value = "";
+
+  // REMOVE SERVIÇOS
+  document.getElementById("listaServicos").innerHTML = "";
+
+  // ZERA TOTAIS
+  document.getElementById("totalPecas").innerText = "0.00";
+  document.getElementById("totalServicos").innerText = "0.00";
+  document.getElementById("valorTotal").innerText = "0.00";
+
+  // ESCONDE FORMULÁRIO
+  document.getElementById("formulario").style.display = "none";
+
+}
+
+</script>
+
+</body>
+</html>
