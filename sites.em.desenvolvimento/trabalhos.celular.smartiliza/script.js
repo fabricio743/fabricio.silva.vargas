@@ -1,5 +1,5 @@
 const URL_SCRIPT =
-"https://script.google.com/macros/s/AKfycbxd07eFFBmVINIUS5eJ1suAc1WNM-z73h9B_jVfA-mNDIfJLNjpQ_nAPcYgRdJ9_LC0/exec";
+"https://script.google.com/macros/s/AKfycbyhNDe3VrOPDewrCXei6pYIg2Go9cPZJ9M1QuoCeQh4gJu0qBMgSmfxF1ioPXshbrQZ/exec";
 
 document
 .getElementById("osForm")
@@ -15,9 +15,10 @@ document
         modelo: document.getElementById("modelo").value,
         defeito: document.getElementById("defeito").value,
         laudo: document.getElementById("laudo").value,
-        custoPeca: document.getElementById("custoPeca").value,
         orcamento: document.getElementById("orcamento").value,
-        status: document.getElementById("status").value,
+        custoPeca: document.getElementById("custoPeca").value,
+        fornecedor: document.getElementById("fornecedor").value,
+        status: document.getElementById("status").value
     };
 
     try {
