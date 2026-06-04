@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Ordem de Serviço</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <div class="logo-area">
+            <img src="logo.png" alt="Smartiliza">
+            <div>
+                <h1>Smartiliza</h1>
+                <span>Assistência Técnica</span>
+            </div>
+        </div>
+
+        <div class="titulo-pagina">
+            Nova Ordem de Serviço
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <form id="osForm">
+
+            <div class="grid">
+
+                <div class="grupo">
+                    <label>Nº da OS</label>
+                    <input type="text" id="os">
+                </div>
+
+                <div class="grupo">
+                    <label>Data</label>
+                    <input type="date" id="data">
+                </div>
+
+                <div class="grupo">
+                    <label>Nome do Cliente</label>
+                    <input type="text" id="cliente">
+                </div>
+
+                <div class="grupo">
+                    <label>Telefone</label>
+                    <input type="text" id="telefone">
+                </div>
+
+                <div class="grupo grupo-full">
+                    <label>Modelo do Aparelho</label>
+                    <input type="text" id="modelo">
+                </div>
+
+                <div class="grupo grupo-full">
+                    <label>Defeito Relatado</label>
+                    <textarea id="defeito"></textarea>
+                </div>
+
+                <div class="grupo grupo-full">
+                    <label>Laudo Técnico</label>
+                    <textarea id="laudo"></textarea>
+                </div>
+
+                <div class="grupo">
+                    <label>Custo da Peça (R$)</label>
+                    <input type="number" step="0.01" id="custoPeca">
+                </div>
+
+                <div class="grupo">
+                    <label>Orçamento (R$)</label>
+                    <input type="number" id="orcamento">
+                </div>
+                <div class="grupo">
+                    <label>Fornecedor da Peça</label>
+                    <input type="text" id="fornecedor" placeholder="Ex: BringIT, AliExpress, Mercado Livre">
+                </div>
+
+                <div class="grupo">
+                    <label>Status</label>
+                    <select id="status">
+                        <option>Em análise</option>
+                        <option>Aguardando peça</option>
+                        <option>Finalizado</option>
+                        <option>Retirado</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit">
+                Salvar Ordem de Serviço
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+<script src="script.js" ></script>
