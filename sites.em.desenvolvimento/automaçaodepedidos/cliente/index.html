@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assados Bonito</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Cabeçalho -->
+
+        <header class="header">
+
+            <div class="logo">
+                🍖
+            </div>
+
+            <h1>Assados Bonito</h1>
+
+            <p>Faça seu pedido de forma rápida</p>
+
+        </header>
+
+        <!-- Barra de progresso -->
+
+        <div class="progress">
+
+            <div class="step active"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+
+        </div>
+
+        <!-- Conteúdo dinâmico -->
+
+        <main id="conteudo">
+
+            <!-- ETAPA 1 -->
+
+            <section class="etapa ativa" id="etapa1">
+
+                <h2>Escolha seus produtos</h2>
+
+                <div class="produtos">
+
+                    <div class="produto-card">
+
+                        <div class="produto-img">
+                            🍗
+                        </div>
+
+                        <h3>Frango Recheado</h3>
+
+                        <p class="preco">
+                            R$ 55,00
+                        </p>
+
+                        <small>
+                            Disponível: 12
+                        </small>
+
+                        <div class="quantidade">
+
+                            <button onclick="diminuir(this)">
+                                -
+                            </button>
+
+                            <span>0</span>
+
+                            <button onclick="aumentar(this)">
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div class="produto-card">
+
+                        <div class="produto-img">
+                            🥩
+                        </div>
+
+                        <h3>Costela</h3>
+
+                        <p class="preco">
+                            R$ 80,00
+                        </p>
+
+                        <small>
+                            Disponível: 8
+                        </small>
+
+                        <div class="quantidade">
+
+                            <button onclick="diminuir(this)">
+                                -
+                            </button>
+
+                            <span>0</span>
+
+                            <button onclick="aumentar(this)">
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- Etapa 2 -->
+            <br>
+            <section class="etapa" id="etapa2">
+
+                <h2>📅 Escolha o dia</h2>
+
+                <div class="datas">
+
+                    <div class="data-card"
+                        onclick="selecionarData(this,'2026-06-20')">
+
+                        <strong>Sábado</strong>
+
+                        <span>20/06/2026</span>
+
+                    </div>
+
+                    <div class="data-card"
+                        onclick="selecionarData(this,'2026-06-21')">
+
+                        <strong>Domingo</strong>
+
+                        <span>21/06/2026</span>
+
+                    </div>
+
+                </div>
+
+            </section>
+            
+            <!-- Etapa 3 -->
+
+            <section class="etapa" id="etapa3" style="display:none;">
+
+                <h2>🕒 Escolha o horário</h2>
+
+                <div class="horarios">
+
+                <button
+                    class="horario-btn"
+                    onclick="selecionarHorario(this,'10:00')">
+
+                    10:00
+
+                </button>
+
+                <button
+                    class="horario-btn"
+                    onclick="selecionarHorario(this,'10:30')">
+
+                    10:30
+
+                </button>
+
+                <button
+                    class="horario-btn"
+                    onclick="selecionarHorario(this,'11:00')">
+
+                    11:00
+
+                </button>
+
+                <button
+                    class="horario-btn"
+                    onclick="selecionarHorario(this,'11:30')">
+
+                    11:30
+
+                </button>
+
+                <button
+                    class="horario-btn"
+                    onclick="selecionarHorario(this,'12:00')">
+
+                    12:00
+
+                </button>
+
+                <button
+                    class="horario-btn"
+                    onclick="selecionarHorario(this,'12:30')">
+
+                    12:30
+
+                </button>
+
+             </div>
+
+            </section>
+
+            <!-- Etapa 4 --> 
+            <section class="etapa" id="etapa4" style="display:none;">
+
+                <h2>🚚 Como deseja receber?</h2>
+
+                <div class="tipo-container">
+
+                    <div
+                        class="tipo-card"
+                        onclick="selecionarTipo(this,'Retirada')">
+
+                        🏪
+
+                        <h3>Retirada</h3>
+
+                        <p>Retirar no local</p>
+
+                    </div>
+
+                    <div
+                        class="tipo-card"
+                        onclick="selecionarTipo(this,'Entrega')">
+
+                        🚚
+
+                        <h3>Entrega</h3>
+
+                        <p>Receber em casa</p>
+
+                    </div>
+
+                </div>
+
+                <div id="endereco" style="display:none;">
+
+                    <h3>📍 Endereço</h3>
+
+                    <input
+                        type="text"
+                        id="municipio"
+                        placeholder="Município">
+
+                    <input
+                        type="text"
+                        id="rua"
+                        placeholder="Rua">
+
+                    <input
+                        type="text"
+                        id="numero"
+                        placeholder="Número">
+
+                    <input
+                        type="text"
+                        id="complemento"
+                        placeholder="Complemento">
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+    </div>
+
+    <!-- Carrinho -->
+
+    <div class="carrinho">
+
+        <div>
+
+            <strong id="itens">
+                0 itens
+            </strong>
+
+            <p id="total">
+                R$ 0,00
+            </p>
+
+        </div>
+
+        <button onclick="proximaEtapa()">
+            Continuar
+        </button>
+
+    </div>
+
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>
