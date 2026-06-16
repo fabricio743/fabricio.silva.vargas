@@ -304,3 +304,247 @@ body{
     border-radius:12px;
 
 }
+
+/* clientes */
+
+.formulario{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.formulario label{
+
+    font-weight:600;
+
+    margin-top:10px;
+
+}
+
+.formulario input,
+.formulario textarea{
+
+    width:100%;
+
+    padding:14px;
+
+    border:1px solid #ddd;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+}
+
+.formulario textarea{
+
+    resize:none;
+
+}
+
+#btnVoltar{
+
+    background:#ececec;
+
+    color:#333;
+
+    border:none;
+
+    padding:14px 20px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+}
+
+/* pagamento */
+
+.pagamentos{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:15px;
+
+}
+
+.pagamento-card{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    border:2px solid transparent;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    box-shadow:
+    0 2px 12px rgba(0,0,0,.05);
+
+    transition:.2s;
+
+}
+
+.pagamento-card span{
+
+    font-size:32px;
+
+}
+
+.pagamento-card h3{
+
+    margin-top:10px;
+
+}
+
+.pagamento-card p{
+
+    color:#666;
+
+    margin-top:5px;
+
+}
+
+.pagamento-card.selected{
+
+    border-color:#ff7a00;
+
+    background:#fff7f0;
+
+}
+
+#pixInfo{
+
+    margin-top:20px;
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:16px;
+
+}
+
+.pix-chave{
+
+    background:#f5f5f5;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    margin:15px 0;
+
+    font-weight:bold;
+
+    text-align:center;
+
+}
+
+.resumo-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    box-shadow:
+    0 2px 12px rgba(0,0,0,.05);
+
+}
+
+.resumo-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:12px;
+
+}
+
+.resumo-titulo{
+
+    font-weight:700;
+
+    margin-top:20px;
+
+    margin-bottom:10px;
+
+}
+
+.total-final{
+
+    margin-top:20px;
+
+    padding-top:20px;
+
+    border-top:1px solid #eee;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    color:#ff7a00;
+
+}
+
+/* confirmação */
+
+.confirmacao-box,
+.sucesso-box{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    text-align:center;
+
+    box-shadow:
+    0 2px 12px rgba(0,0,0,.05);
+
+}
+
+.confirmacao-icon,
+.sucesso-icon{
+
+    font-size:60px;
+
+    margin-bottom:20px;
+
+}
+
+.btn-finalizar{
+
+    margin-top:25px;
+
+    width:100%;
+
+    border:none;
+
+    background:#ff7a00;
+
+    color:white;
+
+    padding:18px;
+
+    border-radius:14px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+}
