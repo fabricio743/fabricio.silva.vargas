@@ -67,10 +67,11 @@
 
 <input
 type="text"
+id="buscaPedido"
 placeholder="Buscar pedido..."
 >
 
-<select>
+<select id="filtroStatus">
 
 <option>Todos</option>
 
@@ -86,47 +87,9 @@ placeholder="Buscar pedido..."
 
 </div>
 
-<div class="pedidos-grid">
-
-<div class="pedido-card">
-
-<div class="pedido-topo">
-
-<strong>PED-2026-001</strong>
-
-<span class="status recebido">
-Recebido
-</span>
-
-</div>
-
-<p>👤 João Silva</p>
-
-<p>📱 55999999999</p>
-
-<p>🍖 2 Frangos Recheados</p>
-
-<p>📅 14/06/2026</p>
-
-<p>🕒 11:00</p>
-
-<p>💳 PIX</p>
-
-<select>
-
-<option>Recebido</option>
-
-<option>Preparando</option>
-
-<option>Pronto</option>
-
-<option>Entregue</option>
-
-<option>Cancelado</option>
-
-</select>
-
-</div>
+<div
+class="pedidos-grid"
+id="listaPedidos">
 
 </div>
 

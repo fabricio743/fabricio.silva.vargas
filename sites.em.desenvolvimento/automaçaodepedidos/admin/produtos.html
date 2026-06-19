@@ -62,76 +62,79 @@
 
 <h2>Produtos</h2>
 
-<button class="novo-produto">
-+ Novo Produto
+<button
+    class="novo-produto"
+    onclick="novoProduto()">
+
+    + Novo Produto
+
 </button>
 
 </header>
 
-<div class="produtos-grid">
-
-<div class="produto-card">
-
-<div class="produto-imagem">
-
-📷
+<div
+    class="produtos-grid"
+    id="listaProdutos">
 
 </div>
 
-<h3>Frango Recheado</h3>
+<div class="modal" id="modalProduto">
 
-<p>R$ 55,00</p>
+    <div class="modal-content">
 
-<span>Estoque: 30</span>
+        <h3 id="tituloModal">
+            Novo Produto
+        </h3>
 
-<span>Categoria: Assados</span>
+        <input
+            type="hidden"
+            id="produtoId">
 
-<div class="acoes-produto">
+        <input
+            type="text"
+            id="nomeProduto"
+            placeholder="Nome">
 
-<button class="editar">
-Editar
-</button>
+        <textarea
+            id="descricaoProduto"
+            placeholder="Descrição"></textarea>
 
-<button class="excluir">
-Excluir
-</button>
+        <input
+            type="number"
+            id="precoProduto"
+            placeholder="Preço">
+
+        <input
+            type="number"
+            id="estoqueProduto"
+            placeholder="Estoque">
+
+        <input
+            type="text"
+            id="categoriaProduto"
+            placeholder="Categoria">
+
+        <div class="modal-acoes">
+
+            <button
+                onclick="fecharModal()">
+
+                Cancelar
+
+            </button>
+
+            <button
+                onclick="salvarProduto()">
+
+                Salvar
+
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
-
-</div>
-
-<div class="produto-card">
-
-<div class="produto-imagem">
-
-📷
-
-</div>
-
-<h3>Costela</h3>
-
-<p>R$ 80,00</p>
-
-<span>Estoque: 15</span>
-
-<span>Categoria: Assados</span>
-
-<div class="acoes-produto">
-
-<button class="editar">
-Editar
-</button>
-
-<button class="excluir">
-Excluir
-</button>
-
-</div>
-
-</div>
-
-</div>
-
 </main>
 
 <script src="js/auth.js"></script>

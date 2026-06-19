@@ -99,56 +99,21 @@
 
 <h3>Produção do Dia</h3>
 
-<div class="produto-agenda">
+<div id="produtosAgenda"></div>
 
-<span>🍖 Frango Recheado</span>
+<button
+class="salvar"
+onclick="salvarAgenda()">
 
-<input
-type="number"
-value="20"
->
-
-</div>
-
-<div class="produto-agenda">
-
-<span>🍖 Frango Simples</span>
-
-<input
-type="number"
-value="10"
->
-
-</div>
-
-<div class="produto-agenda">
-
-<span>🥩 Costela</span>
-
-<input
-type="number"
-value="15"
->
-
-</div>
-
-<div class="produto-agenda">
-
-<span>🔥 Churrasco</span>
-
-<input
-type="number"
-value="10"
->
-
-</div>
-
-<button class="salvar">
 Salvar Agenda
+
 </button>
 
 </div>
 
+<br>
+
+<div id="listaAgenda"></div>
 </main>
 
 <script src="js/auth.js"></script>
