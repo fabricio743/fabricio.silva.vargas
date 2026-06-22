@@ -14,9 +14,10 @@ window.location.href =
 // ===========================
 
 const URL_API =
-  "https://script.google.com/macros/s/AKfycbwktTpX0gwtoZBAJgvjL12dNnmBgCQpDQQXIfdUm_pyxLBaDpnt_96dzsaG555EkwBv/exec";
+  "https://script.google.com/macros/s/AKfycbxdjG4PgiTgZTgBqE0PQLAkz9Y5orczm_fttV1LmZLXuQJ9DrPOi_TqXzgA_7Lb7K20/exec";
 
 let produtos = [];
+
 
 function abrirModal(){
 
@@ -387,14 +388,20 @@ function novoProduto(){
 }
 
 // AGENDA
+let agendaAtual = [];
+let agendaEditando = null;
 async function salvarAgenda(){
 
     const agendaId =
-    String(new Date().getTime());
+        agendaEditando ||
+        String(new Date().getTime());
 
     const agenda = {
 
-        action:"salvarAgenda",
+        action:
+            agendaEditando
+            ? "atualizarAgenda"
+            : "salvarAgenda",
 
         id:agendaId,
 
@@ -478,6 +485,8 @@ async function salvarAgenda(){
         alert(
             "Agenda salva com sucesso!"
         );
+
+        agendaEditando = null;
 
         carregarAgenda();
 
@@ -595,124 +604,30 @@ function renderizarAgenda(lista){
     });
 
 }
-function editarAgenda(dados){
-
-  const aba =
-  SpreadsheetApp
-  .getActiveSpreadsheet()
-  .getSheetByName("AGENDA");
-
-  const linhas =
-  aba.getDataRange()
-  .getValues();
-
-  let encontrou = false;
-
-  for(let i = 1; i < linhas.length; i++){
-
-    const idPlanilha =
-    String(linhas[i][0]).trim();
-
-    const idRecebido =
-    String(dados.id).trim();
-
-    if(idPlanilha === idRecebido){
-
-      encontrou = true;
-
-      aba.getRange(i+1,2)
-      .setValue(dados.data);
-
-      aba.getRange(i+1,3)
-      .setValue(dados.status);
-
-      aba.getRange(i+1,4)
-      .setValue(dados.horaInicio);
-
-      aba.getRange(i+1,5)
-      .setValue(dados.horaFim);
-
-      aba.getRange(i+1,6)
-      .setValue(dados.intervalo);
-
-      aba.getRange(i+1,7)
-      .setValue(dados.limiteHorario);
-
-      break;
-
-    }
-
-  }
-
-  return ContentService
-  .createTextOutput(
-    JSON.stringify({
-      sucesso: encontrou
-    })
-  )
-  .setMimeType(
-    ContentService.MimeType.JSON
-  );
-
-}
-function alterarStatusAgenda(dados){
-
-  const aba =
-  SpreadsheetApp
-  .getActiveSpreadsheet()
-  .getSheetByName("AGENDA");
-
-  const linhas =
-  aba.getDataRange()
-  .getValues();
-
-  let encontrou = false;
-
-  for(let i = 1; i < linhas.length; i++){
-
-    const idPlanilha =
-    String(linhas[i][0]).trim();
-
-    const idRecebido =
-    String(dados.id).trim();
-
-    if(idPlanilha === idRecebido){
-
-      encontrou = true;
-
-      aba
-      .getRange(i+1,3)
-      .setValue(dados.status);
-
-      break;
-
-    }
-
-  }
-
-  return ContentService
-  .createTextOutput(
-    JSON.stringify({
-      sucesso: encontrou
-    })
-  )
-  .setMimeType(
-    ContentService.MimeType.JSON
-  );
-
-}
 function editarAgenda(id){
+
+    agendaEditando = id;
 
     const agenda =
     agendaAtual.find(
-        a => String(a.id) === String(id)
+        item =>
+        String(item.id) ===
+        String(id)
     );
 
     if(!agenda) return;
 
     document.querySelector(
         'input[type="date"]'
-    ).value = agenda.data;
+    ).value =
+    converterDataInput(
+        agenda.data
+    );
+
+    document.querySelectorAll(
+        "select"
+    )[0].value =
+    agenda.status;
 
     document.querySelectorAll(
         'input[type="time"]'
@@ -724,11 +639,19 @@ function editarAgenda(id){
     )[1].value =
     agenda.horaFim;
 
+    document.querySelectorAll(
+        "select"
+    )[1].value =
+    agenda.intervalo;
+
+    document.querySelector(
+        'input[type="number"]'
+    ).value =
+    agenda.limiteHorario;
+
 }
-async function alterarStatusAgenda(
-    id,
-    statusAtual
-){
+async function alterarStatusAgenda(id,statusAtual)
+    {
 
     const novoStatus =
     statusAtual === "ABERTO"
@@ -842,36 +765,171 @@ function renderizarProdutosAgenda(produtos){
     });
 
 }
-function salvarProdutosAgenda(dados){
+function converterDataInput(dataBR){
 
-  const aba =
-  SpreadsheetApp
-  .getActiveSpreadsheet()
-  .getSheetByName(
-    "AGENDA_PRODUTOS"
-  );
+    const partes =
+    dataBR.split("/");
 
-  aba.appendRow([
-
-    dados.idAgenda,
-
-    dados.produtoId,
-
-    dados.limite
-
-  ]);
-
-  return ContentService
-  .createTextOutput(
-    JSON.stringify({
-      sucesso:true
-    })
-  )
-  .setMimeType(
-    ContentService.MimeType.JSON
-  );
+    return `${partes[2]}-${partes[1]}-${partes[0]}`;
 
 }
+
+//PEDIDOS
+let pedidos = [];
+
+async function carregarPedidos(){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API +
+            "?action=listarPedidos"
+        );
+
+        pedidos =
+        await resposta.json();
+
+        renderizarPedidos(
+            pedidos
+        );
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+}
+
+function renderizarPedidos(lista){
+
+    const container =
+    document.getElementById(
+        "listaPedidos"
+    );
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    lista.forEach(pedido => {
+
+        container.innerHTML += `
+
+        <div class="pedido-card">
+
+            <div class="pedido-topo">
+
+                <strong>
+                    ${pedido.id}
+                </strong>
+
+                <select
+                  class="status-select"
+                  onchange="
+                  alterarStatusPedido(
+                  '${pedido.id}',
+                  this.value
+                  )">
+
+                  <option
+                  ${pedido.status==="Recebido"?"selected":""}>
+                  Recebido
+                  </option>
+
+                  <option
+                  ${pedido.status==="Preparando"?"selected":""}>
+                  Preparando
+                  </option>
+
+                  <option
+                  ${pedido.status==="Pronto"?"selected":""}>
+                  Pronto
+                  </option>
+
+                  <option
+                  ${pedido.status==="Entregue"?"selected":""}>
+                  Entregue
+                  </option>
+
+                  <option
+                  ${pedido.status==="Cancelado"?"selected":""}>
+                  Cancelado
+                  </option>
+
+                </select>
+
+            </div>
+
+            <p>
+                👤 ${pedido.cliente}
+            </p>
+
+            <p>
+                📱 ${pedido.telefone}
+            </p>
+
+            <p>
+                📅 ${pedido.data}
+            </p>
+
+            <p>
+                🕒 ${pedido.horario}
+            </p>
+
+            <p>
+                💳 ${pedido.pagamento}
+            </p>
+
+            <p>
+                💰 R$ ${pedido.total}
+            </p>
+
+        </div>
+
+        `;
+
+    });
+
+}
+async function alterarStatusPedido(
+    id,
+    status
+){
+
+    try{
+
+        await fetch(
+            URL_API,
+            {
+                method:"POST",
+                mode:"no-cors",
+                body:JSON.stringify({
+
+                    action:
+                    "alterarStatusPedido",
+
+                    id:id,
+
+                    status:status
+
+                })
+            }
+        );
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+}
+
 
 if(
         window.location.pathname
@@ -883,6 +941,7 @@ if(
         carregarProdutosAgenda();
 
     }
+
 if(
         window.location.pathname
         .includes("agenda.html")
@@ -891,3 +950,11 @@ if(
         carregarAgenda();
 
     }
+if(
+    window.location.pathname
+    .includes("pedidos.html")
+  ){
+
+      carregarPedidos();
+
+  }
