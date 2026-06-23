@@ -76,91 +76,67 @@
 
             <div class="card">
                 <span>Pedidos Hoje</span>
-                <h1>23</h1>
+                <h1 id="pedidosHoje">0</h1>
             </div>
 
             <div class="card">
                 <span>Em Produção</span>
-                <h1>12</h1>
+                <h1 id="emProducao">0</h1>
             </div>
 
             <div class="card">
                 <span>Entregues</span>
-                <h1>18</h1>
+                <h1 id="entreguesHoje">0</h1>
             </div>
 
             <div class="card">
                 <span>Faturamento</span>
-                <h1>R$ 2.350</h1>
+                <h1 id="faturamentoHoje">
+                    R$ 0,00
+                </h1>
             </div>
 
         </section>
 
         <section class="grid">
 
+           <section class="grid">
+
+
             <div class="box">
 
-                <h3>Produção do Dia</h3>
+                <h3>
+                    Pedidos por Dia
+                </h3>
 
-                <div class="produto">
-
-                    <div class="produto-info">
-                        <span>Frango Recheado</span>
-                        <span>16 / 20</span>
-                    </div>
-
-                    <div class="barra">
-                        <div class="progresso" style="width:80%"></div>
-                    </div>
-
-                </div>
-
-                <div class="produto">
-
-                    <div class="produto-info">
-                        <span>Costela</span>
-                        <span>8 / 15</span>
-                    </div>
-
-                    <div class="barra">
-                        <div class="progresso" style="width:53%"></div>
-                    </div>
-
-                </div>
+                <canvas id="graficoPedidos"></canvas>
 
             </div>
 
             <div class="box">
 
-                <h3>Últimos Pedidos</h3>
+                <h3>
+                    Últimos Pedidos
+                </h3>
 
-                <div class="pedido">
-
-                    <strong>PED-001</strong>
-
-                    <p>João Silva</p>
-
-                    <small>2 Frangos Recheados</small>
-
-                </div>
-
-                <div class="pedido">
-
-                    <strong>PED-002</strong>
-
-                    <p>Maria Souza</p>
-
-                    <small>1 Costela</small>
+                <div id="ultimosPedidos">
 
                 </div>
 
             </div>
+
 
         </section>
 
+
+    </section>
+
     </main>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script src="js/app.js"></script>
+
     <script src="js/auth.js"></script>
 
 </body>

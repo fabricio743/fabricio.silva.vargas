@@ -1,7 +1,15 @@
 let etapa = 1;
-
 let total = 0;
 let itens = 0;
+let configuracoes = {};
+let agendaCliente = [];
+
+const URL_API =
+  "https://script.google.com/macros/s/AKfycbw3m2Qr_vsLHBRX16gIphZbRYoBqxo7T6tl82UyQAjAg4tFsR0EsxYRH13x7sAB1Y0L/exec";
+
+carregarConfiguracoesCliente();
+
+carregarAgendaCliente();
 
 function atualizarBarra(){
 
@@ -23,14 +31,13 @@ function atualizarBarra(){
     });
 
 }
-
 function aumentar(btn){
 
     const card =
     btn.closest(".produto-card");
 
     const id =
-    Number(card.dataset.id);
+    String(card.dataset.id);
 
     const nome =
     card.dataset.nome;
@@ -38,11 +45,24 @@ function aumentar(btn){
     const preco =
     Number(card.dataset.preco);
 
+    const disponivel =
+    Number(card.dataset.disponivel || 0);
+
     let span =
     btn.parentElement.querySelector("span");
 
     let valor =
     parseInt(span.innerText);
+
+    if(valor >= disponivel){
+
+        alert(
+            "Quantidade máxima disponível para esta data."
+        );
+
+        return;
+
+    }
 
     valor++;
 
@@ -54,7 +74,7 @@ function aumentar(btn){
 
     let produto =
     pedido.produtos.find(
-        p => p.id === id
+        p => String(p.id) === String(id)
     );
 
     if(produto){
@@ -65,11 +85,11 @@ function aumentar(btn){
 
         pedido.produtos.push({
 
-            id,
+            id:id,
 
-            nome,
+            nome:nome,
 
-            preco,
+            preco:preco,
 
             quantidade:1
 
@@ -80,14 +100,13 @@ function aumentar(btn){
     atualizarCarrinho();
 
 }
-
 function diminuir(btn){
 
     const card =
     btn.closest(".produto-card");
 
     const id =
-    Number(card.dataset.id);
+    String(card.dataset.id);
 
     const preco =
     Number(card.dataset.preco);
@@ -110,7 +129,7 @@ function diminuir(btn){
 
         let produto =
         pedido.produtos.find(
-            p => p.id === id
+            p => String(p.id) === String(id)
         );
 
         if(produto){
@@ -121,7 +140,7 @@ function diminuir(btn){
 
                 pedido.produtos =
                 pedido.produtos.filter(
-                    p => p.id !== id
+                    p => String(p.id) !== String(id)
                 );
 
             }
@@ -133,8 +152,26 @@ function diminuir(btn){
     }
 
 }
-
 function atualizarCarrinho(){
+
+    pedido.subtotal =
+    pedido.produtos.reduce(
+        (soma,item) =>
+        soma + (
+            Number(item.preco) *
+            Number(item.quantidade)
+        ),
+        0
+    );
+
+    pedido.taxaEntrega =
+    pedido.tipo === "Entrega"
+    ? Number(configuracoes.taxaEntrega || 0)
+    : 0;
+
+    pedido.total =
+    pedido.subtotal +
+    pedido.taxaEntrega;
 
     document.getElementById("itens")
     .innerText =
@@ -142,48 +179,31 @@ function atualizarCarrinho(){
 
     document.getElementById("total")
     .innerText =
-    "R$ " + total.toFixed(2);
+    "R$ " + pedido.total.toFixed(2);
 
 }
-
-
-// Função para adicionar um objeto do pedido
-
 const pedido = {
-
     produtos: [],
-
+    idAgenda: "",
     data: "",
-
     horario: "",
-
     tipo: "",
-
     endereco: {
-
         municipio:"",
         rua:"",
         numero:"",
         complemento:""
-
     },
-
     cliente:{
-
         nome:"",
         whatsapp:"",
         observacao:""
-
     },
-
     pagamento:"",
-
+    subtotal:0,
+    taxaEntrega:0,
     total:0
-
 };
-
-// Função para adicionar a data
-
 function selecionarData(card,data){
 
     document
@@ -197,7 +217,6 @@ function selecionarData(card,data){
     pedido.data = data;
 
 }
-
 function selecionarHorario(botao, horario){
 
     document
@@ -211,9 +230,6 @@ function selecionarHorario(botao, horario){
     pedido.horario = horario;
 
 }
-
-// Selecionar o tipo do pedido
-
 function selecionarTipo(card,tipo){
 
     document
@@ -239,19 +255,16 @@ function selecionarTipo(card,tipo){
             .style.display = "none";
 
     }
-
+    atualizarCarrinho();
 }
-
-// Ajustar o fluxo
-
 function proximaEtapa(){
 
 if(etapa === 1){
 
-    if(pedido.produtos.length === 0){
+    if(!pedido.data){
 
         alert(
-            "Selecione pelo menos um produto."
+            "Selecione uma data."
         );
 
         return;
@@ -274,31 +287,55 @@ if(etapa === 1){
 
 }
 
-    if(etapa === 2){
+if(etapa === 2){
 
-        if(!pedido.data){
+    if(pedido.produtos.length === 0){
 
-            alert(
-                "Selecione uma data."
-            );
-
-            return;
-        }
-
-        document
-            .getElementById("etapa2")
-            .style.display = "none";
-
-        document
-            .getElementById("etapa3")
-            .style.display = "block";
-
-        etapa = 3;
-
-        atualizarBarra();
+        alert(
+            "Selecione pelo menos um produto."
+        );
 
         return;
+
     }
+
+    atualizarCarrinho();
+
+    const pedidoMinimo =
+    Number(configuracoes.pedidoMinimo || 0);
+
+    if(
+        pedidoMinimo > 0
+        &&
+        pedido.subtotal < pedidoMinimo
+    ){
+
+        alert(
+            "O pedido mínimo é de R$ " +
+            pedidoMinimo
+            .toFixed(2)
+            .replace(".", ",")
+        );
+
+        return;
+
+    }
+
+    document
+        .getElementById("etapa2")
+        .style.display = "none";
+
+    document
+        .getElementById("etapa3")
+        .style.display = "block";
+
+    etapa = 3;
+
+    atualizarBarra();
+
+    return;
+
+}
     
     if(etapa === 3){
 
@@ -440,12 +477,7 @@ if(etapa === 6){
         return;
     }
 
-    pedido.total =
-    pedido.produtos.reduce(
-        (total,item)=>
-            total + (item.preco * item.quantidade),
-        0
-    );
+    atualizarCarrinho();
 
     document
         .getElementById("etapa6")
@@ -483,7 +515,6 @@ if(etapa === 6){
 
 }
 }
-
 document.addEventListener("input", function(e){
 
     if(e.target.id === "whatsappCliente"){
@@ -509,7 +540,6 @@ document.addEventListener("input", function(e){
     }
 
 });
-
 function voltarEtapa(){
 
     if(etapa === 1){
@@ -545,7 +575,6 @@ function atualizarBotaoVoltar(){
     }
 
 }
-
 function atualizarBarra(){
 
     const passos =
@@ -568,7 +597,6 @@ function atualizarBarra(){
     atualizarBotaoVoltar();
 
 }
-
 function selecionarPagamento(card,pagamento){
 
     document
@@ -586,6 +614,39 @@ function selecionarPagamento(card,pagamento){
         document
             .getElementById("pixInfo")
             .style.display = "block";
+        const pixInfo =
+        document.getElementById("pixInfo");
+
+        if(pixInfo){
+
+            pixInfo.innerHTML = `
+
+                <strong>
+                    Pagamento via PIX
+                </strong>
+
+                <p>
+                    Recebedor:
+                    ${configuracoes.pixNome || "Não informado"}
+                </p>
+
+                <p>
+                    Tipo:
+                    ${configuracoes.pixTipo || "Não informado"}
+                </p>
+
+                <p>
+                    Chave:
+                    ${configuracoes.pixChave || "Não configurada"}
+                </p>
+
+                <button onclick="copiarPix()">
+                    Copiar chave PIX
+                </button>
+
+            `;
+
+        }
 
     }else{
 
@@ -596,11 +657,23 @@ function selecionarPagamento(card,pagamento){
     }
 
 }
-
 function copiarPix(){
 
+    const chavePix =
+    configuracoes.pixChave || "";
+
+    if(!chavePix){
+
+        alert(
+            "Chave PIX não configurada."
+        );
+
+        return;
+
+    }
+
     navigator.clipboard.writeText(
-        "55999999999"
+        chavePix
     );
 
     alert(
@@ -608,8 +681,6 @@ function copiarPix(){
     );
 
 }
-
-
 function gerarResumo(){
 
     let html = "";
@@ -691,27 +762,36 @@ function gerarResumo(){
     }
 
     html += `
-        <div class="total-final">
 
-            Total:
-            R$ ${pedido.total.toFixed(2)}
+    <div class="resumo-item">
+        <span>Subtotal</span>
+        <span>R$ ${pedido.subtotal.toFixed(2)}</span>
+    </div>
 
-        </div>
-    `;
+    <div class="resumo-item">
+        <span>Taxa de entrega</span>
+        <span>R$ ${pedido.taxaEntrega.toFixed(2)}</span>
+    </div>
+
+    <div class="total-final">
+
+        Total:
+        R$ ${pedido.total.toFixed(2)}
+
+    </div>
+`;
 
     document
         .getElementById("resumoConteudo")
         .innerHTML = html;
 
 }
-
 function gerarNumeroPedido(){
 
     return "PED-" +
     Date.now();
 
 }
-
 async function finalizarPedido(){
 
     try{
@@ -722,10 +802,60 @@ async function finalizarPedido(){
         pedido.numeroPedido =
         numeroPedido;
 
-        /*
-        Aqui depois enviaremos
-        para Google Sheets
-        */
+        await fetch(
+            URL_API,
+            {
+                method:"POST",
+                mode:"no-cors",
+                body:JSON.stringify({
+
+                    action:"novoPedido",
+
+                    numeroPedido:
+                    numeroPedido,
+
+                    cliente:
+                    pedido.cliente.nome,
+
+                    telefone:
+                    pedido.cliente.whatsapp,
+
+                    data:
+                    pedido.data,
+
+                    idAgenda:
+                    pedido.idAgenda,
+
+                    horario:
+                    pedido.horario,
+
+                    pagamento:
+                    pedido.pagamento,
+
+                    subtotal:
+                    pedido.subtotal,
+
+                    taxaEntrega:
+                    pedido.taxaEntrega,
+
+                    total:
+                    pedido.total,
+
+                    observacao:
+                    pedido.cliente.observacao,
+
+                    tipo:
+                    pedido.tipo,
+
+                    endereco:
+                    pedido.endereco,
+
+                    itens:
+                    pedido.produtos
+
+                })
+            }
+        );
 
         document
             .getElementById("etapa8")
@@ -740,6 +870,17 @@ async function finalizarPedido(){
             .innerText =
             numeroPedido;
 
+        const mensagemConfirmacao =
+        document.getElementById("mensagemConfirmacao");
+
+            if(mensagemConfirmacao){
+
+                mensagemConfirmacao.innerText =
+                configuracoes.mensagemConfirmacao ||
+                "Pedido recebido com sucesso! Em breve entraremos em contato pelo WhatsApp.";
+
+            }
+
         document
             .querySelector(".carrinho")
             .style.display = "none";
@@ -748,6 +889,382 @@ async function finalizarPedido(){
 
         alert(
             "Erro ao enviar pedido."
+        );
+
+    }
+
+}
+async function carregarConfiguracoesCliente(){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API +
+            "?action=listarConfiguracoes"
+        );
+
+        configuracoes =
+        await resposta.json();
+
+        aplicarConfiguracoesCliente();
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+}
+function aplicarConfiguracoesCliente(){
+
+    if(
+        configuracoes.statusLoja ===
+        "FECHADO"
+    ){
+
+        document.body.innerHTML = `
+
+            <div class="loja-fechada">
+
+                <h1>
+                    🍖 ${configuracoes.nomeEmpresa || "Assados Bonito"}
+                </h1>
+
+                <h2>
+                    Loja fechada no momento
+                </h2>
+
+                <p>
+                    Tente novamente mais tarde.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+    const nomeLojaCliente =
+    document.getElementById("nomeLojaCliente");
+
+    if(nomeLojaCliente){
+
+        nomeLojaCliente.innerText =
+        configuracoes.nomeEmpresa ||
+        "Assados Bonito";
+
+    }
+
+    const subtituloLojaCliente =
+    document.getElementById("subtituloLojaCliente");
+
+    if(subtituloLojaCliente){
+
+        subtituloLojaCliente.innerText =
+        "Faça seu pedido de forma rápida pelo WhatsApp " +
+        (configuracoes.whatsapp || "");
+
+    }
+}
+async function carregarProdutosCliente(){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API +
+            "?action=listarProdutos"
+        );
+
+        const produtos =
+        await resposta.json();
+
+        renderizarProdutosCliente(
+            produtos
+        );
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+}
+async function carregarProdutosDoDiaCliente(idAgenda){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API +
+            "?action=listarProdutosDoDia&idAgenda=" +
+            idAgenda
+        );
+
+        const produtos =
+        await resposta.json();
+
+        renderizarProdutosCliente(
+            produtos
+        );
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+}
+function renderizarProdutosCliente(produtos){
+
+    const container =
+    document.getElementById(
+        "listaProdutosCliente"
+    );
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    if(produtos.length === 0){
+
+        container.innerHTML = `
+
+            <p>
+                Nenhum produto disponível para esta data.
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+    produtos.forEach(produto => {
+
+        if(produto.status !== "ATIVO") return;
+
+        const disponivel =
+        Number(produto.disponivel || 0);
+
+        const bloqueado =
+        disponivel <= 0;
+
+        container.innerHTML += `
+
+            <div
+                class="produto-card ${bloqueado ? "produto-esgotado" : ""}"
+                data-id="${produto.id}"
+                data-nome="${produto.nome}"
+                data-preco="${produto.preco}"
+                data-disponivel="${disponivel}">
+
+                <div class="produto-img">
+                    🍗
+                </div>
+
+                <h3>
+                    ${produto.nome}
+                </h3>
+
+                <p class="preco">
+                    R$ ${Number(produto.preco).toFixed(2).replace(".", ",")}
+                </p>
+
+                <small>
+                    Disponível: ${disponivel}
+                </small>
+
+                <div class="quantidade">
+
+                    <button 
+                        onclick="diminuir(this)"
+                        ${bloqueado ? "disabled" : ""}>
+                        -
+                    </button>
+
+                    <span>0</span>
+
+                    <button 
+                        onclick="aumentar(this)"
+                        ${bloqueado ? "disabled" : ""}>
+                        +
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+async function carregarAgendaCliente(){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API +
+            "?action=listarAgenda"
+        );
+
+        agendaCliente =
+        await resposta.json();
+
+        renderizarDatasCliente();
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+}
+function renderizarDatasCliente(){
+
+    const container =
+    document.getElementById("listaDatasCliente");
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    agendaCliente.forEach(item => {
+
+        if(item.status !== "ABERTO") return;
+
+        container.innerHTML += `
+
+            <div 
+                class="data-card"
+                onclick="selecionarDataCliente(this,'${item.id}')">
+
+                <strong>
+                    ${item.data}
+                </strong>
+
+                <span>
+                    Disponível
+                </span>
+
+            </div>
+
+        `;
+
+    });
+
+}
+function selecionarDataCliente(card,idAgenda){
+
+    document
+    .querySelectorAll(".data-card")
+    .forEach(c =>
+        c.classList.remove("selected")
+    );
+
+    card.classList.add("selected");
+
+    const agenda =
+    agendaCliente.find(
+        item => String(item.id) === String(idAgenda)
+    );
+
+    if(!agenda) return;
+
+    pedido.data =
+    agenda.data;
+
+    pedido.idAgenda =
+    agenda.id;
+
+    pedido.produtos = [];
+
+    itens = 0;
+
+    total = 0;
+
+    atualizarCarrinho();
+
+    renderizarHorariosCliente(
+        agenda
+    );
+
+    carregarProdutosDoDiaCliente(
+        agenda.id
+    );
+
+}
+function renderizarHorariosCliente(agenda){
+
+    const container =
+    document.getElementById("listaHorariosCliente");
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    const inicio =
+    agenda.horaInicio;
+
+    const fim =
+    agenda.horaFim;
+
+    const intervalo =
+    Number(agenda.intervalo) || 30;
+
+    let [hora,minuto] =
+    inicio.split(":").map(Number);
+
+    let [horaFim,minutoFim] =
+    fim.split(":").map(Number);
+
+    let atual =
+    new Date();
+
+    atual.setHours(hora);
+    atual.setMinutes(minuto);
+    atual.setSeconds(0);
+
+    let limite =
+    new Date();
+
+    limite.setHours(horaFim);
+    limite.setMinutes(minutoFim);
+    limite.setSeconds(0);
+
+    while(atual <= limite){
+
+        const horario =
+        String(atual.getHours()).padStart(2,"0") +
+        ":" +
+        String(atual.getMinutes()).padStart(2,"0");
+
+        container.innerHTML += `
+
+            <button
+                class="horario-btn"
+                onclick="selecionarHorario(this,'${horario}')">
+
+                ${horario}
+
+            </button>
+
+        `;
+
+        atual.setMinutes(
+            atual.getMinutes() + intervalo
         );
 
     }

@@ -1091,3 +1091,54 @@ font-weight:600;
     background:#f0f0f0;
 
 }
+
+.pedido-card{
+    transition: 0.2s ease;
+}
+
+.pedido-recebido{
+    background: #a4cbff;
+    border-left: 5px solid #3b82f6;
+}
+
+.pedido-preparando{
+    background: #ffdb4a;
+    border-left: 5px solid #ffcd04;
+}
+
+.pedido-pronto{
+    background: #1dddad8e;
+    border-left: 5px solid #00cea1;
+}
+
+.pedido-entregue{
+    background: #81d66cbd;
+    border-left: 5px solid #16a34a;
+}
+
+.pedido-cancelado{
+    background: #ffdec5;
+    border-left: 5px solid #fb923c;
+}
+
+.btn-editando{
+    animation: editarPulse 0.8s ease;
+    background: #f59e0b !important;
+    color: #ffffff !important;
+}
+
+@keyframes editarPulse{
+
+    0%{
+        transform: scale(1);
+    }
+
+    50%{
+        transform: scale(2.08);
+    }
+
+    100%{
+        transform: scale(1);
+    }
+
+}

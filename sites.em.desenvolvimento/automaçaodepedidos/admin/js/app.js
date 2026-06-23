@@ -9,15 +9,11 @@ window.location.href =
 
 }
 
-// ===========================
-// PRODUTOS
-// ===========================
-
 const URL_API =
-  "https://script.google.com/macros/s/AKfycbxdjG4PgiTgZTgBqE0PQLAkz9Y5orczm_fttV1LmZLXuQJ9DrPOi_TqXzgA_7Lb7K20/exec";
+  "https://script.google.com/macros/s/AKfycbwo7HpebLglX08p9Gb_KVFbv_Ha5EjXkcNjKx1S9scO_6qR-QLMZB4czIKiC8taMrQ4/exec";
 
+// PRODUTOS
 let produtos = [];
-
 
 function abrirModal(){
 
@@ -572,11 +568,9 @@ function renderizarAgenda(lista){
             <div class="agenda-acoes">
 
                 <button
-                class="btn-editar"
-                onclick="editarAgenda('${item.id}')">
-
-                Editar
-
+                    class="btn-editar"
+                    onclick="editarAgenda('${item.id}', this)">
+                    Editar
                 </button>
 
                 <button
@@ -604,8 +598,37 @@ function renderizarAgenda(lista){
     });
 
 }
-function editarAgenda(id){
+function editarAgenda(id, botao = null){
 
+    if(botao){
+
+        const textoOriginal =
+        botao.innerText;
+
+        botao.classList.add(
+            "btn-editando"
+        );
+
+        botao.innerText =
+        "Editando...";
+
+        setTimeout(() => {
+
+            botao.classList.remove(
+                "btn-editando"
+            );
+
+            botao.innerText =
+            textoOriginal;
+
+        }, 800);
+
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
     agendaEditando = id;
 
     const agenda =
@@ -648,6 +671,8 @@ function editarAgenda(id){
         'input[type="number"]'
     ).value =
     agenda.limiteHorario;
+
+    carregarLimitesAgenda(id);
 
 }
 async function alterarStatusAgenda(id,statusAtual)
@@ -773,6 +798,51 @@ function converterDataInput(dataBR){
     return `${partes[2]}-${partes[1]}-${partes[0]}`;
 
 }
+async function carregarLimitesAgenda(idAgenda){
+
+    try{
+
+        const resposta =
+        await fetch(
+
+            URL_API +
+
+            "?action=listarProdutosAgenda" +
+
+            "&idAgenda=" +
+
+            idAgenda
+
+        );
+
+        const limites =
+        await resposta.json();
+
+        limites.forEach(item => {
+
+            const input =
+            document.querySelector(
+
+                `[data-id="${item.produtoId}"]`
+
+            );
+
+            if(input){
+
+                input.value =
+                item.limite;
+
+            }
+
+        });
+
+    }catch(erro){
+
+        console.error(erro);
+
+    }
+
+}
 
 //PEDIDOS
 let pedidos = [];
@@ -790,9 +860,19 @@ async function carregarPedidos(){
         pedidos =
         await resposta.json();
 
-        renderizarPedidos(
-            pedidos
-        );
+        if(
+            typeof filtrarPedidos === "function"
+        ){
+
+            filtrarPedidos();
+
+        }else{
+
+            renderizarPedidos(
+                pedidos
+            );
+
+        }
 
     }catch(erro){
 
@@ -803,7 +883,6 @@ async function carregarPedidos(){
     }
 
 }
-
 function renderizarPedidos(lista){
 
     const container =
@@ -819,7 +898,7 @@ function renderizarPedidos(lista){
 
         container.innerHTML += `
 
-        <div class="pedido-card">
+       <div class="pedido-card ${classeStatusPedido(pedido.status)}">
 
             <div class="pedido-topo">
 
@@ -888,6 +967,13 @@ function renderizarPedidos(lista){
                 💰 R$ ${pedido.total}
             </p>
 
+            <button
+                class="btn-editar"
+                onclick="verPedido('${pedido.id}')">
+
+                Detalhes
+
+            </button>
         </div>
 
         `;
@@ -895,6 +981,98 @@ function renderizarPedidos(lista){
     });
 
 }
+function filtrarPedidos(){
+
+    const busca =
+    document.getElementById("buscaPedido");
+
+    const filtro =
+    document.getElementById("filtroStatus");
+
+    let textoBusca =
+    busca ? busca.value.toLowerCase() : "";
+
+    let statusSelecionado =
+    filtro ? filtro.value : "";
+
+    const resultado =
+    pedidos.filter(pedido => {
+
+        const textoPedido =
+        (
+            pedido.id + " " +
+            pedido.cliente + " " +
+            pedido.telefone
+        ).toLowerCase();
+
+        const combinaBusca =
+        textoPedido.includes(textoBusca);
+
+        const combinaStatus =
+        statusSelecionado === "" ||
+        pedido.status === statusSelecionado;
+
+        return combinaBusca && combinaStatus;
+
+    });
+
+    renderizarPedidos(resultado);
+
+}
+document.addEventListener("input", function(e){
+
+    if(
+        e.target.id === "buscaPedido"
+    ){
+
+        filtrarPedidos();
+
+    }
+
+});
+document.addEventListener("change", function(e){
+
+    if(
+        e.target.classList.contains("filtro-status")
+    ){
+
+        const todos =
+        document.querySelector('.filtro-status[value="Todos"]');
+
+        const outros =
+        Array.from(
+            document.querySelectorAll('.filtro-status:not([value="Todos"])')
+        );
+
+        if(
+            e.target.value === "Todos" &&
+            e.target.checked
+        ){
+
+            outros.forEach(input => {
+                input.checked = false;
+            });
+
+        }else{
+
+            if(todos){
+                todos.checked = false;
+            }
+
+        }
+
+        const algumMarcado =
+        document.querySelectorAll(".filtro-status:checked").length > 0;
+
+        if(!algumMarcado && todos){
+            todos.checked = true;
+        }
+
+        filtrarPedidos();
+
+    }
+
+});
 async function alterarStatusPedido(
     id,
     status
@@ -919,6 +1097,11 @@ async function alterarStatusPedido(
                 })
             }
         );
+             setTimeout(() => {
+
+            carregarPedidos();
+
+        }, 800);
 
     }catch(erro){
 
@@ -929,7 +1112,714 @@ async function alterarStatusPedido(
     }
 
 }
+async function verPedido(idPedido){
 
+    try{
+
+        const resposta =
+        await fetch(
+
+            URL_API +
+            "?action=listarItensPedido" +
+            "&idPedido=" +
+            idPedido
+
+        );
+
+        const itens =
+        await resposta.json();
+
+        let texto = "";
+
+        itens.forEach(item => {
+
+            texto +=
+            item.produto +
+            " x" +
+            item.quantidade +
+            " - R$ " +
+            item.preco +
+            "\n";
+
+        });
+
+        alert(texto);
+
+    }catch(erro){
+
+        console.error(erro);
+
+    }
+
+}
+function filtrarPedidos(){
+
+    const busca =
+    document.getElementById("buscaPedido");
+
+    const textoBusca =
+    busca ? busca.value.toLowerCase() : "";
+
+    const filtrosMarcados =
+    Array.from(
+        document.querySelectorAll(".filtro-status:checked")
+    ).map(input => input.value);
+
+    const mostrarTodos =
+    filtrosMarcados.includes("Todos") ||
+    filtrosMarcados.length === 0;
+
+    const resultado =
+    pedidos.filter(pedido => {
+
+        const textoPedido =
+        (
+            pedido.id + " " +
+            pedido.cliente + " " +
+            pedido.telefone
+        ).toLowerCase();
+
+        const combinaBusca =
+        textoPedido.includes(textoBusca);
+
+        const combinaStatus =
+        mostrarTodos ||
+        filtrosMarcados.includes(pedido.status);
+
+        return combinaBusca && combinaStatus;
+
+    });
+
+    renderizarPedidos(resultado);
+
+}
+function classeStatusPedido(status){
+
+    const statusFormatado =
+    String(status)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-");
+
+    return "pedido-" + statusFormatado;
+
+}
+
+let atualizacaoPedidos = null;
+
+function iniciarAtualizacaoPedidos(){
+
+    if(atualizacaoPedidos){
+        return;
+    }
+
+    atualizacaoPedidos =
+    setInterval(() => {
+
+        carregarPedidos();
+
+    }, 10000);
+
+}
+
+//Dashboard
+async function carregarDashboard(){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API +
+            "?action=dashboard"
+        );
+
+        const dados =
+        await resposta.json();
+
+        document
+        .getElementById("pedidosHoje")
+        .innerText =
+        dados.pedidosHoje;
+
+        document
+        .getElementById("emProducao")
+        .innerText =
+        dados.emProducao;
+
+        document
+        .getElementById("entreguesHoje")
+        .innerText =
+        dados.entreguesHoje;
+
+        document
+        .getElementById("faturamentoHoje")
+        .innerText =
+        "R$ " +
+        Number(
+        dados.faturamentoHoje
+        ).toFixed(2);
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+}
+async function carregarUltimosPedidos(){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API +
+            "?action=ultimosPedidos"
+        );
+
+        const pedidos =
+        await resposta.json();
+
+        const container =
+        document.getElementById(
+            "ultimosPedidos"
+        );
+
+        if(!container) return;
+
+        container.innerHTML = "";
+
+        pedidos.forEach(pedido => {
+
+            container.innerHTML += `
+
+            <div class="pedido">
+
+                <strong>
+                    ${pedido.id}
+                </strong>
+
+                <p>
+                    ${pedido.cliente}
+                </p>
+
+                <small>
+                    ${pedido.status}
+                    •
+                    R$ ${pedido.total}
+                </small>
+
+            </div>
+
+            `;
+
+        });
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+}
+async function carregarGraficoPedidos(){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API + "?action=pedidosUltimos7Dias",
+            {
+                method:"GET",
+                redirect:"follow"
+            }
+        );
+
+        const dados =
+        await resposta.json();
+
+        const labels =
+        Object.keys(dados);
+
+        const valores =
+        Object.values(dados);
+
+        const ctx =
+        document
+        .getElementById(
+            "graficoPedidos"
+        );
+
+        if(!ctx) return;
+
+        new Chart(ctx, {
+
+            type:"bar",
+
+            data:{
+
+                labels:labels,
+
+                datasets:[{
+
+                    label:
+                    "Pedidos",
+
+                    data:valores
+
+                }]
+
+            }
+
+        });
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+
+}
+
+// ESTOQUE
+
+async function carregarEstoque(){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API +
+            "?action=listarProdutos"
+        );
+
+        const produtos =
+        await resposta.json();
+
+        renderizarEstoque(produtos);
+
+    }catch(erro){
+
+        console.error(erro);
+
+    }
+
+}
+function renderizarEstoque(produtos){
+
+    const container =
+    document.getElementById("listaEstoque");
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    produtos.forEach(produto => {
+
+        if(produto.status !== "ATIVO") return;
+
+        const estoque =
+        Number(produto.estoque) || 0;
+
+        const minimo =
+        10;
+
+        const percentual =
+        Math.min(
+            (estoque / minimo) * 100,
+            100
+        );
+
+        const estoqueBaixo =
+        estoque <= minimo;
+
+        container.innerHTML += `
+
+        <div class="estoque-card">
+
+            <h3>
+                🍖 ${produto.nome}
+            </h3>
+
+            <h1>
+                ${estoque}
+            </h1>
+
+            <span>
+                Estoque Atual
+            </span>
+
+            <div class="barra">
+
+                <div
+                    class="${estoqueBaixo ? "progresso-baixo" : "progresso"}"
+                    style="width:${percentual}%">
+                </div>
+
+            </div>
+
+            <p>
+                Mínimo: ${minimo}
+            </p>
+
+            <div class="${estoqueBaixo ? "status-baixo" : "status-ok"}">
+
+                ${estoqueBaixo
+                ? "🔴 Estoque Baixo"
+                : "🟢 Estoque Normal"}
+
+            </div>
+
+            <div class="acoes">
+
+                <button
+                    onclick="ajustarEstoque('${produto.id}', -1)">
+                    -
+                </button>
+
+                <button
+                    onclick="ajustarEstoque('${produto.id}', 1)">
+                    +
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+}
+async function ajustarEstoque(id, valor){
+
+    try{
+
+        await fetch(
+            URL_API,
+            {
+                method:"POST",
+                mode:"no-cors",
+                body:JSON.stringify({
+
+                    action:"ajustarEstoque",
+
+                    id:id,
+
+                    valor:valor
+
+                })
+            }
+        );
+
+        carregarEstoque();
+
+    }catch(erro){
+
+        console.error(erro);
+
+    }
+
+}
+
+// FINANCEIRO
+
+async function carregarFinanceiro(){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API +
+            "?action=financeiro"
+        );
+
+        const dados =
+        await resposta.json();
+
+        atualizarFinanceiro(
+            dados
+        );
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+}
+function formatarMoeda(valor){
+
+    return "R$ " +
+    Number(valor || 0)
+    .toFixed(2)
+    .replace(".", ",");
+
+}
+function atualizarFinanceiro(dados){
+
+    const financeiroHoje =
+    document.getElementById("financeiroHoje");
+
+    const financeiroSemana =
+    document.getElementById("financeiroSemana");
+
+    const financeiroMes =
+    document.getElementById("financeiroMes");
+
+    const financeiroPedidos =
+    document.getElementById("financeiroPedidos");
+
+    const financeiroPix =
+    document.getElementById("financeiroPix");
+
+    const financeiroDinheiro =
+    document.getElementById("financeiroDinheiro");
+
+    const financeiroCartao =
+    document.getElementById("financeiroCartao");
+
+    if(financeiroHoje){
+        financeiroHoje.innerText =
+        formatarMoeda(dados.financeiroHoje);
+    }
+
+    if(financeiroSemana){
+        financeiroSemana.innerText =
+        formatarMoeda(dados.financeiroSemana);
+    }
+
+    if(financeiroMes){
+        financeiroMes.innerText =
+        formatarMoeda(dados.financeiroMes);
+    }
+
+    if(financeiroPedidos){
+        financeiroPedidos.innerText =
+        dados.financeiroPedidos;
+    }
+
+    if(financeiroPix){
+        financeiroPix.innerText =
+        formatarMoeda(dados.financeiroPix);
+    }
+
+    if(financeiroDinheiro){
+        financeiroDinheiro.innerText =
+        formatarMoeda(dados.financeiroDinheiro);
+    }
+
+    if(financeiroCartao){
+        financeiroCartao.innerText =
+        formatarMoeda(dados.financeiroCartao);
+    }
+
+    renderizarProdutosMaisVendidos(
+        dados.produtosMaisVendidos
+    );
+
+    renderizarUltimosRecebimentos(
+        dados.recebimentos
+    );
+
+}
+function renderizarProdutosMaisVendidos(lista){
+
+    const container =
+    document.getElementById(
+        "produtosMaisVendidos"
+    );
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    lista.forEach(item => {
+
+        container.innerHTML += `
+
+            <li>
+                ${item.produto}
+                -
+                ${item.quantidade}
+                vendidos
+            </li>
+
+        `;
+
+    });
+
+}
+function renderizarUltimosRecebimentos(lista){
+
+    const container =
+    document.getElementById(
+        "ultimosRecebimentos"
+    );
+
+    if(!container) return;
+
+    container.innerHTML = "";
+
+    lista.forEach(item => {
+
+        container.innerHTML += `
+
+            <div class="recebimento">
+
+                ${item.id}
+                -
+                ${item.cliente}
+                -
+                ${formatarMoeda(item.total)}
+                -
+                ${item.pagamento}
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+// CONFIGURAÇÕES
+
+async function carregarConfiguracoes(){
+
+    try{
+
+        const resposta =
+        await fetch(
+            URL_API +
+            "?action=listarConfiguracoes"
+        );
+
+        const dados =
+        await resposta.json();
+
+        preencherConfiguracoes(
+            dados
+        );
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+    }
+
+}
+function preencherConfiguracoes(dados){
+
+    const campos = {
+        configNomeEmpresa:"nomeEmpresa",
+        configWhatsapp:"whatsapp",
+        configTaxaEntrega:"taxaEntrega",
+        configPedidoMinimo:"pedidoMinimo",
+        configPixNome:"pixNome",
+        configPixChave:"pixChave",
+        configPixTipo:"pixTipo",
+        configStatusLoja:"statusLoja",
+        configMaxPedidosHorario:"maxPedidosHorario",
+        configTempoHorarios:"tempoHorarios",
+        configMensagemConfirmacao:"mensagemConfirmacao"
+    };
+
+    Object.keys(campos).forEach(id => {
+
+        const elemento =
+        document.getElementById(id);
+
+        if(elemento){
+
+            elemento.value =
+            dados[
+                campos[id]
+            ] || "";
+
+        }
+
+    });
+
+}
+async function salvarConfiguracoes(){
+
+    try{
+
+        await fetch(
+            URL_API,
+            {
+                method:"POST",
+                mode:"no-cors",
+                body:JSON.stringify({
+
+                    action:"salvarConfiguracoes",
+
+                    nomeEmpresa:
+                    document.getElementById("configNomeEmpresa").value,
+
+                    whatsapp:
+                    document.getElementById("configWhatsapp").value,
+
+                    taxaEntrega:
+                    document.getElementById("configTaxaEntrega").value,
+
+                    pedidoMinimo:
+                    document.getElementById("configPedidoMinimo").value,
+
+                    pixNome:
+                    document.getElementById("configPixNome").value,
+
+                    pixChave:
+                    document.getElementById("configPixChave").value,
+
+                    pixTipo:
+                    document.getElementById("configPixTipo").value,
+
+                    statusLoja:
+                    document.getElementById("configStatusLoja").value,
+
+                    maxPedidosHorario:
+                    document.getElementById("configMaxPedidosHorario").value,
+
+                    tempoHorarios:
+                    document.getElementById("configTempoHorarios").value,
+
+                    mensagemConfirmacao:
+                    document.getElementById("configMensagemConfirmacao").value
+
+                })
+            }
+        );
+
+        alert(
+            "Configurações salvas com sucesso!"
+        );
+
+    }catch(erro){
+
+        console.error(
+            erro
+        );
+
+        alert(
+            "Erro ao salvar configurações."
+        );
+
+    }
+
+}
 
 if(
         window.location.pathname
@@ -951,10 +1841,45 @@ if(
 
     }
 if(
+    window.location.pathname.includes("pedidos.html")
+){
+
+    carregarPedidos();
+
+    iniciarAtualizacaoPedidos();
+
+}
+if(
     window.location.pathname
-    .includes("pedidos.html")
-  ){
+    .includes("estoque.html")
+){
 
-      carregarPedidos();
+    carregarEstoque();
 
-  }
+}
+if(
+    window.location.pathname
+    .includes("financeiro.html")
+){
+
+    carregarFinanceiro();
+
+}
+if(
+    window.location.pathname
+    .includes("configuracoes.html")
+){
+
+    carregarConfiguracoes();
+
+}
+if(window.location.pathname.endsWith("/") || window.location.pathname.includes( "index.html")){
+
+    carregarDashboard();
+
+    carregarUltimosPedidos();
+
+    //carregarGraficoPedidos();
+
+
+}

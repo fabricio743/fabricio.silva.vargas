@@ -66,64 +66,112 @@
 
 <div class="config-card">
 
-<h3>Empresa</h3>
+    <h3>Empresa</h3>
 
-<label>Nome da Empresa</label>
-<input type="text" value="Assados Bonito">
+    <label>Nome da Empresa</label>
+    <input 
+        type="text" 
+        id="configNomeEmpresa"
+        placeholder="Ex: Assados Bonito"
+    >
 
-<label>WhatsApp</label>
-<input type="text" value="55999999999">
+    <label>WhatsApp</label>
+    <input 
+        type="text" 
+        id="configWhatsapp"
+        placeholder="Ex: 55999999999"
+    >
 
-<label>Logo</label>
-<input type="file">
+    <label>Logo</label>
+    <input 
+        type="file"
+        id="configLogo"
+    >
 
-<hr>
+    <hr>
 
-<h3>Entrega</h3>
+    <h3>Entrega</h3>
 
-<label>Taxa de Entrega</label>
-<input type="number" value="5">
+    <label>Taxa de Entrega</label>
+    <input 
+        type="number" 
+        id="configTaxaEntrega"
+        placeholder="Ex: 5"
+    >
 
-<label>Pedido Mínimo</label>
-<input type="number" value="20">
+    <label>Pedido Mínimo</label>
+    <input 
+        type="number" 
+        id="configPedidoMinimo"
+        placeholder="Ex: 20"
+    >
 
-<hr>
+    <hr>
 
-<h3>PIX</h3>
+    <h3>PIX</h3>
 
-<label>Nome do Recebedor</label>
-<input type="text">
+    <label>Nome do Recebedor</label>
+    <input 
+        type="text"
+        id="configPixNome"
+        placeholder="Nome de quem recebe o PIX"
+    >
 
-<label>Chave PIX</label>
-<input type="text">
+    <label>Chave PIX</label>
+    <input 
+        type="text"
+        id="configPixChave"
+        placeholder="Digite a chave PIX"
+    >
 
-<label>Tipo da Chave</label>
+    <label>Tipo da Chave</label>
 
-<select>
-<option>Telefone</option>
-<option>CPF</option>
-<option>Email</option>
-<option>Aleatória</option>
-</select>
+    <select id="configPixTipo">
+        <option value="Telefone">Telefone</option>
+        <option value="CPF">CPF</option>
+        <option value="Email">Email</option>
+        <option value="Aleatória">Aleatória</option>
+    </select>
 
-<hr>
+    <hr>
 
-<h3>Sistema</h3>
+    <h3>Sistema</h3>
 
-<label>Máximo de Pedidos por Horário</label>
-<input type="number" value="5">
+    <label>Status da Loja</label>
 
-<label>Tempo entre Horários</label>
+    <select id="configStatusLoja">
+        <option value="ABERTO">Aberto</option>
+        <option value="FECHADO">Fechado</option>
+    </select>
 
-<select>
-<option>15 minutos</option>
-<option selected>30 minutos</option>
-<option>60 minutos</option>
-</select>
+    <label>Máximo de Pedidos por Horário</label>
+    <input 
+        type="number" 
+        id="configMaxPedidosHorario"
+        placeholder="Ex: 5"
+    >
 
-<button class="salvar">
-Salvar Configurações
-</button>
+    <label>Tempo entre Horários</label>
+
+    <select id="configTempoHorarios">
+        <option value="15">15 minutos</option>
+        <option value="30">30 minutos</option>
+        <option value="60">60 minutos</option>
+    </select>
+
+    <label>Mensagem de Confirmação</label>
+
+    <textarea 
+        id="configMensagemConfirmacao"
+        placeholder="Ex: Pedido recebido com sucesso! Em breve confirmaremos pelo WhatsApp."
+    ></textarea>
+
+    <button 
+        class="salvar"
+        onclick="salvarConfiguracoes()"
+    >
+        Salvar Configurações
+    </button>
 
 </div>
 

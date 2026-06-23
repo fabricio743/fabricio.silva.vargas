@@ -23,9 +23,9 @@
                 🍖
             </div>
 
-            <h1>Assados Bonito</h1>
+            <h1 id="nomeLojaCliente">Assados Bonito</h1>
 
-            <p>Faça seu pedido de forma rápida</p>
+            <p id="subtituloLojaCliente">Faça seu pedido de forma rápida</p>
 
         </header>
 
@@ -50,81 +50,10 @@
 
             <section class="etapa ativa" id="etapa1">
 
-                <h2>Escolha seus produtos</h2>
+                <h2>📅 Escolha o dia</h2>
 
-                <div class="produtos">
+                <div class="datas" id="listaDatasCliente">
 
-                    <div
-                            class="produto-card"
-                            data-id="1"
-                            data-nome="Frango Recheado"
-                            data-preco="55">
-
-                            <div class="produto-img">
-                                🍗
-                            </div>
-
-                            <h3>Frango Recheado</h3>
-
-                            <p class="preco">
-                                R$ 55,00
-                            </p>
-
-                            <small>
-                                Disponível: 12
-                            </small>
-
-                            <div class="quantidade">
-
-                                <button onclick="diminuir(this)">
-                                    -
-                                </button>
-
-                                <span>0</span>
-
-                                <button onclick="aumentar(this)">
-                                    +
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                        <div
-                            class="produto-card"
-                            data-id="2"
-                            data-nome="Costela de Porco"
-                            data-preco="70">
-
-                            <div class="produto-img">
-                                🥩
-                            </div>
-
-                            <h3>Costela de Porco</h3>
-
-                            <p class="preco">
-                                R$ 70,00
-                            </p>
-
-                            <small>
-                                Disponível: 20
-                            </small>
-
-                            <div class="quantidade">
-
-                                <button onclick="diminuir(this)">
-                                    -
-                                </button>
-
-                                <span>0</span>
-
-                                <button onclick="aumentar(this)">
-                                    +
-                                </button>
-
-                            </div>
-
-                        </div>
                 </div>
 
             </section>
@@ -133,27 +62,9 @@
             <br>
             <section class="etapa" id="etapa2" style="display:none;">
 
-                <h2>📅 Escolha o dia</h2>
+                <h2>Escolha seus produtos</h2>
 
-                <div class="datas">
-
-                    <div class="data-card"
-                        onclick="selecionarData(this,'2026-06-20')">
-
-                        <strong>Sábado</strong>
-
-                        <span>20/06/2026</span>
-
-                    </div>
-
-                    <div class="data-card"
-                        onclick="selecionarData(this,'2026-06-21')">
-
-                        <strong>Domingo</strong>
-
-                        <span>21/06/2026</span>
-
-                    </div>
+                <div class="produtos" id="listaProdutosCliente">
 
                 </div>
 
@@ -165,57 +76,9 @@
 
                 <h2>🕒 Escolha o horário</h2>
 
-                <div class="horarios">
+                <div class="horarios" id="listaHorariosCliente">
 
-                <button
-                    class="horario-btn"
-                    onclick="selecionarHorario(this,'10:00')">
-
-                    10:00
-
-                </button>
-
-                <button
-                    class="horario-btn"
-                    onclick="selecionarHorario(this,'10:30')">
-
-                    10:30
-
-                </button>
-
-                <button
-                    class="horario-btn"
-                    onclick="selecionarHorario(this,'11:00')">
-
-                    11:00
-
-                </button>
-
-                <button
-                    class="horario-btn"
-                    onclick="selecionarHorario(this,'11:30')">
-
-                    11:30
-
-                </button>
-
-                <button
-                    class="horario-btn"
-                    onclick="selecionarHorario(this,'12:00')">
-
-                    12:00
-
-                </button>
-
-                <button
-                    class="horario-btn"
-                    onclick="selecionarHorario(this,'12:30')">
-
-                    12:30
-
-                </button>
-
-             </div>
+                </div>
 
             </section>
 
@@ -361,22 +224,6 @@
 
                 <div id="pixInfo" style="display:none;">
 
-                    <h3>Pagamento via PIX</h3>
-
-                    <p>Chave PIX:</p>
-
-                    <div class="pix-chave">
-                        55999999999
-                    </div>
-
-                    <button
-                        type="button"
-                        onclick="copiarPix()">
-
-                        Copiar Chave PIX
-
-                    </button>
-
                 </div>
 
             </section>
@@ -440,9 +287,9 @@
 
                     <h2>Pedido Recebido!</h2>
 
-                    <p>
+                    <p id="mensagemConfirmacao">
 
-                        Seu pedido foi enviado com sucesso.
+                        Em breve entraremos em contato.
 
                     </p>
 
