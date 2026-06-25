@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estoque de Peças - Smartiliza</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- CABEÇALHO -->
+    <div class="header">
+
+        <div class="logo-area">
+            <img src="logo.png" alt="Smartiliza">
+            <div>
+                <h1>Smartiliza</h1>
+                <span>Assistência Técnica</span>
+            </div>
+        </div>
+
+        <div class="titulo-pagina">
+            Estoque de Peças
+        </div>
+
+    </div>
+
+    <!-- MENU -->
+    <nav class="menu-central">
+
+        <a href="index.html">
+            Dashboard
+        </a>
+
+        <a href="nova.os.html">
+            Nova OS
+        </a>
+
+        <a href="ordens.html">
+            Ordens de Serviço
+        </a>
+
+        <a href="estoque.html" class="ativo">
+            Estoque de Peças
+        </a>
+
+        <a href="financeiro.html">
+            Financeiro
+        </a>
+
+    </nav>
+
+    <!-- FORMULÁRIO DE ESTOQUE -->
+    <div class="card">
+
+        <div class="topo-secao">
+            <div>
+                <h2>Cadastrar Peça</h2>
+                <p>Adicione peças disponíveis para manutenção e controle interno.</p>
+            </div>
+        </div>
+
+        <form id="pecaForm">
+
+            <input type="hidden" id="pecaId">
+
+            <div class="grid">
+
+                <div class="grupo">
+                    <label>Marca</label>
+                    <input 
+                        type="text" 
+                        id="marcaPeca" 
+                        placeholder="Ex: Samsung, Motorola, iPhone"
+                    >
+                </div>
+
+                <div class="grupo">
+                    <label>Modelo Compatível</label>
+                    <input 
+                        type="text" 
+                        id="modeloPeca" 
+                        placeholder="Ex: A14, G54, XR"
+                    >
+                </div>
+
+                <div class="grupo">
+                    <label>Nome da Peça</label>
+                    <input 
+                        type="text" 
+                        id="nomePeca" 
+                        placeholder="Ex: Tela, bateria, conector de carga"
+                    >
+                </div>
+
+                <div class="grupo">
+                    <label>Quantidade</label>
+                    <input 
+                        type="number" 
+                        id="quantidadePeca" 
+                        min="0"
+                    >
+                </div>
+
+                <div class="grupo">
+                    <label>Custo Unitário (R$)</label>
+                    <input 
+                        type="number" 
+                        step="0.01" 
+                        id="custoUnitarioPeca"
+                    >
+                </div>
+
+                <div class="grupo">
+                    <label>Fornecedor</label>
+                    <input 
+                        type="text" 
+                        id="fornecedorPeca" 
+                        placeholder="Ex: Oeste, BringIT, Mercado Livre"
+                    >
+                </div>
+
+                <div class="grupo">
+                    <label>Status</label>
+                    <select id="statusPeca">
+                        <option>Disponível</option>
+                        <option>Baixo estoque</option>
+                        <option>Esgotado</option>
+                    </select>
+                </div>
+
+                <div class="grupo grupo-full">
+                    <label>Observação</label>
+                    <textarea 
+                        id="observacaoPeca"
+                        placeholder="Ex: Compatível com A14 4G / A14 5G"
+                    ></textarea>
+                </div>
+
+            </div>
+
+            <button type="submit">
+                Salvar Peça
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- LISTA DE PEÇAS -->
+    <div class="card card-separado">
+
+        <div class="topo-secao">
+            <div>
+                <h2>Peças Cadastradas</h2>
+                <p>Lista das peças registradas no estoque.</p>
+            </div>
+
+            <button 
+                type="button" 
+                class="btn-secundario"
+                onclick="carregarPecas()"
+            >
+                Atualizar Estoque
+            </button>
+        </div>
+
+        <div class="tabela-area">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Peça</th>
+                        <th>Qtd</th>
+                        <th>Custo</th>
+                        <th>Fornecedor</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody id="listaPecas">
+                    <tr>
+                        <td colspan="8" class="mensagem-tabela">
+                            Nenhuma peça carregada ainda.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/estoque.js"></script>
+
+</body>
+</html>

@@ -1,5 +1,4 @@
-const URL_SCRIPT =
-"https://script.google.com/macros/s/AKfycbyhNDe3VrOPDewrCXei6pYIg2Go9cPZJ9M1QuoCeQh4gJu0qBMgSmfxF1ioPXshbrQZ/exec";
+const URL_SCRIPT = CONFIG.URL_SCRIPT;
 
 document
 .getElementById("osForm")

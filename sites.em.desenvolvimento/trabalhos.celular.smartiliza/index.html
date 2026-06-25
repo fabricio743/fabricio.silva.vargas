@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Ordem de Serviço</title>
+    <title>Dashboard - Smartiliza</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
 
+    <!-- CABEÇALHO -->
     <div class="header">
 
         <div class="logo-area">
@@ -21,88 +22,103 @@
         </div>
 
         <div class="titulo-pagina">
-            Nova Ordem de Serviço
+            Central de Serviços
         </div>
 
     </div>
 
+    <!-- MENU -->
+    <nav class="menu-central">
+
+        <a href="index.html" class="ativo">
+            Dashboard
+        </a>
+
+        <a href="nova.os.html">
+            Nova OS
+        </a>
+
+        <a href="ordens.html">
+            Ordens de Serviço
+        </a>
+
+        <a href="estoque.html">
+            Estoque de Peças
+        </a>
+
+        <a href="financeiro.html">
+            Financeiro
+        </a>
+
+    </nav>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard-grid">
+
+        <div class="dash-card">
+            <span class="dash-label">Ordens abertas</span>
+            <strong id="totalAbertas">0</strong>
+            <p>OS em andamento ou análise</p>
+        </div>
+
+        <div class="dash-card">
+            <span class="dash-label">Aguardando peça</span>
+            <strong id="totalAguardando">0</strong>
+            <p>Serviços esperando peça</p>
+        </div>
+
+        <div class="dash-card">
+            <span class="dash-label">Finalizadas</span>
+            <strong id="totalFinalizadas">0</strong>
+            <p>Prontas para retirada</p>
+        </div>
+
+        <div class="dash-card">
+            <span class="dash-label">Retiradas</span>
+            <strong id="totalRetiradas">0</strong>
+            <p>Serviços já entregues</p>
+        </div>
+
+    </div>
+
+    <!-- ACESSOS RÁPIDOS -->
     <div class="card">
 
-        <form id="osForm">
-
-            <div class="grid">
-
-                <div class="grupo">
-                    <label>Nº da OS</label>
-                    <input type="text" id="os">
-                </div>
-
-                <div class="grupo">
-                    <label>Data</label>
-                    <input type="date" id="data">
-                </div>
-
-                <div class="grupo">
-                    <label>Nome do Cliente</label>
-                    <input type="text" id="cliente">
-                </div>
-
-                <div class="grupo">
-                    <label>Telefone</label>
-                    <input type="text" id="telefone">
-                </div>
-
-                <div class="grupo grupo-full">
-                    <label>Modelo do Aparelho</label>
-                    <input type="text" id="modelo">
-                </div>
-
-                <div class="grupo grupo-full">
-                    <label>Defeito Relatado</label>
-                    <textarea id="defeito"></textarea>
-                </div>
-
-                <div class="grupo grupo-full">
-                    <label>Laudo Técnico</label>
-                    <textarea id="laudo"></textarea>
-                </div>
-
-                <div class="grupo">
-                    <label>Custo da Peça (R$)</label>
-                    <input type="number" step="0.01" id="custoPeca">
-                </div>
-
-                <div class="grupo">
-                    <label>Orçamento (R$)</label>
-                    <input type="number" id="orcamento">
-                </div>
-                <div class="grupo">
-                    <label>Fornecedor da Peça</label>
-                    <input type="text" id="fornecedor" placeholder="Ex: BringIT, AliExpress, Mercado Livre">
-                </div>
-
-                <div class="grupo">
-                    <label>Status</label>
-                    <select id="status">
-                        <option>Em análise</option>
-                        <option>Aguardando peça</option>
-                        <option>Finalizado</option>
-                        <option>Retirado</option>
-                    </select>
-                </div>
-
+        <div class="topo-secao">
+            <div>
+                <h2>Acessos rápidos</h2>
+                <p>Escolha uma área da central para continuar.</p>
             </div>
+        </div>
 
-            <button type="submit">
-                Salvar Ordem de Serviço
-            </button>
+        <div class="atalhos-grid">
 
-        </form>
+            <a href="nova-os.html" class="atalho-card">
+                <strong>Nova Ordem de Serviço</strong>
+                <span>Cadastrar uma nova OS na planilha.</span>
+            </a>
+
+            <a href="ordens.html" class="atalho-card">
+                <strong>Ordens de Serviço</strong>
+                <span>Consultar OS e alterar status pelo site.</span>
+            </a>
+
+            <a href="estoque.html" class="atalho-card">
+                <strong>Estoque de Peças</strong>
+                <span>Cadastrar e controlar peças disponíveis.</span>
+            </a>
+
+            <a href="financeiro.html" class="atalho-card">
+                <strong>Financeiro</strong>
+                <span>Acompanhar custos, orçamento e lucro.</span>
+            </a>
+
+        </div>
 
     </div>
 
 </div>
 
+
 </body>
 </html>
-<script src="script.js" ></script>

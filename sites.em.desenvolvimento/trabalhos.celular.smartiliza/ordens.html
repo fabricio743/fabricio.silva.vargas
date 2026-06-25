@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordens de Serviço - Smartiliza</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- CABEÇALHO -->
+    <div class="header">
+
+        <div class="logo-area">
+            <img src="logo.png" alt="Smartiliza">
+            <div>
+                <h1>Smartiliza</h1>
+                <span>Assistência Técnica</span>
+            </div>
+        </div>
+
+        <div class="titulo-pagina">
+            Ordens de Serviço
+        </div>
+
+    </div>
+
+    <!-- MENU -->
+    <nav class="menu-central">
+
+        <a href="index.html">
+            Dashboard
+        </a>
+
+        <a href="nova.os.html">
+            Nova OS
+        </a>
+
+        <a href="ordens.html" class="ativo">
+            Ordens de Serviço
+        </a>
+
+        <a href="estoque.html">
+            Estoque de Peças
+        </a>
+
+        <a href="financeiro.html">
+            Financeiro
+        </a>
+
+    </nav>
+
+    <!-- LISTA DE ORDENS -->
+    <div class="card">
+
+        <div class="topo-secao">
+            <div>
+                <h2>Lista de Ordens</h2>
+                <p>Consulte as ordens cadastradas e altere o status diretamente pelo site.</p>
+            </div>
+
+            <button 
+                type="button" 
+                class="btn-secundario"
+                onclick="carregarOrdens()"
+            >
+                Atualizar Lista
+            </button>
+        </div>
+
+        <div class="filtros">
+
+            <div class="grupo">
+                <label>Pesquisar</label>
+                <input 
+                    type="text" 
+                    id="pesquisaOS" 
+                    placeholder="Buscar por OS, cliente, telefone ou modelo"
+                    oninput="filtrarOrdens()"
+                >
+            </div>
+
+            <div class="grupo">
+                <label>Status</label>
+                <select id="filtroStatus" onchange="filtrarOrdens()">
+                    <option value="">Todos</option>
+                    <option>Em análise</option>
+                    <option>Aguardando peça</option>
+                    <option>Finalizado</option>
+                    <option>Retirado</option>
+                    <option>Sem conserto</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="tabela-area">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>OS</th>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Telefone</th>
+                        <th>Modelo</th>
+                        <th>Orçamento</th>
+                        <th>Custo</th>
+                        <th>Lucro</th>
+                        <th>Status</th>
+                        <th>Garantia</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+
+                <tbody id="listaOrdens">
+                    <tr>
+                        <td colspan="11" class="mensagem-tabela">
+                            Carregando ordens...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+<script src="js/config.js"></script>
+<script src="js/ordens.js"></script>
+
+</body>
+</html>
