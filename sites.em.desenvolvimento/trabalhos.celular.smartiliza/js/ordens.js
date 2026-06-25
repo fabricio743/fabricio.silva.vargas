@@ -199,25 +199,37 @@ async function salvarStatus(linha){
 
         if(resultado.sucesso){
 
-            selectStatus.disabled = false;
+    selectStatus.disabled = false;
 
-            const linhaTabela = selectStatus.closest("tr");
+    const linhaTabela = selectStatus.closest("tr");
 
-            linhaTabela.classList.remove(
-                "linha-retirado",
-                "linha-aguardando",
-                "linha-sem-conserto",
-                "linha-finalizado",
-                "linha-analise"
-            );
+    linhaTabela.classList.remove(
+        "linha-retirado",
+        "linha-aguardando",
+        "linha-sem-conserto",
+        "linha-finalizado",
+        "linha-analise"
+    );
 
-            const novaClasse = classeStatus(novoStatus);
+    const novaClasse = classeStatus(novoStatus);
 
-            if(novaClasse){
-                linhaTabela.classList.add(novaClasse);
-            }
+    if(novaClasse){
+        linhaTabela.classList.add(novaClasse);
+    }
 
-        } else {
+    const ordem = ordensCarregadas.find(function(item){
+        return Number(item.linha) === Number(linha);
+    });
+
+    if(ordem){
+        ordem.status = novoStatus;
+    }
+
+    if(novoStatus === "Finalizado"){
+        perguntarEnvioWhatsApp(linha);
+    }
+
+} else {
 
             selectStatus.disabled = false;
             alert("Erro ao atualizar status.");
@@ -738,5 +750,68 @@ function formatarMoedaPDF(valor){
         style: "currency",
         currency: "BRL"
     });
+
+}
+
+function perguntarEnvioWhatsApp(linha){
+
+    const ordem = ordensCarregadas.find(function(item){
+        return Number(item.linha) === Number(linha);
+    });
+
+    if(!ordem){
+        alert("Ordem de serviço não encontrada para envio da mensagem.");
+        return;
+    }
+
+    const confirmar = confirm(
+        "OS finalizada. Deseja avisar o cliente pelo WhatsApp?"
+    );
+
+    if(!confirmar){
+        return;
+    }
+
+    enviarWhatsAppFinalizado(ordem);
+
+}
+
+
+function enviarWhatsAppFinalizado(ordem){
+
+    const telefoneLimpo = String(ordem.telefone || "")
+        .replace(/\D/g, "");
+
+    if(!telefoneLimpo){
+        alert("Telefone do cliente não encontrado.");
+        return;
+    }
+
+    const telefoneBrasil = telefoneLimpo.startsWith("55")
+        ? telefoneLimpo
+        : "55" + telefoneLimpo;
+
+    const valorServico = Number(ordem.orcamento || 0)
+        .toFixed(2)
+        .replace(".", ",");
+
+    const mensagem =
+`Olá, ${ordem.cliente}! Aqui é da Smartiliza Assistência Técnica.
+
+Sua ordem de serviço nº ${ordem.os}, referente ao aparelho ${ordem.modelo}, foi finalizada e já está pronta para retirada.
+
+Valor total do serviço: R$ ${valorServico}
+
+O comprovante/termo de garantia será enviado em seguida.
+
+Aguardamos sua retirada. Obrigado!`;
+
+    const link =
+        "https://wa.me/" +
+        telefoneBrasil +
+        "?text=" +
+        encodeURIComponent(mensagem);
+
+    window.open(link, "_blank");
 
 }
