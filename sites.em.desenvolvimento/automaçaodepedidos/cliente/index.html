@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assados Bonito</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Cabeçalho -->
+
+        <header class="header">
+
+            <div class="logo">
+                🍖
+            </div>
+
+            <h1 id="nomeLojaCliente">Assados Bonito</h1>
+
+            <p id="subtituloLojaCliente">Faça seu pedido de forma rápida</p>
+
+        </header>
+
+        <!-- Barra de progresso -->
+
+        <div class="progress">
+
+            <div class="step active"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+
+        </div>
+
+        <!-- Conteúdo dinâmico -->
+
+        <main id="conteudo">
+
+            <!-- ETAPA 1 -->
+
+            <section class="etapa ativa" id="etapa1">
+
+                <h2>📅 Escolha o dia</h2>
+
+                <div class="datas" id="listaDatasCliente">
+
+                </div>
+
+            </section>
+
+            <!-- Etapa 2 -->
+            <br>
+            <section class="etapa" id="etapa2" style="display:none;">
+
+                <h2>Escolha seus produtos</h2>
+
+                <div class="produtos" id="listaProdutosCliente">
+
+                </div>
+
+            </section>
+            
+            <!-- Etapa 3 -->
+
+            <section class="etapa" id="etapa3" style="display:none;">
+
+                <h2>🕒 Escolha o horário</h2>
+
+                <div class="horarios" id="listaHorariosCliente">
+
+                </div>
+
+            </section>
+
+            <!-- Etapa 4 --> 
+            <section class="etapa" id="etapa4" style="display:none;">
+
+                <h2>🚚 Como deseja receber?</h2>
+
+                <div class="tipo-container">
+
+                    <div
+                        class="tipo-card"
+                        onclick="selecionarTipo(this,'Retirada')">
+
+                        🏪
+
+                        <h3>Retirada</h3>
+
+                        <p>Retirar no local</p>
+
+                    </div>
+
+                    <div
+                        class="tipo-card"
+                        onclick="selecionarTipo(this,'Entrega')">
+
+                        🚚
+
+                        <h3>Entrega</h3>
+
+                        <p>Receber em casa</p>
+
+                    </div>
+
+                </div>
+
+                <div id="endereco" style="display:none;">
+
+                    <h3>📍 Endereço</h3>
+
+                    <input
+                        type="text"
+                        id="municipio"
+                        placeholder="Município">
+
+                    <input
+                        type="text"
+                        id="rua"
+                        placeholder="Rua">
+
+                    <input
+                        type="text"
+                        id="numero"
+                        placeholder="Número">
+
+                    <input
+                        type="text"
+                        id="complemento"
+                        placeholder="Complemento">
+
+                </div>
+
+            </section>
+
+            <!-- Etapa 5 -->
+
+            <section class="etapa" id="etapa5" style="display:none;">
+
+                <h2>👤 Seus Dados</h2>
+
+                <div class="formulario">
+
+                    <label>Nome Completo</label>
+
+                    <input
+                        type="text"
+                        id="nomeCliente"
+                        placeholder="Digite seu nome">
+
+                    <label>WhatsApp</label>
+
+                    <input
+                        type="tel"
+                        id="whatsappCliente"
+                        placeholder="(55) 99999-9999">
+
+                    <label>Observações</label>
+
+                    <textarea
+                        id="observacaoCliente"
+                        placeholder="Ex: sem cebola, entregar no portão..."
+                        rows="4"></textarea>
+
+                </div>
+
+            </section>
+
+            <!-- Etapa 6 -->
+
+            <section class="etapa" id="etapa6" style="display:none;">
+
+                <h2>💳 Forma de Pagamento</h2>
+
+                <div class="pagamentos">
+
+                    <div
+                        class="pagamento-card"
+                        onclick="selecionarPagamento(this,'PIX')">
+
+                        <span>📱</span>
+
+                        <h3>PIX</h3>
+
+                        <p>Pagamento instantâneo</p>
+
+                    </div>
+
+                    <div
+                        class="pagamento-card"
+                        onclick="selecionarPagamento(this,'Dinheiro')">
+
+                        <span>💵</span>
+
+                        <h3>Dinheiro</h3>
+
+                        <p>Pagar na retirada/entrega</p>
+
+                    </div>
+
+                    <div
+                        class="pagamento-card"
+                        onclick="selecionarPagamento(this,'Cartão')">
+
+                        <span>💳</span>
+
+                        <h3>Cartão</h3>
+
+                        <p>Débito ou Crédito</p>
+
+                    </div>
+
+                </div>
+
+                <div id="pixInfo" style="display:none;">
+
+                </div>
+
+            </section>
+
+            <!-- Resumo do Pedido -->
+
+            <section class="etapa" id="etapa7" style="display:none;">
+
+                <h2>📋 Resumo do Pedido</h2>
+
+                <div class="resumo-card">
+
+                    <div id="resumoConteudo">
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- Etapa 8 - Confirmação -->  
+
+            <section class="etapa" id="etapa8" style="display:none;">
+
+                <div class="confirmacao-box">
+
+                    <div class="confirmacao-icon">
+                        📦
+                    </div>
+
+                    <h2>Confirmar Pedido</h2>
+
+                    <p>
+
+                        Confira os dados acima.
+
+                        Ao clicar em <strong>Finalizar Pedido</strong>,
+                        seu pedido será enviado para nossa equipe.
+
+                    </p>
+
+                    <button
+                        class="btn-finalizar"
+                        onclick="finalizarPedido()">
+
+                        Finalizar Pedido
+
+                    </button>
+
+                </div>
+
+            </section>
+
+            <section class="etapa" id="sucesso" style="display:none;">
+
+                <div class="sucesso-box">
+
+                    <div class="sucesso-icon">
+                        ✅
+                    </div>
+
+                    <h2>Pedido Recebido!</h2>
+
+                    <p id="mensagemConfirmacao">
+
+                        Em breve entraremos em contato.
+
+                    </p>
+
+                    <p>
+
+                        Número do pedido:
+
+                        <strong id="numeroPedido"></strong>
+
+                    </p>
+
+                    <p>
+
+                        Em breve entraremos em contato.
+
+                    </p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Carrinho -->
+
+    <div class="carrinho">
+
+    <button
+        id="btnVoltar"
+        onclick="voltarEtapa()">
+
+        ← Voltar
+
+    </button>
+
+    <div>
+
+        <strong id="itens">
+            0 itens
+        </strong>
+
+        <p id="total">
+            R$ 0,00
+        </p>
+
+    </div>
+
+    <button
+        onclick="proximaEtapa()">
+
+        Continuar
+
+    </button>
+
+</div>
+
+    <script src="js/app.js"></script>
+
+</body>
+
+</html>

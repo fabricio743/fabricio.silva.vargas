@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Financeiro</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+    🍖 Assados Bonito
+    </div>
+
+        <nav>
+
+            <a href="index.html">
+                🏠 Dashboard
+            </a>
+
+            <a href="pedidos.html">
+                📦 Pedidos
+            </a>
+
+            <a href="produtos.html">
+                🍗 Produtos
+            </a>
+
+            <a href="estoque.html">
+                📊 Estoque
+            </a>
+
+            <a href="agenda.html">
+                📅 Agenda
+            </a>
+
+            <a href="financeiro.html" class="active">
+                💰 Financeiro
+            </a>
+
+            <a href="configuracoes.html">
+                ⚙ Configurações
+            </a>
+
+        </nav>
+
+</div>
+
+<main class="content">
+
+    <header class="topbar">
+
+    <h2>Financeiro</h2>
+
+    </header>
+
+    <section class="cards">
+
+        <div class="card">
+            <span>Hoje</span>
+            <h1 id="financeiroHoje">R$ 0,00</h1>
+        </div>
+
+        <div class="card">
+            <span>Semana</span>
+            <h1 id="financeiroSemana">R$ 0,00</h1>
+        </div>
+
+        <div class="card">
+            <span>Mês</span>
+            <h1 id="financeiroMes">R$ 0,00</h1>
+        </div>
+
+        <div class="card">
+            <span>Pedidos</span>
+            <h1 id="financeiroPedidos">0</h1>
+        </div>
+
+    </section>
+
+    <div class="box">
+
+        <h3>Formas de Pagamento</h3>
+
+        <div class="financeiro-item">
+            <span>PIX</span>
+            <strong id="financeiroPix">R$ 0,00</strong>
+        </div>
+
+        <div class="financeiro-item">
+            <span>Dinheiro</span>
+            <strong id="financeiroDinheiro">R$ 0,00</strong>
+        </div>
+
+        <div class="financeiro-item">
+            <span>Cartão</span>
+            <strong id="financeiroCartao">R$ 0,00</strong>
+        </div>
+
+    </div>
+
+    <div class="box">
+
+        <h3>Produtos Mais Vendidos</h3>
+
+        <ol id="produtosMaisVendidos">
+
+        </ol>
+
+    </div>
+
+    <div class="box">
+
+        <h3>Últimos Recebimentos</h3>
+
+        <div id="ultimosRecebimentos">
+
+        </div>
+
+    </div>
+
+</main>
+
+<script src="js/auth.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Controle Financeiro</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>💰 Controle Financeiro</h1>
+
+<div class="dashboard">
+
+<div class="card">
+<h3>Entradas</h3>
+<p id="totalEntradas">R$ 0,00</p>
+</div>
+
+<div class="card">
+<h3>Saídas</h3>
+<p id="totalSaidas">R$ 0,00</p>
+</div>
+
+<div class="card">
+<h3>Saldo</h3>
+<p id="saldo">R$ 0,00</p>
+</div>
+
+</div>
+
+<canvas id="grafico"></canvas>
+
+<form id="formulario">
+
+<input type="date" id="data" required>
+
+<select id="tipo">
+<option value="Entrada">Entrada</option>
+<option value="Saída">Saída</option>
+</select>
+
+<input
+type="text"
+id="local"
+placeholder="Onde foi gasto?"
+required>
+
+<input
+type="text"
+id="descricao"
+placeholder="Descrição">
+
+<textarea
+id="observacoes"
+placeholder="Observações"></textarea>
+
+<input
+type="number"
+id="valor"
+step="0.01"
+placeholder="Valor"
+required>
+
+<select id="pagamento">
+<option>Dinheiro</option>
+<option>PIX</option>
+</select>
+
+<button type="button" onclick="adicionarLancamento()">
+Adicionar
+</button>
+
+</form>
+
+<h2>Lançamentos Pendentes</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Data</th>
+<th>Tipo</th>
+<th>Local</th>
+<th>Valor</th>
+<th>Ações</th>
+</tr>
+</thead>
+
+<tbody id="tabela"></tbody>
+
+</table>
+
+<button id="enviar">
+Enviar Todos
+</button>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>

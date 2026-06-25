@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos de Assados</title>
+
+
+<link rel="stylesheet" href="style.css">
+
+
+</head>
+<body>
+
+
+<div class="container">
+
+    <div class="header">
+        <h1>🍖 Pedidos de Assados</h1>
+        <p>Faça seu pedido online</p>
+    </div>
+
+    <form id="pedidoForm">
+
+        <div class="campo">
+            <label>Número do Pedido</label>
+            <input type="text" id="pedido" readonly>
+        </div>
+
+        <div class="campo">
+            <label>Nome do Cliente</label>
+            <input
+                type="text"
+                id="cliente"
+                placeholder="Digite seu nome"
+                required
+            >
+        </div>
+
+        <div class="campo">
+            <label>WhatsApp</label>
+            <input
+                type="tel"
+                id="whatsapp"
+                placeholder="(55) 99999-9999"
+                required
+            >
+        </div>
+
+        <div class="campo">
+            <label>Produto</label>
+            <select id="produto" required>
+                <option value="">Selecione</option>
+                <option>Frango Recheado</option>
+                <option>Frango Sem Recheio</option>
+                <option>Costela</option>
+                <option>Churrasco</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Quantidade</label>
+            <input
+                type="number"
+                id="quantidade"
+                min="1"
+                value="1"
+                required
+            >
+        </div>
+
+        <div class="campo">
+            <label>Forma de Pagamento</label>
+            <select id="pagamento" required>
+                <option value="">Selecione</option>
+                <option>PIX</option>
+                <option>Dinheiro</option>
+                <option>Cartão</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label>Horário Desejado</label>
+            <input
+                type="time"
+                id="horario"
+                required
+            >
+        </div>
+
+        <div class="campo">
+            <label>Tipo do Pedido</label>
+            <select id="tipo" required>
+                <option value="">Selecione</option>
+                <option value="Retirada">
+                    Retirada no Local
+                </option>
+                <option value="Entrega">
+                    Entrega
+                </option>
+            </select>
+        </div>
+
+        <div id="endereco" class="endereco">
+
+            <h3>📍 Endereço para Entrega</h3>
+
+            <div class="campo">
+                <label>Município</label>
+                <input
+                    type="text"
+                    id="municipio"
+                    placeholder="Ex: Rodeio Bonito"
+                >
+            </div>
+
+            <div class="campo">
+                <label>Rua</label>
+                <input
+                    type="text"
+                    id="rua"
+                    placeholder="Nome da rua"
+                >
+            </div>
+
+            <div class="campo">
+                <label>Número</label>
+                <input
+                    type="text"
+                    id="numero"
+                    placeholder="Número da casa"
+                >
+            </div>
+
+            <div class="campo">
+                <label>Complemento</label>
+                <input
+                    type="text"
+                    id="complemento"
+                    placeholder="Apartamento, referência, etc."
+                >
+            </div>
+
+        </div>
+
+        <button type="submit">
+            Enviar Pedido
+        </button>
+
+    </form>
+
+    <div id="mensagem" class="mensagem"></div>
+
+</div>
+
+<script src="script.js"></script>
+
+
+</body>
+</html>

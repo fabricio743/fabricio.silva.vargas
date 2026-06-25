@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Assados Bonito</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="sidebar">
+
+        <div class="logo">
+            🍖 Assados Bonito
+        </div>
+
+        <nav>
+
+            <a href="#" class="active">
+                🏠 Dashboard
+            </a>
+
+            <a href="pedidos.html">
+                📦 Pedidos
+            </a>
+
+            <a href="produtos.html">
+                🍗 Produtos
+            </a>
+
+            <a href="estoque.html">
+                📊 Estoque
+            </a>
+
+            <a href="agenda.html">
+                📅 Agenda
+            </a>
+
+            <a href="financeiro.html">
+                💰 Financeiro
+            </a>
+
+            <a href="configuracoes.html">
+                ⚙ Configurações
+            </a>
+
+        </nav>
+
+    </div>
+
+    <main class="content">
+
+        <header class="topbar">
+
+            <h2>Dashboard</h2>
+
+        <div class="admin-info">
+
+        <span>👤 Admin</span>
+
+        <button onclick="logout()">
+        Sair
+        </button>
+
+        </div>
+
+        </header>
+
+        <section class="cards">
+
+            <div class="card">
+                <span>Pedidos Hoje</span>
+                <h1 id="pedidosHoje">0</h1>
+            </div>
+
+            <div class="card">
+                <span>Em Produção</span>
+                <h1 id="emProducao">0</h1>
+            </div>
+
+            <div class="card">
+                <span>Entregues</span>
+                <h1 id="entreguesHoje">0</h1>
+            </div>
+
+            <div class="card">
+                <span>Faturamento</span>
+                <h1 id="faturamentoHoje">
+                    R$ 0,00
+                </h1>
+            </div>
+
+        </section>
+
+        <section class="grid">
+
+           <section class="grid">
+
+
+            <div class="box">
+
+                <h3>
+                    Pedidos por Dia
+                </h3>
+
+                <canvas id="graficoPedidos"></canvas>
+
+            </div>
+
+            <div class="box">
+
+                <h3>
+                    Últimos Pedidos
+                </h3>
+
+                <div id="ultimosPedidos">
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="js/app.js"></script>
+
+    <script src="js/auth.js"></script>
+
+</body>
+
+</html>

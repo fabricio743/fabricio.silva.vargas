@@ -201,7 +201,7 @@
 <script>
 
 
-  const API_URL = "https://script.google.com/macros/s/AKfycbwJ5Ri28tweKUrcPVSrKJvbTysKTMov90u_j04cL8MBzgZ8NVbO225fL_bHnmrrDb6K/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbzn5qc9YFDVq-TrHYYRys5ne_vPSKHd07fjrL4POiluJHsRAGmKG0BpovF-svr8-tsc/exec";
   
   document.getElementById("desconto")
   document
@@ -246,7 +246,8 @@
           type="number"
           class="servico"
           placeholder="Valor do serviço"
-          readonly
+          min="0"
+          step="0.01"
         >
 
       </div>
@@ -257,18 +258,25 @@
 
     const inputPeca = div.querySelector(".peca");
     const inputServico = div.querySelector(".servico");
+    inputServico.addEventListener(
+      "input",
+      atualizarTotais
+    );
 
     inputPeca.addEventListener("input", () => {
 
-      let valorPeca = parseFloat(inputPeca.value) || 0;
+      let valorPeca =
+        parseFloat(inputPeca.value) || 0;
 
-      let valorServico = valorPeca * 0.50;
+      let valorServico =
+        valorPeca * 0.5;
 
       if(valorServico < 80){
         valorServico = 80;
       }
 
-      inputServico.value = valorServico.toFixed(2);
+      inputServico.value =
+        valorServico.toFixed(2);
 
       atualizarTotais();
 
@@ -276,17 +284,23 @@
 
   }
 
- function atualizarTotais(){
+function atualizarTotais(){
 
   let totalPecas = 0;
   let totalServicos = 0;
 
   document.querySelectorAll(".peca").forEach(campo => {
-    totalPecas += parseFloat(campo.value) || 0;
+
+    totalPecas +=
+      parseFloat(campo.value) || 0;
+
   });
 
   document.querySelectorAll(".servico").forEach(campo => {
-    totalServicos += parseFloat(campo.value) || 0;
+
+    totalServicos +=
+      parseFloat(campo.value) || 0;
+
   });
 
   const desconto =
