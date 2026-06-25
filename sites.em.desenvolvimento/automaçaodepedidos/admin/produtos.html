@@ -105,9 +105,22 @@
             placeholder="Preço">
 
         <input
-            type="number"
+            type="hidden"
             id="estoqueProduto"
-            placeholder="Estoque">
+            value="0">
+
+        <input
+            type="hidden"
+            id="imagemAtualProduto">
+
+        <input
+            type="file"
+            id="imagemProduto"
+            accept="image/*">
+
+        <div id="previewImagemProduto" class="preview-imagem-produto">
+
+        </div>
 
         <input
             type="text"

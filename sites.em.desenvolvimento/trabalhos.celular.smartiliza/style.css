@@ -16,10 +16,12 @@
 body{
     background:var(--fundo);
     padding:30px;
+    overflow-x:hidden;
 }
 
 .container{
-    max-width:1200px;
+    max-width:1600px;
+    width:100%;
     margin:auto;
 }
 
@@ -310,6 +312,13 @@ button:hover{
 .tabela-area{
     width:100%;
     overflow-x:auto;
+    padding-bottom:10px;
+}
+
+.tabela-area table{
+    width:100%;
+    min-width:1350px;
+    border-collapse:collapse;
 }
 
 table{
@@ -406,4 +415,202 @@ tbody tr:hover{
 
 .financeiro-placeholder li{
     margin-bottom:4px;
+}
+
+.modal-detalhes{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.45);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    z-index:999;
+}
+
+.modal-detalhes.ativo{
+    display:flex;
+}
+
+.modal-conteudo{
+    background:#fff;
+    width:100%;
+    max-width:900px;
+    max-height:90vh;
+    overflow-y:auto;
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.modal-topo{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:20px;
+    margin-bottom:25px;
+    border-bottom:1px solid var(--borda);
+    padding-bottom:18px;
+}
+
+.modal-topo h2{
+    color:var(--azul);
+    font-size:24px;
+}
+
+.modal-topo p{
+    color:#667;
+    margin-top:5px;
+}
+
+.btn-fechar-modal{
+    width:42px;
+    height:42px;
+    margin-top:0;
+    padding:0;
+    border-radius:50%;
+    font-size:28px;
+    line-height:1;
+    background:#f1f5f9;
+    color:var(--azul);
+    box-shadow:none;
+}
+
+.btn-fechar-modal:hover{
+    transform:none;
+    box-shadow:none;
+    background:#e2e8f0;
+}
+
+.detalhes-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    margin-bottom:20px;
+}
+
+.detalhe-item{
+    background:var(--fundo);
+    border:1px solid var(--borda);
+    border-radius:14px;
+    padding:15px;
+}
+
+.detalhe-item span,
+.detalhe-bloco span{
+    display:block;
+    color:#667;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:6px;
+}
+
+.detalhe-item strong{
+    color:var(--azul);
+    font-size:16px;
+}
+
+.detalhe-bloco{
+    background:var(--fundo);
+    border:1px solid var(--borda);
+    border-radius:14px;
+    padding:18px;
+    margin-top:15px;
+}
+
+.detalhe-bloco p{
+    color:#334;
+    line-height:1.6;
+    white-space:pre-wrap;
+}
+/* CORES DAS LINHAS POR STATUS */
+
+.linha-retirado{
+    background:#bef5a8;
+}
+
+.linha-retirado:hover{
+    background:#bbf7d0;
+}
+
+.linha-aguardando{
+    background:#dbb9ff;
+}
+
+.linha-aguardando:hover{
+    background:#c188ff;
+}
+
+.linha-sem-conserto{
+    background:#ff9b9b;
+}
+
+.linha-sem-conserto:hover{
+    background:#fecaca;
+}
+
+.linha-finalizado{
+    background:#7ab4ffc7;
+}
+
+.linha-finalizado:hover{
+    background:#bfdbfe;
+}
+
+.linha-analise{
+    background:#ffc477;
+}
+
+.linha-analise:hover{
+    background:#fed7aa;
+}
+
+th,
+td{
+    padding:14px;
+    text-align:left;
+    border-bottom:1px solid var(--borda);
+    font-size:14px;
+    vertical-align:middle;
+}
+
+td{
+    white-space:nowrap;
+}
+
+td:nth-child(3),
+td:nth-child(5){
+    white-space:normal;
+    min-width:160px;
+}
+
+.modal-acoes{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.btn-pdf{
+    width:auto;
+    margin-top:0;
+    padding:11px 16px;
+    border-radius:10px;
+    font-size:14px;
+}
+
+@media(max-width:768px){
+
+    .modal-conteudo{
+        padding:20px;
+    }
+
+    .modal-topo{
+        flex-direction:row;
+        align-items:flex-start;
+    }
+
+    .detalhes-grid{
+        grid-template-columns:1fr;
+    }
+
 }

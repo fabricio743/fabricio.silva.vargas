@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -10,126 +11,336 @@
 
 <div class="container">
 
-    <!-- CABEÇALHO -->
-    <div class="header">
+```
+<!-- CABEÇALHO -->
+<div class="header">
 
-        <div class="logo-area">
-            <img src="logo.png" alt="Smartiliza">
-            <div>
-                <h1>Smartiliza</h1>
-                <span>Assistência Técnica</span>
-            </div>
+    <div class="logo-area">
+        <img src="logo.png" alt="Smartiliza">
+        <div>
+            <h1>Smartiliza</h1>
+            <span>Assistência Técnica</span>
+        </div>
+    </div>
+
+    <div class="titulo-pagina">
+        Ordens de Serviço
+    </div>
+
+</div>
+
+<!-- MENU -->
+<nav class="menu-central">
+
+    <a href="index.html">
+        Dashboard
+    </a>
+
+    <a href="nova-os.html">
+        Nova OS
+    </a>
+
+    <a href="ordens.html" class="ativo">
+        Ordens de Serviço
+    </a>
+
+    <a href="estoque.html">
+        Estoque de Peças
+    </a>
+
+    <a href="financeiro.html">
+        Financeiro
+    </a>
+
+</nav>
+
+<!-- LISTA DE ORDENS -->
+<div class="card">
+
+    <div class="topo-secao">
+        <div>
+            <h2>Lista de Ordens</h2>
+            <p>Consulte as ordens cadastradas e altere o status diretamente pelo site.</p>
         </div>
 
-        <div class="titulo-pagina">
-            Ordens de Serviço
+        <button 
+            type="button" 
+            class="btn-secundario"
+            onclick="carregarOrdens()"
+        >
+            Atualizar Lista
+        </button>
+    </div>
+
+    <div class="filtros">
+
+        <div class="grupo">
+            <label>Pesquisar</label>
+            <input 
+                type="text" 
+                id="pesquisaOS" 
+                placeholder="Buscar por OS, cliente, telefone ou modelo"
+                oninput="filtrarOrdens()"
+            >
+        </div>
+
+        <div class="grupo">
+            <label>Status</label>
+            <select id="filtroStatus" onchange="filtrarOrdens()">
+                <option value="">Todos</option>
+                <option>Em análise</option>
+                <option>Aguardando peça</option>
+                <option>Finalizado</option>
+                <option>Retirado</option>
+                <option>Sem conserto</option>
+            </select>
         </div>
 
     </div>
 
-    <!-- MENU -->
-    <nav class="menu-central">
+    <div class="tabela-area">
 
-        <a href="index.html">
-            Dashboard
-        </a>
+        <table>
+            <thead>
+                <tr>
+                    <th>OS</th>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Telefone</th>
+                    <th>Modelo</th>
+                    <th>Orçamento</th>
+                    <th>Custo</th>
+                    <th>Lucro</th>
+                    <th>Status</th>
+                    <th>Garantia</th>
+                    <th>Detalhes</th>
+                    <th>Editar</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
 
-        <a href="nova.os.html">
-            Nova OS
-        </a>
+            <tbody id="listaOrdens">
+                <tr>
+                    <td colspan="13" class="mensagem-tabela">
+                        Carregando ordens...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-        <a href="ordens.html" class="ativo">
-            Ordens de Serviço
-        </a>
+    </div>
 
-        <a href="estoque.html">
-            Estoque de Peças
-        </a>
+</div>
 
-        <a href="financeiro.html">
-            Financeiro
-        </a>
+<!-- MODAL DE DETALHES DA OS -->
+<div class="modal-detalhes" id="modalDetalhesOS">
 
-    </nav>
+    <div class="modal-conteudo">
 
-    <!-- LISTA DE ORDENS -->
-    <div class="card">
-
-        <div class="topo-secao">
+        <div class="modal-topo">
             <div>
-                <h2>Lista de Ordens</h2>
-                <p>Consulte as ordens cadastradas e altere o status diretamente pelo site.</p>
+                <h2>Detalhes da Ordem de Serviço</h2>
+                <p id="detalheSubtitulo">Informações completas da OS</p>
             </div>
 
-            <button 
-                type="button" 
-                class="btn-secundario"
-                onclick="carregarOrdens()"
-            >
-                Atualizar Lista
-            </button>
-        </div>
+            <div class="modal-acoes">
 
-        <div class="filtros">
-
-            <div class="grupo">
-                <label>Pesquisar</label>
-                <input 
-                    type="text" 
-                    id="pesquisaOS" 
-                    placeholder="Buscar por OS, cliente, telefone ou modelo"
-                    oninput="filtrarOrdens()"
+                <button 
+                    type="button" 
+                    class="btn-pdf"
+                    onclick="gerarPDFCliente()"
                 >
+                    Gerar PDF
+                </button>
+
+                <button 
+                    type="button" 
+                    class="btn-fechar-modal"
+                    onclick="fecharDetalhesOS()"
+                >
+                    ×
+                </button>
+
+            </div>
+        </div>
+
+        <div class="detalhes-grid">
+
+            <div class="detalhe-item">
+                <span>Nº da OS</span>
+                <strong id="detalheOS"></strong>
             </div>
 
-            <div class="grupo">
-                <label>Status</label>
-                <select id="filtroStatus" onchange="filtrarOrdens()">
-                    <option value="">Todos</option>
-                    <option>Em análise</option>
-                    <option>Aguardando peça</option>
-                    <option>Finalizado</option>
-                    <option>Retirado</option>
-                    <option>Sem conserto</option>
-                </select>
+            <div class="detalhe-item">
+                <span>Data</span>
+                <strong id="detalheData"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Cliente</span>
+                <strong id="detalheCliente"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Telefone</span>
+                <strong id="detalheTelefone"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Modelo</span>
+                <strong id="detalheModelo"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Status</span>
+                <strong id="detalheStatus"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Orçamento</span>
+                <strong id="detalheOrcamento"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Custo da peça</span>
+                <strong id="detalheCusto"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Lucro</span>
+                <strong id="detalheLucro"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Fornecedor</span>
+                <strong id="detalheFornecedor"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Garantia</span>
+                <strong id="detalheGarantia"></strong>
             </div>
 
         </div>
 
-        <div class="tabela-area">
+        <div class="detalhe-bloco">
+            <span>Defeito relatado</span>
+            <p id="detalheDefeito"></p>
+        </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>OS</th>
-                        <th>Data</th>
-                        <th>Cliente</th>
-                        <th>Telefone</th>
-                        <th>Modelo</th>
-                        <th>Orçamento</th>
-                        <th>Custo</th>
-                        <th>Lucro</th>
-                        <th>Status</th>
-                        <th>Garantia</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-
-                <tbody id="listaOrdens">
-                    <tr>
-                        <td colspan="11" class="mensagem-tabela">
-                            Carregando ordens...
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
+        <div class="detalhe-bloco">
+            <span>Laudo técnico / O que foi arrumado</span>
+            <p id="detalheLaudo"></p>
         </div>
 
     </div>
 
 </div>
+
+<!-- MODAL DE EDIÇÃO DA OS -->
+<div class="modal-detalhes" id="modalEditarOS">
+
+    <div class="modal-conteudo">
+
+        <div class="modal-topo">
+            <div>
+                <h2>Editar Ordem de Serviço</h2>
+                <p id="editarSubtitulo">Atualize as informações da OS</p>
+            </div>
+
+            <button 
+                type="button" 
+                class="btn-fechar-modal"
+                onclick="fecharEditarOS()"
+            >
+                ×
+            </button>
+        </div>
+
+        <form id="editarOSForm">
+
+            <input type="hidden" id="editarLinhaOS">
+
+            <div class="grid">
+
+                <div class="grupo">
+                    <label>Nº da OS</label>
+                    <input type="text" id="editarNumeroOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Data</label>
+                    <input type="date" id="editarDataOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Cliente</label>
+                    <input type="text" id="editarClienteOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Telefone</label>
+                    <input type="text" id="editarTelefoneOS">
+                </div>
+
+                <div class="grupo grupo-full">
+                    <label>Modelo do Aparelho</label>
+                    <input type="text" id="editarModeloOS">
+                </div>
+
+                <div class="grupo grupo-full">
+                    <label>Defeito Relatado</label>
+                    <textarea id="editarDefeitoOS"></textarea>
+                </div>
+
+                <div class="grupo grupo-full">
+                    <label>Laudo Técnico / O que foi arrumado</label>
+                    <textarea id="editarLaudoOS"></textarea>
+                </div>
+
+                <div class="grupo">
+                    <label>Orçamento (R$)</label>
+                    <input type="number" step="0.01" id="editarOrcamentoOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Custo da Peça (R$)</label>
+                    <input type="number" step="0.01" id="editarCustoPecaOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Fornecedor</label>
+                    <input type="text" id="editarFornecedorOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Status</label>
+                    <select id="editarStatusOS">
+                        <option>Em análise</option>
+                        <option>Aguardando peça</option>
+                        <option>Finalizado</option>
+                        <option>Retirado</option>
+                        <option>Sem conserto</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit">
+                Salvar Alterações da OS
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+```
+
+</div>
+
 <script src="js/config.js"></script>
+
 <script src="js/ordens.js"></script>
 
 </body>

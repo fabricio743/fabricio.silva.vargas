@@ -10,7 +10,7 @@ window.location.href =
 }
 
 const URL_API =
-  "https://script.google.com/macros/s/AKfycbwo7HpebLglX08p9Gb_KVFbv_Ha5EjXkcNjKx1S9scO_6qR-QLMZB4czIKiC8taMrQ4/exec";
+  "https://script.google.com/macros/s/AKfycbwFetjqzV7r2YY30uCB68fa-ZcAGPMGWJtPBxq8inVhv_YLNsnfG0HTD-TVKcuTAq8c/exec";
 
 // PRODUTOS
 let produtos = [];
@@ -58,6 +58,10 @@ function limparFormulario(){
     document
         .getElementById("categoriaProduto")
         .value = "";
+    
+    document.getElementById("imagemProduto").value = "";
+    document.getElementById("imagemAtualProduto").value = "";
+    document.getElementById("previewImagemProduto").innerHTML = "";
 
 }
 document.addEventListener(
@@ -120,12 +124,15 @@ function renderizarProdutos(){
                 ? "inativo"
                 : ""}">
 
-                <div class="produto-imagem">
+               <div class="produto-imagem">
 
-                    📷
+                    ${
+                        produto.imagem
+                        ? `<img src="${produto.imagem}" alt="${produto.nome}">`
+                        : "🍗"
+                    }
 
                 </div>
-
                 <h3>
                     ${produto.nome}
                 </h3>
@@ -209,6 +216,16 @@ function editarProduto(id){
         .getElementById("categoriaProduto")
         .value = produto.categoria;
 
+    document.getElementById("imagemProduto").value = "";
+
+    document.getElementById("imagemAtualProduto").value =
+    produto.imagem || "";
+
+    document.getElementById("previewImagemProduto").innerHTML =
+    produto.imagem
+    ? `<img src="${produto.imagem}" alt="${produto.nome}">`
+    : "";
+
     document
         .getElementById("tituloModal")
         .innerText =
@@ -272,6 +289,35 @@ async function salvarProduto(){
     .getElementById("produtoId")
     .value;
 
+    const inputImagem =
+    document
+    .getElementById("imagemProduto");
+
+    const arquivoImagem =
+    inputImagem.files[0];
+
+    let imagemBase64 = "";
+    let imagemNome = "";
+    let imagemTipo = "";
+
+    if(arquivoImagem){
+
+        const base64Completo =
+        await converterArquivoBase64(
+            arquivoImagem
+        );
+
+        imagemBase64 =
+        base64Completo.split(",")[1];
+
+        imagemNome =
+        arquivoImagem.name;
+
+        imagemTipo =
+        arquivoImagem.type;
+
+    }
+
     const produto = {
 
         action:
@@ -299,32 +345,39 @@ async function salvarProduto(){
         estoque:
         document
         .getElementById("estoqueProduto")
-        .value,
+        .value || 0,
 
         categoria:
         document
         .getElementById("categoriaProduto")
-        .value
+        .value,
+
+        imagem:
+        document
+        .getElementById("imagemAtualProduto")
+        .value,
+
+        imagemBase64:
+        imagemBase64,
+
+        imagemNome:
+        imagemNome,
+
+        imagemTipo:
+        imagemTipo
 
     };
-
-    console.log("=== PRODUTO ENVIADO ===");
-    console.log(produto);
-    console.log("Action:", produto.action);
-    console.log("ID:", produto.id);
 
     try{
 
         await fetch(
             URL_API,
             {
-                method: "POST",
-                mode: "no-cors",
-                body: JSON.stringify(produto)
+                method:"POST",
+                mode:"no-cors",
+                body:JSON.stringify(produto)
             }
         );
-
-        console.log("Requisição enviada.");
 
         fecharModal();
 
@@ -380,6 +433,26 @@ function novoProduto(){
         "Novo Produto";
 
     abrirModal();
+
+}
+function converterArquivoBase64(arquivo){
+
+    return new Promise((resolve,reject) => {
+
+        const leitor =
+        new FileReader();
+
+        leitor.onload = () => {
+            resolve(leitor.result);
+        };
+
+        leitor.onerror = erro => {
+            reject(erro);
+        };
+
+        leitor.readAsDataURL(arquivo);
+
+    });
 
 }
 
