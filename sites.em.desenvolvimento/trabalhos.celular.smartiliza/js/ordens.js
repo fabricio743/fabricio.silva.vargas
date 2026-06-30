@@ -209,24 +209,25 @@ async function salvarStatus(linha){
 
         if(resultado.sucesso){
 
-            selectStatus.disabled = false;
+    selectStatus.disabled = false;
 
-            const linhaTabela = selectStatus.closest("tr");
+    const linhaTabela = selectStatus.closest("tr");
 
-            linhaTabela.classList.remove(
-                "linha-retirado",
-                "linha-aguardando",
-                "linha-sem-conserto",
-                "linha-finalizado",
-                "linha-analise"
-            );
+    linhaTabela.classList.remove(
+        "linha-retirado",
+        "linha-aguardando",
+        "linha-sem-conserto",
+        "linha-finalizado",
+        "linha-analise"
+    );
 
-            const novaClasse = classeStatus(novoStatus);
+    const novaClasse = classeStatus(novoStatus);
 
-            if(novaClasse){
-                linhaTabela.classList.add(novaClasse);
-            }
+    if(novaClasse){
+        linhaTabela.classList.add(novaClasse);
+    }
 
+<<<<<<< HEAD
             const ordem = ordensCarregadas.find(function(item){
                 return Number(item.linha) === Number(linha);
             });
@@ -240,6 +241,21 @@ async function salvarStatus(linha){
             }
 
         } else {
+=======
+    const ordem = ordensCarregadas.find(function(item){
+        return Number(item.linha) === Number(linha);
+    });
+
+    if(ordem){
+        ordem.status = novoStatus;
+    }
+
+    if(novoStatus === "Finalizado"){
+        perguntarEnvioWhatsApp(linha);
+    }
+
+} else {
+>>>>>>> 94448b3b8335b412988ab13c4d02b9d601696a41
 
             selectStatus.disabled = false;
             alert("Erro ao atualizar status.");
@@ -763,14 +779,30 @@ function formatarMoedaPDF(valor){
 
 }
 
+<<<<<<< HEAD
 function enviarWhatsAppPorLinha(linha){
+=======
+function perguntarEnvioWhatsApp(linha){
+>>>>>>> 94448b3b8335b412988ab13c4d02b9d601696a41
 
     const ordem = ordensCarregadas.find(function(item){
         return Number(item.linha) === Number(linha);
     });
 
     if(!ordem){
+<<<<<<< HEAD
         alert("Ordem de serviço não encontrada.");
+=======
+        alert("Ordem de serviço não encontrada para envio da mensagem.");
+        return;
+    }
+
+    const confirmar = confirm(
+        "OS finalizada. Deseja avisar o cliente pelo WhatsApp?"
+    );
+
+    if(!confirmar){
+>>>>>>> 94448b3b8335b412988ab13c4d02b9d601696a41
         return;
     }
 
@@ -778,6 +810,10 @@ function enviarWhatsAppPorLinha(linha){
 
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 94448b3b8335b412988ab13c4d02b9d601696a41
 function enviarWhatsAppFinalizado(ordem){
 
     const telefoneLimpo = String(ordem.telefone || "")
@@ -815,6 +851,7 @@ Aguardamos sua retirada. Obrigado!`;
 
     window.open(link, "_blank");
 
+<<<<<<< HEAD
 }
 
 const editarOSForm = document.getElementById("editarOSForm");
@@ -869,3 +906,6 @@ if(editarOSForm){
     });
 
 }
+=======
+}
+>>>>>>> 94448b3b8335b412988ab13c4d02b9d601696a41

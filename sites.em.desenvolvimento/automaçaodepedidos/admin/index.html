@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
@@ -6,138 +7,195 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin | Assados Bonito</title>
 
-    <link rel="stylesheet" href="css/style.css">
-    
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+
 </head>
 
 <body>
 
-    <div class="sidebar">
 
-        <div class="logo">
-            🍖 Assados Bonito
-        </div>
+<div class="sidebar">
 
-        <nav>
-
-            <a href="#" class="active">
-                🏠 Dashboard
-            </a>
-
-            <a href="pedidos.html">
-                📦 Pedidos
-            </a>
-
-            <a href="produtos.html">
-                🍗 Produtos
-            </a>
-
-            <a href="estoque.html">
-                📊 Estoque
-            </a>
-
-            <a href="agenda.html">
-                📅 Agenda
-            </a>
-
-            <a href="financeiro.html">
-                💰 Financeiro
-            </a>
-
-            <a href="configuracoes.html">
-                ⚙ Configurações
-            </a>
-
-        </nav>
-
+    <div class="logo">
+        🍖 Assados Bonito
     </div>
 
-    <main class="content">
+    <nav>
 
-        <header class="topbar">
+        <a href="index.html" class="active">
+            🏠 Dashboard
+        </a>
 
+        <a href="pedidos.html">
+            📦 Pedidos
+        </a>
+
+        <a href="produtos.html">
+            🍗 Produtos
+        </a>
+
+        <a href="estoque.html">
+            📊 Estoque
+        </a>
+
+        <a href="agenda.html">
+            📅 Agenda
+        </a>
+
+        <a href="financeiro.html">
+            💰 Financeiro
+        </a>
+
+        <a href="configuracoes.html">
+            ⚙ Configurações
+        </a>
+
+    </nav>
+
+</div>
+
+<main class="content">
+
+    <header class="topbar">
+
+        <div>
             <h2>Dashboard</h2>
+            <p class="subtitulo-dashboard">
+                Visão geral dos pedidos, produção e faturamento.
+            </p>
+        </div>
 
         <div class="admin-info">
 
-        <span>👤 Admin</span>
+            <span>👤 Admin</span>
 
-        <button onclick="logout()">
-        Sair
-        </button>
+            <button onclick="logout()">
+                Sair
+            </button>
 
         </div>
 
-        </header>
+    </header>
 
-        <section class="cards">
+    <section class="cards-dashboard">
 
-            <div class="card">
-                <span>Pedidos Hoje</span>
-                <h1 id="pedidosHoje">0</h1>
+        <div class="card-dashboard">
+            <span>📦</span>
+
+            <div>
+                <h3>Pedidos hoje</h3>
+                <strong id="pedidosHoje">0</strong>
             </div>
+        </div>
 
-            <div class="card">
-                <span>Em Produção</span>
-                <h1 id="emProducao">0</h1>
+        <div class="card-dashboard">
+            <span>🔥</span>
+
+            <div>
+                <h3>Em produção</h3>
+                <strong id="emProducao">0</strong>
             </div>
+        </div>
 
-            <div class="card">
-                <span>Entregues</span>
-                <h1 id="entreguesHoje">0</h1>
+        <div class="card-dashboard">
+            <span>✅</span>
+
+            <div>
+                <h3>Entregues hoje</h3>
+                <strong id="entreguesHoje">0</strong>
             </div>
+        </div>
 
-            <div class="card">
-                <span>Faturamento</span>
-                <h1 id="faturamentoHoje">
-                    R$ 0,00
-                </h1>
+        <div class="card-dashboard">
+            <span>💰</span>
+
+            <div>
+                <h3>Faturamento hoje</h3>
+                <strong id="faturamentoHoje">R$ 0,00</strong>
             </div>
+        </div>
 
-        </section>
+        <div class="card-dashboard">
+            <span>🍖</span>
 
-        <section class="grid">
-
-           <section class="grid">
-
-
-            <div class="box">
-
-                <h3>
-                    Pedidos por Dia
-                </h3>
-
-                <canvas id="graficoPedidos"></canvas>
-
+            <div>
+                <h3>Produtos ativos</h3>
+                <strong id="produtosAtivos">0</strong>
             </div>
+        </div>
 
-            <div class="box">
+        <div class="card-dashboard">
+            <span>📅</span>
 
-                <h3>
-                    Últimos Pedidos
-                </h3>
-
-                <div id="ultimosPedidos">
-
-                </div>
-
+            <div>
+                <h3>Agendas abertas</h3>
+                <strong id="agendasAbertas">0</strong>
             </div>
+        </div>
 
+        <div class="card-dashboard">
+            <span>⚠️</span>
 
-        </section>
+            <div>
+                <h3>Estoque baixo</h3>
+                <strong id="estoqueBaixo">0</strong>
+            </div>
+        </div>
 
+        <div class="card-dashboard">
+            <span>🎯</span>
+
+            <div>
+                <h3>Ticket médio</h3>
+                <strong id="ticketMedio">R$ 0,00</strong>
+            </div>
+        </div>
 
     </section>
 
-    </main>
+    <section class="grid-dashboard">
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <div class="box-dashboard">
 
-    <script src="js/app.js"></script>
+            <div class="box-header">
+                <h3>Pedidos por Dia</h3>
+                <span>Últimos 7 dias</span>
+            </div>
 
-    <script src="js/auth.js"></script>
+            <canvas id="graficoPedidos"></canvas>
+
+        </div>
+
+        <div class="box-dashboard">
+
+            <div class="box-header">
+                <h3>Últimos Pedidos</h3>
+                <a href="pedidos.html">Ver todos</a>
+            </div>
+
+            <div id="ultimosPedidos" class="ultimos-pedidos">
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+<script src="../js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/auth.js"></script>
+
+<!-- Se for usar gráfico, mantenha o Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="js/dashboard.js"></script>
+
 
 </body>
 

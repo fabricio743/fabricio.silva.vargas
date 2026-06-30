@@ -1,5 +1,7 @@
 console.log("Painel Administrativo iniciado.");
 
+const URL_API = CONFIG.URL_SCRIPT;
+
 function logout(){
 
 localStorage.removeItem("logado");
@@ -9,8 +11,7 @@ window.location.href =
 
 }
 
-const URL_API =
-  "https://script.google.com/macros/s/AKfycbwFetjqzV7r2YY30uCB68fa-ZcAGPMGWJtPBxq8inVhv_YLNsnfG0HTD-TVKcuTAq8c/exec";
+
 
 // PRODUTOS
 let produtos = [];

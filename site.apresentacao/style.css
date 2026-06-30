@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #0f172a;
+    background: #0f172a;
     color: #e2e8f0;
     line-height: 1.6;
 }
@@ -44,8 +44,9 @@ h2 {
 }
 
 .sobre img {
-    width: 250px;
-    border-radius: 10px;
+    width: 210px;
+    height: 220px;
+    border-radius: 20px;
 }
 
 blockquote {
