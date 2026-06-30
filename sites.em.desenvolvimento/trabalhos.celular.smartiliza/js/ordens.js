@@ -54,7 +54,7 @@ function mostrarOrdens(ordens){
 
         lista.innerHTML = `
             <tr>
-                <td colspan="13" class="mensagem-tabela">
+                <td colspan="14" class="mensagem-tabela">
                     Nenhuma ordem encontrada.
                 </td>
             </tr>
@@ -106,35 +106,45 @@ function mostrarOrdens(ordens){
 
             <td>${formatarData(item.garantia)}</td>
 
-            <td>
-                <button 
-                    type="button" 
-                    class="btn-tabela"
-                    onclick="abrirDetalhesOS(${item.linha})"
-                >
-                    Ver
-                </button>
-            </td>
+                <td>
+                    <button 
+                        type="button" 
+                        class="btn-tabela"
+                        onclick="abrirDetalhesOS(${item.linha})"
+                    >
+                        Ver
+                    </button>
+                </td>
 
-            <td>
-                <button 
-                    type="button" 
-                    class="btn-tabela"
-                    onclick="abrirEditarOS(${item.linha})"
-                >
-                    Editar
-                </button>
-            </td>
+                <td>
+                    <button 
+                        type="button" 
+                        class="btn-tabela"
+                        onclick="abrirEditarOS(${item.linha})"
+                    >
+                        Editar
+                    </button>
+                </td>
 
-            <td>
-                <button 
-                    type="button" 
-                    class="btn-salvar-status"
-                    onclick="salvarStatus(${item.linha})"
-                >
-                    Salvar
-                </button>
-            </td>
+                <td>
+                    <button 
+                        type="button" 
+                        class="btn-whatsapp"
+                        onclick="enviarWhatsAppPorLinha(${item.linha})"
+                    >
+                        Avisar
+                    </button>
+                </td>
+
+                <td>
+                    <button 
+                        type="button" 
+                        class="btn-salvar-status"
+                        onclick="salvarStatus(${item.linha})"
+                    >
+                        Salvar
+                    </button>
+                </td>
         `;
 
         lista.appendChild(linha);
@@ -215,6 +225,18 @@ async function salvarStatus(linha){
 
             if(novaClasse){
                 linhaTabela.classList.add(novaClasse);
+            }
+
+            const ordem = ordensCarregadas.find(function(item){
+                return Number(item.linha) === Number(linha);
+            });
+
+            if(ordem){
+                ordem.status = novoStatus;
+            }
+
+            if(novoStatus === "Finalizado"){
+                perguntarEnvioWhatsApp(linha);
             }
 
         } else {
@@ -737,6 +759,113 @@ function formatarMoedaPDF(valor){
     return Number(valor || 0).toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL"
+    });
+
+}
+
+function enviarWhatsAppPorLinha(linha){
+
+    const ordem = ordensCarregadas.find(function(item){
+        return Number(item.linha) === Number(linha);
+    });
+
+    if(!ordem){
+        alert("Ordem de serviço não encontrada.");
+        return;
+    }
+
+    enviarWhatsAppFinalizado(ordem);
+
+}
+
+function enviarWhatsAppFinalizado(ordem){
+
+    const telefoneLimpo = String(ordem.telefone || "")
+        .replace(/\D/g, "");
+
+    if(!telefoneLimpo){
+        alert("Telefone do cliente não encontrado.");
+        return;
+    }
+
+    const telefoneBrasil = telefoneLimpo.startsWith("55")
+        ? telefoneLimpo
+        : "55" + telefoneLimpo;
+
+    const valorServico = Number(ordem.orcamento || 0)
+        .toFixed(2)
+        .replace(".", ",");
+
+    const mensagem =
+`Olá, ${ordem.cliente}! Aqui é da Smartiliza Assistência Técnica.
+
+Sua ordem de serviço nº ${ordem.os}, referente ao aparelho ${ordem.modelo}, foi finalizada e já está pronta para retirada.
+
+Valor total do serviço: R$ ${valorServico}
+
+O comprovante/termo de garantia será enviado em seguida.
+
+Aguardamos sua retirada. Obrigado!`;
+
+    const link =
+        "https://wa.me/" +
+        telefoneBrasil +
+        "?text=" +
+        encodeURIComponent(mensagem);
+
+    window.open(link, "_blank");
+
+}
+
+const editarOSForm = document.getElementById("editarOSForm");
+
+if(editarOSForm){
+
+    editarOSForm.addEventListener("submit", async function(e){
+
+        e.preventDefault();
+
+        const dados = {
+            action: "editarOS",
+
+            linha: document.getElementById("editarLinhaOS").value,
+            os: document.getElementById("editarNumeroOS").value,
+            data: document.getElementById("editarDataOS").value,
+            cliente: document.getElementById("editarClienteOS").value,
+            telefone: document.getElementById("editarTelefoneOS").value,
+            modelo: document.getElementById("editarModeloOS").value,
+            defeito: document.getElementById("editarDefeitoOS").value,
+            laudo: document.getElementById("editarLaudoOS").value,
+            orcamento: document.getElementById("editarOrcamentoOS").value,
+            custoPeca: document.getElementById("editarCustoPecaOS").value,
+            fornecedor: document.getElementById("editarFornecedorOS").value,
+            status: document.getElementById("editarStatusOS").value
+        };
+
+        try {
+
+            const resposta = await fetch(URL_SCRIPT,{
+                method:"POST",
+                body:JSON.stringify(dados)
+            });
+
+            const resultado = await resposta.json();
+
+            if(resultado.sucesso){
+                alert("OS atualizada com sucesso!");
+                fecharEditarOS();
+                carregarOrdens();
+            } else {
+                alert(resultado.mensagem || "Erro ao atualizar OS.");
+            }
+
+        } catch(erro){
+
+            alert("Erro ao atualizar OS.");
+            console.error(erro);
+
+        }
+
     });
 
 }
