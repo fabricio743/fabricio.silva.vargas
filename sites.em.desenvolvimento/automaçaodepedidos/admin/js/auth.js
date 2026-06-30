@@ -1,9 +1,4 @@
-const logado =
-localStorage.getItem("logado");
-
-if(logado !== "true"){
-
-window.location.href =
-"login.html";
-
+function logout() {
+    localStorage.removeItem("logado");
+    window.location.href = "login.html";
 }

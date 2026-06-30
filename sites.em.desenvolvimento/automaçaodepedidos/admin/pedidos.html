@@ -140,8 +140,160 @@ placeholder="Buscar pedido..."
 
 </main>
 
+<div id="modalDetalhesPedido" class="modal-detalhes-pedido">
+
+    <div class="modal-detalhes-conteudo">
+
+        <div class="modal-detalhes-header">
+            <div>
+                <h2>Detalhes do Pedido</h2>
+                <span id="detalheNumeroPedido">PED-000</span>
+            </div>
+
+            <button onclick="fecharDetalhesPedido()" class="btn-fechar-modal">
+                ×
+            </button>
+        </div>
+
+        <div id="conteudoDetalhesPedido" class="modal-detalhes-body">
+            <!-- conteúdo gerado pelo JS -->
+        </div>
+
+    </div>
+
+</div>
+
+<div id="modalEditarPedido" class="modal-detalhes-pedido">
+
+    <div class="modal-detalhes-conteudo">
+
+        <div class="modal-detalhes-header">
+            <div>
+                <h2>Editar Pedido</h2>
+                <span id="editarNumeroPedido">PED-000</span>
+            </div>
+
+            <button onclick="fecharEditarPedido()" class="btn-fechar-modal">
+                ×
+            </button>
+        </div>
+
+        <div class="modal-detalhes-body">
+
+            <input type="hidden" id="editarPedidoId">
+
+            <div class="form-grid-editar">
+
+                <div class="campo">
+                    <label>Cliente</label>
+                    <input type="text" id="editarCliente">
+                </div>
+
+                <div class="campo">
+                    <label>WhatsApp</label>
+                    <input type="text" id="editarTelefone">
+                </div>
+
+                <div class="campo">
+                    <label>Data</label>
+                    <input type="date" id="editarData">
+                </div>
+
+                <div class="campo">
+                    <label>Horário</label>
+                    <input type="time" id="editarHorario">
+                </div>
+
+                <div class="campo">
+                    <label>Status</label>
+                    <select id="editarStatus">
+                        <option>Recebido</option>
+                        <option>Preparando</option>
+                        <option>Pronto</option>
+                        <option>Entregue</option>
+                        <option>Cancelado</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label>Pagamento</label>
+                    <select id="editarPagamento">
+                        <option>PIX</option>
+                        <option>Dinheiro</option>
+                        <option>Cartão</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label>Tipo</label>
+                    <select id="editarTipo" onchange="controlarEnderecoEdicao()">
+                        <option>Retirada</option>
+                        <option>Entrega</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label>Total</label>
+                    <input type="number" id="editarTotal" step="0.01">
+                </div>
+
+            </div>
+
+            <div id="editarEnderecoBox" class="detalhe-card" style="margin-top: 14px;">
+
+                <h3>📍 Endereço</h3>
+
+                <div class="form-grid-editar">
+
+                    <div class="campo">
+                        <label>Município</label>
+                        <input type="text" id="editarMunicipio">
+                    </div>
+
+                    <div class="campo">
+                        <label>Rua</label>
+                        <input type="text" id="editarRua">
+                    </div>
+
+                    <div class="campo">
+                        <label>Número</label>
+                        <input type="text" id="editarNumeroEndereco">
+                    </div>
+
+                    <div class="campo">
+                        <label>Complemento</label>
+                        <input type="text" id="editarComplemento">
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="campo" style="margin-top: 14px;">
+                <label>Observação</label>
+                <textarea id="editarObservacao" rows="3"></textarea>
+            </div>
+
+            <div class="detalhe-acoes">
+                <button onclick="fecharEditarPedido()" class="btn-secundario">
+                    Cancelar
+                </button>
+
+                <button onclick="salvarEdicaoPedido()" class="btn-whatsapp">
+                    Salvar alterações
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="../js/config.js"></script>
+<script src="js/api.js"></script>
 <script src="js/auth.js"></script>
-<script src="js/app.js"></script>
+<script src="js/pedidos.js"></script>
 
 </body>
 

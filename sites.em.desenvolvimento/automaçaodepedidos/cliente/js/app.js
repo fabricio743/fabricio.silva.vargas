@@ -4,8 +4,7 @@ let itens = 0;
 let configuracoes = {};
 let agendaCliente = [];
 
-const URL_API =
-  "https://script.google.com/macros/s/AKfycbw3m2Qr_vsLHBRX16gIphZbRYoBqxo7T6tl82UyQAjAg4tFsR0EsxYRH13x7sAB1Y0L/exec";
+const URL_API = CONFIG.URL_SCRIPT;
 
 carregarConfiguracoesCliente();
 
@@ -1058,6 +1057,15 @@ function renderizarProdutosCliente(produtos){
         const bloqueado =
         disponivel <= 0;
 
+        const imagemProduto =
+        produto.imagem
+        ? `<img 
+                src="${produto.imagem}" 
+                alt="${produto.nome}"
+                onerror="this.style.display='none'; this.parentElement.innerHTML='🍗';"
+           >`
+        : "🍗";
+
         container.innerHTML += `
 
             <div
@@ -1068,12 +1076,16 @@ function renderizarProdutosCliente(produtos){
                 data-disponivel="${disponivel}">
 
                 <div class="produto-img">
-                    🍗
+                    ${imagemProduto}
                 </div>
 
                 <h3>
                     ${produto.nome}
                 </h3>
+
+                <p class="produto-descricao">
+                    ${produto.descricao || ""}
+                </p>
 
                 <p class="preco">
                     R$ ${Number(produto.preco).toFixed(2).replace(".", ",")}
