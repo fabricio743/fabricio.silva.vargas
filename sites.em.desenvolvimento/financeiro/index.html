@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle Financeiro</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <aside class="sidebar">
+
+            <div class="logo">
+                <div class="logo-icon">💰</div>
+                <div>
+                    <h1>Financeiro</h1>
+                    <p>Controle mensal</p>
+                </div>
+            </div>
+
+            <nav class="menu">
+                <button class="menu-item active" onclick="mostrarTela('dashboard', this)">
+                    🏠 Principal
+                </button>
+
+                <button class="menu-item" onclick="mostrarTela('receitas', this)">
+                    💵 Receitas
+                </button>
+
+                <button class="menu-item" onclick="mostrarTela('despesas', this)">
+                    🧾 Despesas
+                </button>
+
+                <button class="menu-item" onclick="mostrarTela('guardado', this)">
+                    🏦 Guardado
+                </button>
+
+                <button class="menu-item" onclick="mostrarTela('categorias', this)">
+                    ⚙️ Categorias
+                </button>
+            </nav>
+
+        </aside>
+
+        <main class="conteudo">
+
+            <header class="topo">
+                <div>
+                    <h2 id="tituloPagina">Principal</h2>
+                    <p>Resumo financeiro do mês</p>
+                </div>
+
+                <div class="filtro-mes">
+                    <label>Mês</label>
+
+                    <input type="month" id="filtroMes" onchange="atualizarTudoNaTela()">
+                </div>
+            </header>
+
+            <!-- DASHBOARD -->
+            <section id="dashboard" class="tela ativa">
+
+                <div class="cards">
+
+                    <div class="card receita">
+                        <span>Receitas</span>
+                        <strong id="totalReceitas">R$ 0,00</strong>
+                    </div>
+
+                    <div class="card despesa">
+                        <span>Despesas</span>
+                        <strong id="totalDespesas">R$ 0,00</strong>
+                    </div>
+
+                    <div class="card guardado">
+                        <span>Guardado</span>
+                        <strong id="totalGuardado">R$ 0,00</strong>
+                    </div>
+
+                    <div class="card saldo">
+                        <span>Saldo livre</span>
+                        <strong id="saldoLivre">R$ 0,00</strong>
+                    </div>
+
+                </div>
+
+                <div class="painel">
+                    <h3>Resumo por categoria</h3>
+
+                    <div class="tabela-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Área</th>
+                                    <th>Tipo</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="resumoCategorias">
+                                <tr>
+                                    <td colspan="3">Nenhum dado carregado.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- RECEITAS -->
+            <section id="receitas" class="tela">
+
+                <div class="painel">
+                    <div class="painel-header">
+                        <h3>Nova receita</h3>
+                    </div>
+
+                    <form id="formReceita" class="form-grid">
+
+                        <input type="hidden" id="linhaReceita">
+
+                        <div class="campo">
+                            <label>Data</label>
+                            <input type="date" id="dataReceita" required>
+                        </div>
+
+                        <div class="campo">
+                            <label>Tipo</label>
+                            <select id="tipoReceita" required></select>
+                        </div>
+
+                        <div class="campo">
+                            <label>Informações</label>
+                            <input type="text" id="infoReceita" placeholder="Ex: salário, serviço, extra">
+                        </div>
+
+                        <div class="campo">
+                            <label>Valor</label>
+                            <input type="number" id="valorReceita" step="0.01" required>
+                        </div>
+
+                        <button type="submit" class="btn salvar">
+                            Salvar receita
+                        </button>
+
+                    </form>
+                </div>
+
+                <div class="painel">
+                    <h3>Histórico de receitas</h3>
+
+                    <div class="tabela-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Tipo</th>
+                                    <th>Informações</th>
+                                    <th>Valor</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="listaReceitas"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- DESPESAS -->
+            <section id="despesas" class="tela">
+
+                <div class="painel">
+                    <div class="painel-header">
+                        <h3>Nova despesa</h3>
+                    </div>
+
+                    <form id="formDespesa" class="form-grid">
+
+                        <input type="hidden" id="linhaDespesa">
+
+                        <div class="campo">
+                            <label>Data</label>
+                            <input type="date" id="dataDespesa" required>
+                        </div>
+
+                        <div class="campo">
+                            <label>Tipo</label>
+                            <select id="tipoDespesa" required></select>
+                        </div>
+
+                        <div class="campo">
+                            <label>Informações</label>
+                            <input type="text" id="infoDespesa" placeholder="Ex: remédio, compra, conta">
+                        </div>
+
+                        <div class="campo">
+                            <label>Valor</label>
+                            <input type="number" id="valorDespesa" step="0.01" required>
+                        </div>
+
+                        <div class="campo">
+                            <label>Método de pagamento</label>
+                            <select id="metodoDespesa">
+                                <option value="pix">Pix</option>
+                                <option value="dinheiro">Dinheiro</option>
+                                <option value="debito">Débito</option>
+                                <option value="credito">Crédito</option>
+                                <option value="boleto">Boleto</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="campo">
+                            <label>Status</label>
+                            <select id="statusDespesa">
+                                <option value="pago">Pago</option>
+                                <option value="pendente">Pendente</option>
+                                <option value="atrasado">Atrasado</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn salvar">
+                            Salvar despesa
+                        </button>
+
+                    </form>
+                </div>
+
+                <div class="painel">
+                    <h3>Histórico de despesas</h3>
+
+                    <div class="tabela-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Tipo</th>
+                                    <th>Informações</th>
+                                    <th>Valor</th>
+                                    <th>Pagamento</th>
+                                    <th>Status</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="listaDespesas"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- GUARDADO -->
+            <section id="guardado" class="tela">
+
+                <div class="painel">
+                    <h3>Novo valor guardado</h3>
+
+                    <form id="formGuardado" class="form-grid">
+
+                        <input type="hidden" id="linhaGuardado">
+
+                        <div class="campo">
+                            <label>Data</label>
+                            <input type="date" id="dataGuardado" required>
+                        </div>
+
+                        <div class="campo">
+                            <label>Tipo</label>
+                            <select id="tipoGuardado" required></select>
+                        </div>
+
+                        <div class="campo">
+                            <label>Informações</label>
+                            <input type="text" id="infoGuardado" placeholder="Ex: reserva, caixinha">
+                        </div>
+
+                        <div class="campo">
+                            <label>Valor</label>
+                            <input type="number" id="valorGuardado" step="0.01" required>
+                        </div>
+
+                        <button type="submit" class="btn salvar">
+                            Salvar guardado
+                        </button>
+
+                    </form>
+                </div>
+
+                <div class="painel">
+                    <h3>Histórico de guardado</h3>
+
+                    <div class="tabela-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Tipo</th>
+                                    <th>Informações</th>
+                                    <th>Valor</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="listaGuardado"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- CATEGORIAS -->
+            <section id="categorias" class="tela">
+
+                <div class="painel">
+                    <h3>Nova categoria</h3>
+
+                    <form id="formCategoria" class="form-grid">
+
+                        <input type="hidden" id="linhaCategoria">
+
+                        <div class="campo">
+                            <label>Área</label>
+                            <select id="areaCategoria" required>
+                                <option value="receita">Receita</option>
+                                <option value="despesas">Despesas</option>
+                                <option value="guardado">Guardado</option>
+                            </select>
+                        </div>
+
+                        <div class="campo">
+                            <label>Tipo</label>
+                            <input type="text" id="tipoCategoria" required placeholder="Ex: faculdade">
+                        </div>
+
+                        <div class="campo">
+                            <label>Ativo</label>
+                            <select id="ativoCategoria">
+                                <option value="sim">Sim</option>
+                                <option value="nao">Não</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn salvar">
+                            Salvar categoria
+                        </button>
+
+                    </form>
+                </div>
+
+                <div class="painel">
+                    <h3>Categorias cadastradas</h3>
+
+                    <div class="tabela-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Área</th>
+                                    <th>Tipo</th>
+                                    <th>Ativo</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="listaCategorias"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+    <div id="loadingEdicao" class="loading-edicao">
+    <div class="spinner"></div>
+    <p>Carregando dados...</p>
+    </div>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
