@@ -631,3 +631,15 @@ td:nth-child(5){
 .btn-whatsapp:hover{
     box-shadow:0 8px 16px rgba(34,197,94,.25);
 }
+
+.filtro-dashboard{
+    margin-bottom:25px;
+}
+
+.grupo-filtro-mes{
+    min-width:220px;
+}
+
+.grupo-filtro-mes input{
+    height:48px;
+}
