@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Smartiliza</title>
+    <title>Central de Ordens de Serviço - Smartiliza</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- LOADING GERAL DO SITE -->
+    <div id="loadingSite" class="loading-site">
+        <div class="loading-card">
+            <div class="spinner"></div>
+            <h2>Carregando sistema...</h2>
+            <p>Buscando ordens de serviço</p>
+        </div>
+    </div>
 
 <div class="container">
 
@@ -22,7 +31,7 @@
         </div>
 
         <div class="titulo-pagina">
-            Central de Serviços
+            Ordens de Serviço
         </div>
 
     </div>
@@ -31,131 +40,149 @@
     <nav class="menu-central">
 
         <a href="index.html" class="ativo">
-            Dashboard
+            Ordens de Serviço
         </a>
 
         <a href="nova.os.html">
             Nova OS
         </a>
 
-        <a href="ordens.html">
-            Ordens de Serviço
-        </a>
-
-        <a href="estoque.html">
-            Estoque de Peças
-        </a>
-
-        <a href="financeiro.html">
-            Financeiro
-        </a>
-
     </nav>
-    aa
+    <!-- FILTRO DO RESUMO -->
     <div class="card filtro-dashboard">
 
-        <div class="topo-secao">
+        <div class="topo-secao resumo-mes-layout">
+
             <div>
-                <h2>Filtro do Dashboard</h2>
-                <p>Selecione um mês para visualizar os dados do período.</p>
+                <h2>Resumo do mês</h2>
+                <p>Selecione um mês para visualizar as ordens do período.</p>
+            </div>
+
+            <div class="resumo-total-mes">
+                <span>Total de ordens no mês</span>
+                <strong id="totalOrdensMes">0</strong>
             </div>
 
             <div class="grupo grupo-filtro-mes">
                 <label>Mês</label>
-                <input type="month" id="filtroMesDashboard">
+                <input 
+                    type="month" 
+                    id="filtroMesDashboard"
+                    onchange="aplicarFiltrosOrdens()"
+                >
             </div>
+
+        </div>
+
+    </div>
+    <!-- RESUMO DAS ORDENS -->
+    <div class="dashboard-grid">
+
+        <div class="dash-card">
+            <span class="dash-label">Ordens abertas</span>
+            <strong id="totalAbertas">0</strong>
+            <p>OS em análise ou aguardando serviço.</p>
+        </div>
+
+        <div class="dash-card">
+            <span class="dash-label">Aguardando peça</span>
+            <strong id="totalAguardando">0</strong>
+            <p>Serviços esperando peça.</p>
+        </div>
+
+        <div class="dash-card">
+            <span class="dash-label">Finalizadas</span>
+            <strong id="totalFinalizadas">0</strong>
+            <p>Prontas para retirada.</p>
+        </div>
+
+        <div class="dash-card">
+            <span class="dash-label">Retiradas</span>
+            <strong id="totalRetiradas">0</strong>
+            <p>Serviços já entregues.</p>
         </div>
 
     </div>
 
-    <!-- DASHBOARD -->
-    <div class="dashboard-grid">
-
-    <div class="dash-card">
-        <span class="dash-label">Ordens abertas</span>
-        <strong id="totalAbertas">0</strong>
-        <p>OS em análise ou aguardando peça.</p>
-    </div>
-
-    <div class="dash-card">
-        <span class="dash-label">Aguardando peça</span>
-        <strong id="totalAguardando">0</strong>
-        <p>Serviços esperando peça.</p>
-    </div>
-
-    <div class="dash-card">
-        <span class="dash-label">Finalizadas</span>
-        <strong id="totalFinalizadas">0</strong>
-        <p>Prontas para retirada.</p>
-    </div>
-
-    <div class="dash-card">
-        <span class="dash-label">Retiradas</span>
-        <strong id="totalRetiradas">0</strong>
-        <p>Serviços já entregues.</p>
-    </div>
-
-    </div>
-    
-    <div class="dashboard-grid">
-
-    <div class="dash-card">
-        <span class="dash-label">Total de OS</span>
-        <strong id="dashTotalOS">0</strong>
-        <p>Total de ordens registradas.</p>
-    </div>
-
-    <div class="dash-card">
-        <span class="dash-label">Faturamento</span>
-        <strong id="dashFaturamento">R$ 0,00</strong>
-        <p>Soma dos orçamentos.</p>
-    </div>
-
-    <div class="dash-card">
-        <span class="dash-label">Custos</span>
-        <strong id="dashCustos">R$ 0,00</strong>
-        <p>Soma dos custos de peças.</p>
-    </div>
-
-    <div class="dash-card">
-        <span class="dash-label">Lucro</span>
-        <strong id="dashLucro">R$ 0,00</strong>
-        <p>Faturamento menos custos.</p>
-    </div>
-
-    </div>
-  
-    <!-- ACESSOS RÁPIDOS -->
+    <!-- ÁREA DE ORDENS -->
     <div class="card">
 
         <div class="topo-secao">
+
             <div>
-                <h2>Acessos rápidos</h2>
-                <p>Escolha uma área da central para continuar.</p>
+                <h2>Lista de Ordens</h2>
+                <p>Consulte, filtre e acompanhe as ordens de serviço.</p>
             </div>
+
+            <button 
+                type="button" 
+                class="btn-atualizar-lista"
+                onclick="carregarOrdens()"
+            >
+                Atualizar Lista
+            </button>
+
         </div>
 
-        <div class="atalhos-grid">
+        <!-- FILTROS -->
+        <div class="filtros-ordens">
 
-            <a href="nova-os.html" class="atalho-card">
-                <strong>Nova Ordem de Serviço</strong>
-                <span>Cadastrar uma nova OS na planilha.</span>
-            </a>
+            <div class="grupo">
+                <label>Buscar</label>
+                <input 
+                    type="text" 
+                    id="campoBusca" 
+                    placeholder="Cliente, telefone, aparelho ou OS..."
+                    oninput="aplicarFiltrosOrdens()"
+                >
+            </div>
 
-            <a href="ordens.html" class="atalho-card">
-                <strong>Ordens de Serviço</strong>
-                <span>Consultar OS e alterar status pelo site.</span>
-            </a>
+            <div class="grupo">
+                <label>Status</label>
+                <select id="filtroStatus" onchange="aplicarFiltrosOrdens()">
+                    <option value="">Todos</option>
+                    <option value="Em análise">Em análise</option>
+                    <option value="Aguardando peça">Aguardando peça</option>
+                    <option value="Finalizado">Finalizado</option>
+                    <option value="Retirado">Retirado</option>
+                    <option value="Sem conserto">Sem conserto</option>
+                </select>
+            </div>
 
-            <a href="estoque.html" class="atalho-card">
-                <strong>Estoque de Peças</strong>
-                <span>Cadastrar e controlar peças disponíveis.</span>
-            </a>
+        </div>
 
-            <a href="financeiro.html" class="atalho-card">
-                <strong>Financeiro</strong>
-                <span>Acompanhar custos, orçamento e lucro.</span>
-            </a>
+        <!-- LOADING -->
+        <div id="loadingOrdens" class="loading">
+            Carregando ordens...
+        </div>
+
+        <!-- LISTA -->
+        <div class="tabela-container">
+
+            <table class="tabela-ordens">
+                <thead>
+                    <tr>
+                        <th>OS</th>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Telefone</th>
+                        <th>Aparelho</th>
+                        <th>Orçamento</th>
+                        <th>Custo</th>
+                        <th>Lucro</th>
+                        <th>Status</th>
+                        <th>Garantia</th>
+                        <th>Ver</th>
+                        <th>Editar</th>
+                        <th>Avisar</th>
+                        <th>Salvar</th>
+                    </tr>
+                </thead>
+
+                <tbody id="listaOrdens">
+                    <!-- As ordens serão carregadas pelo JavaScript -->
+                </tbody>
+            </table>
 
         </div>
 
@@ -163,9 +190,209 @@
 
 </div>
 
+<!-- MODAL DETALHES DA OS -->
+<div id="modalDetalhesOS" class="modal">
+
+    <div class="modal-conteudo modal-grande">
+
+        <div class="modal-topo">
+            <div>
+                <h2>Detalhes da OS</h2>
+                <p id="detalheSubtitulo">Informações da ordem de serviço</p>
+            </div>
+
+            <button type="button" class="btn-fechar" onclick="fecharDetalhesOS()">
+                ×
+            </button>
+        </div>
+
+        <div class="detalhes-grid">
+
+            <div class="detalhe-item">
+                <span>OS</span>
+                <strong id="detalheOS"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Data</span>
+                <strong id="detalheData"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Cliente</span>
+                <strong id="detalheCliente"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Telefone</span>
+                <strong id="detalheTelefone"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Aparelho / Modelo</span>
+                <strong id="detalheModelo"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Status</span>
+                <strong id="detalheStatus"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Orçamento</span>
+                <strong id="detalheOrcamento"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Custo da Peça</span>
+                <strong id="detalheCusto"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Lucro</span>
+                <strong id="detalheLucro"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Fornecedor</span>
+                <strong id="detalheFornecedor"></strong>
+            </div>
+
+            <div class="detalhe-item">
+                <span>Garantia</span>
+                <strong id="detalheGarantia"></strong>
+            </div>
+
+        </div>
+
+        <div class="detalhe-bloco">
+            <span>Defeito relatado</span>
+            <p id="detalheDefeito"></p>
+        </div>
+
+        <div class="detalhe-bloco">
+            <span>Laudo / Serviço realizado</span>
+            <p id="detalheLaudo"></p>
+        </div>
+
+        <div class="modal-acoes">
+            <button type="button" class="btn-secundario" onclick="fecharDetalhesOS()">
+                Fechar
+            </button>
+
+            <button type="button" class="btn-principal" onclick="gerarPDFCliente()">
+                Gerar PDF
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- MODAL EDITAR OS -->
+<div id="modalEditarOS" class="modal">
+
+    <div class="modal-conteudo modal-grande">
+
+        <div class="modal-topo">
+            <div>
+                <h2>Editar OS</h2>
+                <p id="editarSubtitulo">Atualize as informações da ordem de serviço</p>
+            </div>
+
+            <button type="button" class="btn-fechar" onclick="fecharEditarOS()">
+                ×
+            </button>
+        </div>
+
+        <form id="editarOSForm">
+
+            <input type="hidden" id="editarLinhaOS">
+
+            <div class="form-grid">
+
+                <div class="grupo">
+                    <label>Nº da OS</label>
+                    <input type="text" id="editarNumeroOS" readonly>
+                </div>
+
+                <div class="grupo">
+                    <label>Data</label>
+                    <input type="date" id="editarDataOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Cliente</label>
+                    <input type="text" id="editarClienteOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Telefone</label>
+                    <input type="text" id="editarTelefoneOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Aparelho / Modelo</label>
+                    <input type="text" id="editarModeloOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Status</label>
+                    <select id="editarStatusOS">
+                        <option>Em análise</option>
+                        <option>Aguardando peça</option>
+                        <option>Finalizado</option>
+                        <option>Retirado</option>
+                        <option>Sem conserto</option>
+                    </select>
+                </div>
+
+                <div class="grupo">
+                    <label>Orçamento</label>
+                    <input type="number" step="0.01" id="editarOrcamentoOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Custo da Peça</label>
+                    <input type="number" step="0.01" id="editarCustoPecaOS">
+                </div>
+
+                <div class="grupo">
+                    <label>Fornecedor</label>
+                    <input type="text" id="editarFornecedorOS">
+                </div>
+
+            </div>
+
+            <div class="grupo">
+                <label>Defeito relatado</label>
+                <textarea id="editarDefeitoOS" rows="4"></textarea>
+            </div>
+
+            <div class="grupo">
+                <label>Laudo / Serviço realizado</label>
+                <textarea id="editarLaudoOS" rows="4"></textarea>
+            </div>
+
+            <div class="modal-acoes">
+                <button type="button" class="btn-secundario" onclick="fecharEditarOS()">
+                    Cancelar
+                </button>
+
+                <button type="submit" class="btn-principal">
+                    Salvar alterações
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 <script src="js/config.js"></script>
-<script src="js/dashboard.js"></script>
+<script src="js/ordens.js"></script>
 
 </body>
 </html>
