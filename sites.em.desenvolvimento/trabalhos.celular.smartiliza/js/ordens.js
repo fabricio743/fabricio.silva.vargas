@@ -3,45 +3,98 @@ const URL_SCRIPT = CONFIG.URL_SCRIPT;
 let ordensCarregadas = [];
 let ordemSelecionadaPDF = null;
 
-window.addEventListener("load", carregarOrdens);
-
+window.addEventListener("load", function(){
+    definirMesAtual();
+    carregarOrdens();
+});
 
 // =============================
 // CARREGAR ORDENS
 // =============================
 
+function esconderLoadingSite(){
+
+    const loadingSite = document.getElementById("loadingSite");
+
+    if(loadingSite){
+        loadingSite.classList.add("oculto");
+    }
+
+}
+
 async function carregarOrdens(){
 
     const lista = document.getElementById("listaOrdens");
+    const loading = document.getElementById("loadingOrdens");
 
-    lista.innerHTML = `
-        <tr>
-            <td colspan="14" class="mensagem-tabela">
-                Carregando ordens...
-            </td>
-        </tr>
-    `;
+    if(loading){
+        loading.style.display = "block";
+    }
 
-    try {
-
-        const resposta = await fetch(URL_SCRIPT + "?action=listarOS");
-        const ordens = await resposta.json();
-
-        ordensCarregadas = ordens;
-
-        mostrarOrdens(ordensCarregadas);
-
-    } catch(erro){
-
+    if(lista){
         lista.innerHTML = `
             <tr>
                 <td colspan="14" class="mensagem-tabela">
-                    Erro ao carregar ordens.
+                    <div class="loading-tabela">
+                        <span class="spinner-tabela"></span>
+                        <span>Carregando ordens...</span>
+                    </div>
                 </td>
             </tr>
         `;
+    }
 
-        console.error(erro);
+    try {
+
+        console.log("URL_SCRIPT:", URL_SCRIPT);
+        console.log("URL FINAL:", URL_SCRIPT + "?action=listarOS");
+
+        const resposta = await fetch(URL_SCRIPT + "?action=listarOS");
+
+        const texto = await resposta.text();
+
+        console.log("STATUS DA RESPOSTA:", resposta.status);
+        console.log("RESPOSTA RECEBIDA:", texto);
+
+        if(!resposta.ok){
+            throw new Error("Erro HTTP " + resposta.status);
+        }
+
+        let ordens;
+
+        try {
+            ordens = JSON.parse(texto);
+        } catch(erroJson) {
+            throw new Error("A resposta não é JSON. Verifique a URL do Apps Script.");
+        }
+
+        ordensCarregadas = Array.isArray(ordens)
+            ? [...ordens].reverse()
+            : [];
+
+        aplicarFiltrosOrdens();
+
+    } catch(erro){
+
+        if(lista){
+            lista.innerHTML = `
+                <tr>
+                    <td colspan="14" class="mensagem-tabela">
+                        Erro ao carregar ordens. Verifique a URL do Apps Script.
+                    </td>
+                </tr>
+            `;
+        }
+
+        console.error("ERRO AO CARREGAR ORDENS:", erro);
+
+    } finally {
+
+        if(loading){
+            loading.style.display = "none";
+        }
+
+        esconderLoadingSite();
 
     }
 
@@ -158,21 +211,97 @@ function mostrarOrdens(ordens){
 
 }
 
+function atualizarResumoOrdens(ordens){
+
+    const totalAbertas = document.getElementById("totalAbertas");
+    const totalAguardando = document.getElementById("totalAguardando");
+    const totalFinalizadas = document.getElementById("totalFinalizadas");
+    const totalRetiradas = document.getElementById("totalRetiradas");
+    const totalOrdensMes = document.getElementById("totalOrdensMes");
+
+    if(!Array.isArray(ordens)){
+        ordens = [];
+    }
+
+    const abertas = ordens.filter(function(item){
+        const status = normalizarStatus(item.status);
+
+        return (
+            status === "em analise" ||
+            status === "aguardando aprovacao"
+        );
+    }).length;
+
+    const aguardando = ordens.filter(function(item){
+        return normalizarStatus(item.status) === "aguardando peca";
+    }).length;
+
+    const finalizadas = ordens.filter(function(item){
+        return normalizarStatus(item.status) === "finalizado";
+    }).length;
+
+    const retiradas = ordens.filter(function(item){
+        return normalizarStatus(item.status) === "retirado";
+    }).length;
+
+    if(totalAbertas){
+        totalAbertas.textContent = abertas;
+    }
+
+    if(totalAguardando){
+        totalAguardando.textContent = aguardando;
+    }
+
+    if(totalFinalizadas){
+        totalFinalizadas.textContent = finalizadas;
+    }
+
+    if(totalRetiradas){
+        totalRetiradas.textContent = retiradas;
+    }
+
+    if(totalOrdensMes){
+        totalOrdensMes.textContent = ordens.length;
+    }
+
+}
+
+function normalizarStatus(status){
+
+    return String(status || "")
+        .toLowerCase()
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+}
 
 // =============================
 // FILTROS
 // =============================
 
-function filtrarOrdens(){
+function aplicarFiltrosOrdens(){
 
-    const texto = document
-        .getElementById("pesquisaOS")
-        .value
-        .toLowerCase();
+    const campoBusca =
+        document.getElementById("campoBusca") ||
+        document.getElementById("pesquisaOS");
 
-    const status = document
-        .getElementById("filtroStatus")
-        .value;
+    const campoStatus = document.getElementById("filtroStatus");
+    const campoMes = document.getElementById("filtroMesDashboard");
+
+    const texto = campoBusca
+        ? campoBusca.value.toLowerCase().trim()
+        : "";
+
+    const statusSelecionado = campoStatus
+        ? campoStatus.value
+        : "";
+
+    const mesSelecionado = campoMes
+        ? campoMes.value
+        : "";
+
+    const statusFiltroNormalizado = normalizarStatus(statusSelecionado);
 
     const filtradas = ordensCarregadas.filter(function(item){
 
@@ -182,22 +311,31 @@ function filtrarOrdens(){
             String(item.telefone || "").toLowerCase().includes(texto) ||
             String(item.modelo || "").toLowerCase().includes(texto);
 
+        const statusItemNormalizado = normalizarStatus(item.status);
+
         const bateStatus =
-            status === "" ||
-            item.status === status ||
+            statusSelecionado === "" ||
+            statusItemNormalizado === statusFiltroNormalizado ||
             (
-                status === "Sem conserto" &&
-                item.status === "Sem concerto"
+                statusFiltroNormalizado === "sem conserto" &&
+                statusItemNormalizado === "sem concerto"
             );
 
-        return bateTexto && bateStatus;
+        const bateMes =
+            mesSelecionado === "" ||
+            obterAnoMes(item.data) === mesSelecionado;
+
+        return bateTexto && bateStatus && bateMes;
 
     });
 
+    atualizarResumoOrdens(filtradas);
     mostrarOrdens(filtradas);
 
 }
-
+function filtrarOrdens(){
+    aplicarFiltrosOrdens();
+}
 
 // =============================
 // SALVAR STATUS
@@ -343,11 +481,7 @@ function formatarMoedaPDF(valor){
 
 function classeStatus(status){
 
-    const statusNormalizado = String(status || "")
-        .toLowerCase()
-        .trim()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+    const statusNormalizado = normalizarStatus(status);
 
     if(statusNormalizado === "retirado"){
         return "linha-retirado";
@@ -372,10 +506,13 @@ function classeStatus(status){
         return "linha-analise";
     }
 
+    if(statusNormalizado === "aguardando aprovacao"){
+        return "linha-analise";
+    }
+
     return "";
 
 }
-
 
 // =============================
 // MODAL DETALHES
@@ -945,5 +1082,53 @@ function gerarPDFCliente(){
     janela.document.open();
     janela.document.write(htmlPDF);
     janela.document.close();
+
+}
+
+function definirMesAtual(){
+
+    const filtroMes = document.getElementById("filtroMesDashboard");
+
+    if(!filtroMes){
+        return;
+    }
+
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+
+    filtroMes.value = `${ano}-${mes}`;
+
+}
+function obterAnoMes(data){
+
+    if(!data){
+        return "";
+    }
+
+    // Caso venha como: 2026-07-08T03:00:00.000Z
+    if(typeof data === "string" && data.includes("T")){
+        return data.split("T")[0].slice(0, 7);
+    }
+
+    // Caso venha como: 2026-07-08
+    if(typeof data === "string" && data.includes("-")){
+        return data.slice(0, 7);
+    }
+
+    // Caso venha como: 08/07/2026
+    if(typeof data === "string" && data.includes("/")){
+        const partes = data.split("/");
+
+        if(partes.length === 3){
+            const dia = partes[0];
+            const mes = partes[1];
+            const ano = partes[2];
+
+            return `${ano}-${mes}`;
+        }
+    }
+
+    return "";
 
 }

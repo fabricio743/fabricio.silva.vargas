@@ -1,4 +1,4 @@
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxsJyCtKe5oSAFsOPDOYf3dok_XYD6iAQSEwp_261dT0K48zimEw6e3J_KgmR9Slcnm/exec";
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwcJ9dQGc25pIn_dyQbRw0W8koa2_Za9bFMdIN5cHEgnXtIL-QOWuG0UC5LnYpRQ6x8/exec";
 
 let categorias = [];
 let receitas = [];
@@ -119,26 +119,66 @@ function preencherSelectsCategorias() {
 
 async function carregarReceitas() {
     try {
-        const resposta = await fetch(`${URL_SCRIPT}?action=listarReceitas`);
-        const resultado = await resposta.json();
+        const resultado = await buscarJSONP(
+            `${URL_SCRIPT}?action=listarReceitas`
+        );
 
-        if (!resultado.sucesso) return;
+        if (!resultado.sucesso) {
+            console.error("Erro ao listar receitas:", resultado.mensagem);
+            return;
+        }
 
         receitas = resultado.lancamentos;
+
+        console.log("Receitas carregadas:", receitas);
 
     } catch (erro) {
         console.error("Erro ao carregar receitas:", erro);
     }
 }
 
+function buscarJSONP(url) {
+    return new Promise((resolve, reject) => {
+        const callbackName = "jsonpCallback_" + Date.now();
+
+        window[callbackName] = function (dados) {
+            resolve(dados);
+
+            delete window[callbackName];
+            script.remove();
+        };
+
+        const script = document.createElement("script");
+
+        const separador = url.includes("?") ? "&" : "?";
+
+        script.src = `${url}${separador}callback=${callbackName}`;
+
+        script.onerror = function () {
+            reject(new Error("Erro ao carregar JSONP"));
+
+            delete window[callbackName];
+            script.remove();
+        };
+
+        document.body.appendChild(script);
+    });
+}
+
 async function carregarDespesas() {
     try {
-        const resposta = await fetch(`${URL_SCRIPT}?action=listarDespesas`);
-        const resultado = await resposta.json();
+        const resultado = await buscarJSONP(
+            `${URL_SCRIPT}?action=listarDespesas`
+        );
 
-        if (!resultado.sucesso) return;
+        if (!resultado.sucesso) {
+            console.error("Erro ao listar despesas:", resultado.mensagem);
+            return;
+        }
 
         despesas = resultado.lancamentos;
+
+        console.log("Despesas carregadas:", despesas);
 
     } catch (erro) {
         console.error("Erro ao carregar despesas:", erro);
@@ -147,12 +187,18 @@ async function carregarDespesas() {
 
 async function carregarGuardado() {
     try {
-        const resposta = await fetch(`${URL_SCRIPT}?action=listarGuardado`);
-        const resultado = await resposta.json();
+        const resultado = await buscarJSONP(
+            `${URL_SCRIPT}?action=listarGuardado`
+        );
 
-        if (!resultado.sucesso) return;
+        if (!resultado.sucesso) {
+            console.error("Erro ao listar guardado:", resultado.mensagem);
+            return;
+        }
 
         guardado = resultado.lancamentos;
+
+        console.log("Guardado carregado:", guardado);
 
     } catch (erro) {
         console.error("Erro ao carregar guardado:", erro);

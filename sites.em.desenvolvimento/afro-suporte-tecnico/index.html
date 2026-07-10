@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ordem de Serviço</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      background:#111;
+      color:#fff;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding:20px;
+    }
+
+    .container{
+      width:100%;
+      max-width:900px;
+      background:#1d1d1d;
+      padding:30px;
+      border-radius:18px;
+      box-shadow:0 0 25px rgba(0,0,0,0.5);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:30px;
+      font-size:38px;
+      color:#ffc400;
+    }
+
+    .topo{
+      display:flex;
+      justify-content:center;
+      margin-bottom:25px;
+    }
+
+    button{
+      border:none;
+      padding:14px 24px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:bold;
+      transition:0.3s;
+      font-size:15px;
+    }
+
+    button:disabled{
+      opacity:0.6;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .btn-add{
+      background:#ffc400;
+      color:#000;
+    }
+
+    .btn-add:hover{
+      transform:scale(1.03);
+    }
+
+    .formulario{
+      display:none;
+      flex-direction:column;
+      gap:15px;
+    }
+
+    input, select, textarea{
+      width:100%;
+      padding:13px;
+      border:none;
+      border-radius:10px;
+      font-size:15px;
+      outline:none;
+    }
+
+    textarea{
+      min-height:80px;
+      resize:vertical;
+    }
+
+    .equipamento-box{
+      background:#252525;
+      padding:18px;
+      border-radius:14px;
+      margin-bottom:18px;
+      border:1px solid #333;
+    }
+
+    .equipamento-topo{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:15px;
+      gap:10px;
+    }
+
+    .equipamento-topo h2{
+      font-size:20px;
+      color:#ffc400;
+    }
+
+    .servico-box{
+      background:#303030;
+      padding:15px;
+      border-radius:12px;
+      margin-top:15px;
+    }
+
+    .servico-topo{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:10px;
+      gap:10px;
+    }
+
+    .servico-topo strong{
+      color:#fff;
+    }
+
+    .linha{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px;
+      margin-top:10px;
+    }
+
+    .totais{
+      background:#222;
+      padding:15px;
+      border-radius:12px;
+      line-height:32px;
+      margin-top:10px;
+      border:1px solid #333;
+    }
+
+    .btn-servico{
+      background:#333;
+      color:#fff;
+      margin-top:10px;
+    }
+
+    .btn-servico:hover{
+      background:#444;
+    }
+
+    .btn-remover{
+      background:#b00020;
+      color:#fff;
+      padding:9px 14px;
+      font-size:13px;
+    }
+
+    .btn-remover:hover{
+      background:#d00028;
+    }
+
+    .btn-salvar{
+      background:#00c853;
+      color:#fff;
+      margin-top:10px;
+    }
+
+    .btn-salvar:hover{
+      background:#00e676;
+    }
+
+    .dados-cliente{
+      background:#262626;
+      padding:15px;
+      border-radius:12px;
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+    }
+
+    .acoes-final{
+      display:flex;
+      gap:15px;
+      flex-wrap:wrap;
+    }
+
+    .btn-limpar{
+      background:#444;
+      color:#fff;
+      margin-top:10px;
+    }
+
+    .btn-limpar:hover{
+      background:#555;
+    }
+
+    @media(max-width:600px){
+
+      .container{
+        padding:20px;
+      }
+
+      h1{
+        font-size:30px;
+      }
+
+      .linha{
+        grid-template-columns:1fr;
+      }
+
+      .equipamento-topo,
+      .servico-topo{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+
+      .acoes-final{
+        flex-direction:column;
+      }
+
+      .acoes-final button{
+        width:100%;
+      }
+
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <h1>Ordem de Serviço</h1>
+
+  <div class="topo">
+    <button class="btn-add" onclick="abrirFormulario()">
+      Adicionar
+    </button>
+  </div>
+
+  <div class="formulario" id="formulario">
+
+    <div class="dados-cliente">
+
+      <input
+        type="text"
+        id="nome"
+        placeholder="Nome do cliente"
+      >
+
+      <input
+        type="text"
+        id="telefone"
+        placeholder="Telefone / WhatsApp"
+      >
+
+    </div>
+
+    <div id="listaEquipamentos"></div>
+
+    <button
+      class="btn-servico"
+      type="button"
+      onclick="adicionarEquipamento()"
+    >
+      Adicionar Outro Equipamento
+    </button>
+
+    <div class="totais">
+
+      <div>
+        <strong>Total Peças:</strong>
+        R$ <span id="totalPecas">0.00</span>
+      </div>
+
+      <div>
+        <strong>Total Serviços:</strong>
+        R$ <span id="totalServicos">0.00</span>
+      </div>
+
+      <div>
+        <strong>Total Geral:</strong>
+        R$ <span id="valorTotal">0.00</span>
+      </div>
+
+    </div>
+
+    <div class="acoes-final">
+
+      <button
+        class="btn-salvar"
+        id="btnSalvar"
+        onclick="salvarOrdem()"
+      >
+        Salvar Ordem
+      </button>
+
+      <button
+        class="btn-limpar"
+        type="button"
+        onclick="limparFormulario()"
+      >
+        Cancelar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+  const API_URL = "COLE_AQUI_A_URL_DO_APPS_SCRIPT";
+
+  let contadorEquipamentos = 0;
+
+  function abrirFormulario(){
+
+    document.getElementById("formulario").style.display = "flex";
+
+    if(document.getElementById("listaEquipamentos").children.length === 0){
+      adicionarEquipamento();
+    }
+
+  }
+
+  function adicionarEquipamento(){
+
+    contadorEquipamentos++;
+
+    const div = document.createElement("div");
+
+    div.classList.add("equipamento-box");
+
+    div.innerHTML = `
+
+      <div class="equipamento-topo">
+
+        <h2>Equipamento ${contadorEquipamentos}</h2>
+
+        <button
+          type="button"
+          class="btn-remover"
+          onclick="removerEquipamento(this)"
+        >
+          Remover Equipamento
+        </button>
+
+      </div>
+
+      <div class="linha">
+
+        <select class="tipoEquipamento">
+          <option value="">Selecione o tipo</option>
+          <option value="Celular">Celular</option>
+          <option value="PC">PC</option>
+          <option value="Notebook">Notebook</option>
+          <option value="Console">Console</option>
+          <option value="Controle">Controle</option>
+          <option value="Impressora">Impressora</option>
+          <option value="Outro">Outro</option>
+        </select>
+
+        <input
+          type="text"
+          class="marcaModelo"
+          placeholder="Marca / Modelo"
+        >
+
+      </div>
+
+      <textarea
+        class="observacaoEquipamento"
+        placeholder="Defeito relatado ou observação do equipamento"
+      ></textarea>
+
+      <div class="listaServicos"></div>
+
+      <button
+        class="btn-servico"
+        type="button"
+        onclick="adicionarServico(this)"
+      >
+        Adicionar Serviço Neste Equipamento
+      </button>
+
+    `;
+
+    document.getElementById("listaEquipamentos").appendChild(div);
+
+    const botaoServico = div.querySelector(".btn-servico");
+
+    adicionarServico(botaoServico);
+
+  }
+
+  function adicionarServico(botao){
+
+    const equipamentoBox = botao.closest(".equipamento-box");
+
+    const listaServicos = equipamentoBox.querySelector(".listaServicos");
+
+    const numeroServico = listaServicos.children.length + 1;
+
+    const div = document.createElement("div");
+
+    div.classList.add("servico-box");
+
+    div.innerHTML = `
+
+      <div class="servico-topo">
+
+        <strong>Serviço ${numeroServico}</strong>
+
+        <button
+          type="button"
+          class="btn-remover"
+          onclick="removerServico(this)"
+        >
+          Remover Serviço
+        </button>
+
+      </div>
+
+      <input
+        type="text"
+        class="descricao"
+        placeholder="O que foi feito"
+      />
+
+      <div class="linha">
+
+        <input
+          type="number"
+          class="peca"
+          placeholder="Valor da peça"
+          min="0"
+          step="0.01"
+        />
+
+        <input
+          type="number"
+          class="servico"
+          placeholder="Valor do serviço"
+          readonly
+        />
+
+      </div>
+
+    `;
+
+    listaServicos.appendChild(div);
+
+    const inputPeca = div.querySelector(".peca");
+    const inputServico = div.querySelector(".servico");
+
+    inputServico.value = "80.00";
+
+    inputPeca.addEventListener("input", () => {
+
+      calcularValorServico(inputPeca, inputServico);
+
+      atualizarTotais();
+
+    });
+
+    atualizarTotais();
+
+  }
+
+  function calcularValorServico(inputPeca, inputServico){
+
+    let valorPeca = parseFloat(inputPeca.value) || 0;
+
+    let valorServico = valorPeca * 0.5;
+
+    if(valorServico < 80){
+      valorServico = 80;
+    }
+
+    inputServico.value = valorServico.toFixed(2);
+
+  }
+
+  function removerEquipamento(botao){
+
+    const equipamentoBox = botao.closest(".equipamento-box");
+
+    equipamentoBox.remove();
+
+    atualizarTotais();
+
+  }
+
+  function removerServico(botao){
+
+    const servicoBox = botao.closest(".servico-box");
+
+    const listaServicos = servicoBox.parentElement;
+
+    if(listaServicos.children.length <= 1){
+      alert("Cada equipamento precisa ter pelo menos um serviço.");
+      return;
+    }
+
+    servicoBox.remove();
+
+    atualizarTotais();
+
+  }
+
+  function atualizarTotais(){
+
+    let totalPecas = 0;
+    let totalServicos = 0;
+
+    document.querySelectorAll(".peca").forEach(campo => {
+      totalPecas += parseFloat(campo.value) || 0;
+    });
+
+    document.querySelectorAll(".servico").forEach(campo => {
+      totalServicos += parseFloat(campo.value) || 0;
+    });
+
+    const total = totalPecas + totalServicos;
+
+    document.getElementById("totalPecas").innerText =
+      totalPecas.toFixed(2);
+
+    document.getElementById("totalServicos").innerText =
+      totalServicos.toFixed(2);
+
+    document.getElementById("valorTotal").innerText =
+      total.toFixed(2);
+
+  }
+
+  function gerarNumeroOS(){
+
+    const data = new Date();
+
+    const ano = data.getFullYear();
+
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+
+    const dia = String(data.getDate()).padStart(2, "0");
+
+    const hora = String(data.getHours()).padStart(2, "0");
+
+    const minuto = String(data.getMinutes()).padStart(2, "0");
+
+    const segundo = String(data.getSeconds()).padStart(2, "0");
+
+    return `OS-${ano}${mes}${dia}-${hora}${minuto}${segundo}`;
+
+  }
+
+  async function salvarOrdem(){
+
+    const btnSalvar = document.getElementById("btnSalvar");
+
+    const nome = document.getElementById("nome").value.trim();
+    const telefone = document.getElementById("telefone").value.trim();
+
+    const equipamentos =
+      document.querySelectorAll(".equipamento-box");
+
+    if(nome === ""){
+      alert("Informe o nome do cliente.");
+      return;
+    }
+
+    if(equipamentos.length === 0){
+      alert("Adicione pelo menos um equipamento.");
+      return;
+    }
+
+    btnSalvar.disabled = true;
+    btnSalvar.innerText = "Salvando...";
+
+    const numeroOS = gerarNumeroOS();
+
+    try{
+
+      for(const equipamento of equipamentos){
+
+        const tipoEquipamento =
+          equipamento.querySelector(".tipoEquipamento").value;
+
+        const marcaModelo =
+          equipamento.querySelector(".marcaModelo").value.trim();
+
+        const observacaoEquipamento =
+          equipamento.querySelector(".observacaoEquipamento").value.trim();
+
+        const servicos =
+          equipamento.querySelectorAll(".servico-box");
+
+        for(const servicoBox of servicos){
+
+          const descricao =
+            servicoBox.querySelector(".descricao").value.trim();
+
+          const valorPeca =
+            parseFloat(servicoBox.querySelector(".peca").value) || 0;
+
+          const valorServico =
+            parseFloat(servicoBox.querySelector(".servico").value) || 0;
+
+          const valorTotal =
+            valorPeca + valorServico;
+
+          if(descricao === ""){
+            continue;
+          }
+
+          await fetch(API_URL, {
+
+            method: "POST",
+            mode: "no-cors",
+
+            body: JSON.stringify({
+
+              os: numeroOS,
+              nome: nome,
+              telefone: telefone,
+              tipoEquipamento: tipoEquipamento,
+              marcaModelo: marcaModelo,
+              observacaoEquipamento: observacaoEquipamento,
+              servico: descricao,
+              valorPeca: valorPeca,
+              valorServico: valorServico,
+              valorTotal: valorTotal
+
+            })
+
+          });
+
+        }
+
+      }
+
+      alert("Ordem salva com sucesso!");
+
+      limparFormulario();
+
+    }catch(erro){
+
+      console.error(erro);
+
+      alert("Erro ao salvar na planilha.");
+
+    }finally{
+
+      btnSalvar.disabled = false;
+      btnSalvar.innerText = "Salvar Ordem";
+
+    }
+
+  }
+
+  function limparFormulario(){
+
+    document.getElementById("nome").value = "";
+    document.getElementById("telefone").value = "";
+
+    document.getElementById("listaEquipamentos").innerHTML = "";
+
+    document.getElementById("totalPecas").innerText = "0.00";
+    document.getElementById("totalServicos").innerText = "0.00";
+    document.getElementById("valorTotal").innerText = "0.00";
+
+    document.getElementById("formulario").style.display = "none";
+
+    contadorEquipamentos = 0;
+
+  }
+
+</script>
+
+</body>
+</html>
