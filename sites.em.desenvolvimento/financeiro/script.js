@@ -1,4 +1,4 @@
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyp31-ZPpMQz1ERtSpbxug1giQH2DnCWo9XwD-cIR90beIxRLoLejRi5y863r9xVR94/exec";
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyeAkSFj6j4BUTFnah54ywAAzlcaxP2tchbguqd5AQNPK5MlhXqLlIsoOqLWCfhPaXa/exec";
 
 let categorias = [];
 let receitas = [];
@@ -72,18 +72,28 @@ async function carregarTudo() {
 
 async function carregarCategorias() {
     try {
-        const resposta = await fetch(`${URL_SCRIPT}?action=listarCategorias`);
-        const resultado = await resposta.json();
+        const resultado = await buscarJSONP(
+            `${URL_SCRIPT}?action=listarCategorias`
+        );
 
-        if (!resultado.sucesso) return;
+        if (!resultado.sucesso) {
+            console.error(
+                "Erro ao carregar categorias:",
+                resultado.mensagem
+            );
+            return;
+        }
 
-        categorias = resultado.categorias;
+        categorias = resultado.categorias || [];
 
         preencherSelectsCategorias();
         listarCategoriasNaTela();
 
     } catch (erro) {
-        console.error("Erro ao carregar categorias:", erro);
+        console.error(
+            "Erro ao carregar categorias:",
+            erro
+        );
     }
 }
 
@@ -578,16 +588,21 @@ function filtrarPorMes(lista) {
     }
 
     return lista.filter(item => {
-        const data = new Date(item.data);
+        const dataTexto = String(item.data || "").trim();
 
-        if (isNaN(data)) {
+        const partes = dataTexto.split("-");
+
+        if (partes.length !== 3) {
             return false;
         }
 
-        const anoItem = data.getFullYear();
-        const mesItem = data.getMonth() + 1;
+        const anoItem = Number(partes[0]);
+        const mesItem = Number(partes[1]);
 
-        return anoItem === filtro.ano && mesItem === filtro.mes;
+        return (
+            anoItem === filtro.ano &&
+            mesItem === filtro.mes
+        );
     });
 }
 
@@ -723,19 +738,28 @@ function formatarMoeda(valor) {
 function formatarData(data) {
     if (!data) return "";
 
-    const d = new Date(data);
+    const texto = String(data).trim();
+    const partes = texto.split("-");
 
-    if (isNaN(d)) return data;
+    if (partes.length === 3) {
+        const ano = partes[0];
+        const mes = partes[1];
+        const dia = partes[2].substring(0, 2);
 
-    return d.toLocaleDateString("pt-BR");
+        return `${dia}/${mes}/${ano}`;
+    }
+
+    return texto;
 }
 
 function converterDataInput(data) {
     if (!data) return "";
 
-    const d = new Date(data);
+    const texto = String(data).trim();
 
-    if (isNaN(d)) return data;
+    if (/^\d{4}-\d{2}-\d{2}/.test(texto)) {
+        return texto.substring(0, 10);
+    }
 
-    return d.toISOString().split("T")[0];
+    return "";
 }
