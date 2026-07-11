@@ -1,4 +1,5 @@
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyeAkSFj6j4BUTFnah54ywAAzlcaxP2tchbguqd5AQNPK5MlhXqLlIsoOqLWCfhPaXa/exec";
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwcJ9dQGc25pIn_dyQbRw0W8koa2_Za9bFMdIN5cHEgnXtIL-QOWuG0UC5LnYpRQ6x8/exec";
+
 
 let categorias = [];
 let receitas = [];
