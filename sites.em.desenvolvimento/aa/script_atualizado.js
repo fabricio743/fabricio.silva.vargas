@@ -1,4 +1,4 @@
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbz5gqVIu9v5b0y3Myp1_jPUjKrFPapyhVizeEthKz7x2LU03Hb-quWSMkGML6ZPGx9n/exec";
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwoFwwCpUFqzRLT9R1IJ-_wL1OZSV0gLScFU1YMR4yY3JDQNU3YtdG-uOm7tsSfmnPs/exec";
 
 let categorias = [];
 let receitas = [];
@@ -596,7 +596,7 @@ function editarReceita(linha) {
         mostrarTela("receitas", document.querySelectorAll(".menu-item")[1]);
 
         esconderLoadingEdicao();
-    }, 500);
+    }, 250);
 }
 
 function editarDespesa(linha) {
@@ -621,7 +621,7 @@ function editarDespesa(linha) {
         mostrarTela("despesas", document.querySelectorAll(".menu-item")[2]);
 
         esconderLoadingEdicao();
-    }, 500);
+    }, 250);
 }
 
 function editarGuardado(linha) {
@@ -644,7 +644,7 @@ function editarGuardado(linha) {
         mostrarTela("guardado", document.querySelectorAll(".menu-item")[3]);
 
         esconderLoadingEdicao();
-    }, 500);
+    }, 250);
 }
 
 function editarCategoria(linha) {
@@ -666,7 +666,7 @@ esconderLoading();
         mostrarTela("categorias", document.querySelectorAll(".menu-item")[4]);
 
         esconderLoadingEdicao();
-    }, 500);
+    }, 250);
 }
 
 function mostrarLoadingEdicao() {

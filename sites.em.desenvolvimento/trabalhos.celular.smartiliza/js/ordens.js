@@ -752,8 +752,6 @@ Sua ordem de serviço nº ${ordem.os}, referente ao aparelho ${ordem.modelo}, fo
 
 Valor total do serviço: R$ ${valorServico}
 
-O comprovante/termo de garantia será enviado em seguida.
-
 Aguardamos sua retirada. Obrigado!`;
 
     const link =

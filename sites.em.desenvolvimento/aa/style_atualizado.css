@@ -619,7 +619,7 @@ tbody tr:hover {
     border-top-color: #48bd7a;
     border-radius: 50%;
 
-    animation: girarLoading 0.75s linear infinite;
+    animation: girarLoading 0.65s linear infinite;
 }
 
 @keyframes girarLoading {
