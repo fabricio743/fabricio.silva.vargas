@@ -909,6 +909,7 @@ td:nth-child(5){
     animation:girarLoadingSite .8s linear infinite;
 }
 
+
 @keyframes girarLoadingSite{
     from{
         transform:rotate(0deg);
