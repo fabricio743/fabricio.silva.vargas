@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Análises | Controle de Vendas</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+
+    <!-- ==========================================
+         MENU LATERAL
+    =========================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                CV
+            </div>
+
+            <div class="logo-text">
+
+                <strong>
+                    Controle
+                </strong>
+
+                <span>
+                    de Vendas
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="menu">
+
+            <p class="menu-title">
+                MENU PRINCIPAL
+            </p>
+
+
+            <a href="index.html" class="menu-item">
+
+                <span class="menu-icon">
+                    ⌂
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a href="vendas.html" class="menu-item">
+
+                <span class="menu-icon">
+                    🛒
+                </span>
+
+                <span>
+                    Vendas
+                </span>
+
+            </a>
+
+
+            <a href="produtos.html" class="menu-item">
+
+                <span class="menu-icon">
+                    ▣
+                </span>
+
+                <span>
+                    Produtos
+                </span>
+
+            </a>
+
+
+            <a href="gastos.html" class="menu-item">
+
+                <span class="menu-icon">
+                    R$
+                </span>
+
+                <span>
+                    Gastos
+                </span>
+
+            </a>
+
+
+            <a href="analises.html" class="menu-item active">
+
+                <span class="menu-icon">
+                    ▥
+                </span>
+
+                <span>
+                    Análises
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="menu-item">
+
+                <span class="menu-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Configurações
+                </span>
+
+            </a>
+
+
+            <div class="user-box">
+
+                <div class="user-avatar">
+                    ML
+                </div>
+
+                <div class="user-info">
+
+                    <strong>
+                        Minha Loja
+                    </strong>
+
+                    <span>
+                        Administrador
+                    </span>
+
+                </div>
+
+                <button class="user-more">
+                    •••
+                </button>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ==========================================
+         CONTEÚDO
+    =========================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+
+            <button class="mobile-menu">
+                ☰
+            </button>
+
+
+            <div class="page-title">
+
+                <span class="breadcrumb">
+                    Início / Análises
+                </span>
+
+                <h1>
+                    Análises
+                </h1>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+
+                <button class="icon-button notification">
+
+                    🔔
+
+                    <span class="notification-dot"></span>
+
+                </button>
+
+
+                <div class="topbar-date">
+
+                    <span>
+                        Período
+                    </span>
+
+                    <button class="period-button">
+
+                        Este mês
+
+                        <span>
+                            ⌄
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ==========================================
+             PÁGINA
+        =========================================== -->
+
+        <section class="page-container">
+
+
+            <!-- CABEÇALHO -->
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        VISÃO FINANCEIRA
+                    </span>
+
+                    <h2>
+                        Análises
+                    </h2>
+
+                    <p>
+                        Entenda o desempenho financeiro da sua operação.
+                    </p>
+
+                </div>
+
+
+                <div class="analysis-period">
+
+                    <button class="period-option">
+                        7 dias
+                    </button>
+
+                    <button class="period-option active">
+                        30 dias
+                    </button>
+
+                    <button class="period-option">
+                        3 meses
+                    </button>
+
+                    <button class="period-option">
+                        1 ano
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 PRINCIPAIS INDICADORES
+            =========================================== -->
+
+            <div class="metrics-grid analysis-metrics">
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon sales-icon">
+                            R$
+                        </div>
+
+                        <span class="metric-period">
+                            30 dias
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Faturamento
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 18.420
+                    </strong>
+
+                    <div class="metric-footer positive">
+
+                        ↑ 14,8%
+
+                        <small>
+                            comparado ao período anterior
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon cost-icon">
+                            ↓
+                        </div>
+
+                        <span class="metric-period">
+                            30 dias
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Custos + gastos
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 11.280
+                    </strong>
+
+                    <div class="metric-footer negative">
+
+                        ↑ 7,3%
+
+                        <small>
+                            comparado ao período anterior
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="metric-card highlight-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon profit-icon">
+                            ✓
+                        </div>
+
+                        <span class="metric-period">
+                            30 dias
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Lucro líquido
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 7.140
+                    </strong>
+
+                    <div class="metric-footer positive">
+
+                        ↑ 28,5%
+
+                        <small>
+                            comparado ao período anterior
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon order-icon">
+                            %
+                        </div>
+
+                        <span class="metric-period">
+                            30 dias
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Margem líquida
+                    </span>
+
+                    <strong class="metric-value">
+                        38,8%
+                    </strong>
+
+                    <div class="metric-footer positive">
+
+                        ↑ 4,2 p.p.
+
+                        <small>
+                            comparado ao período anterior
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 EVOLUÇÃO FINANCEIRA
+            =========================================== -->
+
+            <div class="card analysis-chart-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            Evolução financeira
+                        </h3>
+
+                        <p>
+                            Compare faturamento, custos e lucro ao longo do período.
+                        </p>
+
+                    </div>
+
+
+                    <div class="chart-legend">
+
+                        <span>
+                            <i class="legend-sales"></i>
+                            Faturamento
+                        </span>
+
+                        <span>
+                            <i class="legend-cost"></i>
+                            Custos
+                        </span>
+
+                        <span>
+                            <i class="legend-profit"></i>
+                            Lucro
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="analysis-chart">
+
+
+                    <div class="analysis-y-axis">
+
+                        <span>
+                            R$ 20k
+                        </span>
+
+                        <span>
+                            R$ 15k
+                        </span>
+
+                        <span>
+                            R$ 10k
+                        </span>
+
+                        <span>
+                            R$ 5k
+                        </span>
+
+                        <span>
+                            R$ 0
+                        </span>
+
+                    </div>
+
+
+                    <div class="analysis-chart-area">
+
+
+                        <div class="analysis-grid">
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                        </div>
+
+
+                        <!-- LINHA FATURAMENTO -->
+
+                        <svg
+                            class="analysis-line"
+                            viewBox="0 0 900 250"
+                            preserveAspectRatio="none"
+                        >
+
+                            <polyline
+                                points="
+                                0,185
+                                90,165
+                                180,170
+                                270,125
+                                360,145
+                                450,100
+                                540,118
+                                630,75
+                                720,92
+                                810,55
+                                900,65
+                                "
+                            />
+
+                        </svg>
+
+
+                        <!-- LINHA CUSTOS -->
+
+                        <svg
+                            class="analysis-line cost-line"
+                            viewBox="0 0 900 250"
+                            preserveAspectRatio="none"
+                        >
+
+                            <polyline
+                                points="
+                                0,215
+                                90,195
+                                180,202
+                                270,165
+                                360,175
+                                450,148
+                                540,160
+                                630,125
+                                720,137
+                                810,105
+                                900,112
+                                "
+                            />
+
+                        </svg>
+
+
+                        <!-- LINHA LUCRO -->
+
+                        <svg
+                            class="analysis-line profit-line"
+                            viewBox="0 0 900 250"
+                            preserveAspectRatio="none"
+                        >
+
+                            <polyline
+                                points="
+                                0,235
+                                90,220
+                                180,225
+                                270,188
+                                360,205
+                                450,165
+                                540,178
+                                630,140
+                                720,155
+                                810,120
+                                900,128
+                                "
+                            />
+
+                        </svg>
+
+
+                        <div class="analysis-x-axis">
+
+                            <span>
+                                Semana 1
+                            </span>
+
+                            <span>
+                                Semana 2
+                            </span>
+
+                            <span>
+                                Semana 3
+                            </span>
+
+                            <span>
+                                Semana 4
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 DUAS COLUNAS
+            =========================================== -->
+
+            <div class="two-column-grid analysis-columns">
+
+
+                <!-- PRODUTOS MAIS RENTÁVEIS -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                Produtos mais rentáveis
+                            </h3>
+
+                            <p>
+                                Produtos que mais geraram lucro.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="ranking-list">
+
+
+                        <div class="ranking-item">
+
+                            <span class="ranking-position">
+                                1
+                            </span>
+
+                            <div class="ranking-product">
+
+                                <div class="product-image">
+                                    📱
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Tela iPhone 11 OLED
+                                    </strong>
+
+                                    <span>
+                                        18 vendas
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="ranking-value">
+
+                                <strong>
+                                    R$ 2.070
+                                </strong>
+
+                                <span>
+                                    lucro
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="ranking-item">
+
+                            <span class="ranking-position">
+                                2
+                            </span>
+
+                            <div class="ranking-product">
+
+                                <div class="product-image">
+                                    📱
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Tela Samsung A12
+                                    </strong>
+
+                                    <span>
+                                        12 vendas
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="ranking-value">
+
+                                <strong>
+                                    R$ 1.440
+                                </strong>
+
+                                <span>
+                                    lucro
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="ranking-item">
+
+                            <span class="ranking-position">
+                                3
+                            </span>
+
+                            <div class="ranking-product">
+
+                                <div class="product-image">
+                                    🔋
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Bateria iPhone 11
+                                    </strong>
+
+                                    <span>
+                                        15 vendas
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="ranking-value">
+
+                                <strong>
+                                    R$ 1.050
+                                </strong>
+
+                                <span>
+                                    lucro
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="ranking-item">
+
+                            <span class="ranking-position">
+                                4
+                            </span>
+
+                            <div class="ranking-product">
+
+                                <div class="product-image">
+                                    🔌
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Conector USB-C
+                                    </strong>
+
+                                    <span>
+                                        22 vendas
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="ranking-value">
+
+                                <strong>
+                                    R$ 660
+                                </strong>
+
+                                <span>
+                                    lucro
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- INDICADORES -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                Indicadores
+                            </h3>
+
+                            <p>
+                                Alguns números importantes da operação.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="indicator-list">
+
+
+                        <div class="indicator-item">
+
+                            <div class="indicator-icon">
+                                🛒
+                            </div>
+
+                            <div class="indicator-info">
+
+                                <span>
+                                    Ticket médio
+                                </span>
+
+                                <strong>
+                                    R$ 271,00
+                                </strong>
+
+                            </div>
+
+                            <span class="indicator-positive">
+                                +6,4%
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="indicator-item">
+
+                            <div class="indicator-icon">
+                                📈
+                            </div>
+
+                            <div class="indicator-info">
+
+                                <span>
+                                    Crescimento das vendas
+                                </span>
+
+                                <strong>
+                                    +14,8%
+                                </strong>
+
+                            </div>
+
+                            <span class="indicator-positive">
+                                Bom
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="indicator-item">
+
+                            <div class="indicator-icon">
+                                💰
+                            </div>
+
+                            <div class="indicator-info">
+
+                                <span>
+                                    Lucro por venda
+                                </span>
+
+                                <strong>
+                                    R$ 105,00
+                                </strong>
+
+                            </div>
+
+                            <span class="indicator-positive">
+                                +9,2%
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="indicator-item">
+
+                            <div class="indicator-icon">
+                                📦
+                            </div>
+
+                            <div class="indicator-info">
+
+                                <span>
+                                    Giro de estoque
+                                </span>
+
+                                <strong>
+                                    2,8x
+                                </strong>
+
+                            </div>
+
+                            <span class="indicator-positive">
+                                Bom
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="indicator-item">
+
+                            <div class="indicator-icon">
+                                ⚠
+                            </div>
+
+                            <div class="indicator-info">
+
+                                <span>
+                                    Produtos sem venda
+                                </span>
+
+                                <strong>
+                                    5 produtos
+                                </strong>
+
+                            </div>
+
+                            <span class="indicator-warning">
+                                Atenção
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 COMPARAÇÃO DE PERÍODOS
+            =========================================== -->
+
+            <div class="card comparison-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            Comparação de períodos
+                        </h3>
+
+                        <p>
+                            Veja como o negócio está evoluindo.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="comparison-grid">
+
+
+                    <div class="comparison-period">
+
+                        <span>
+                            AGOSTO
+                        </span>
+
+                        <strong>
+                            R$ 15.990
+                        </strong>
+
+                        <small>
+                            faturamento
+                        </small>
+
+                    </div>
+
+
+                    <div class="comparison-arrow">
+                        →
+                    </div>
+
+
+                    <div class="comparison-period current">
+
+                        <span>
+                            SETEMBRO
+                        </span>
+
+                        <strong>
+                            R$ 18.420
+                        </strong>
+
+                        <small>
+                            faturamento
+                        </small>
+
+                    </div>
+
+
+                    <div class="comparison-result positive">
+
+                        <strong>
+                            +15,2%
+                        </strong>
+
+                        <span>
+                            crescimento
+                        </span>
+
+                    </div>
+
+
+                    <div class="comparison-divider"></div>
+
+
+                    <div class="comparison-period">
+
+                        <span>
+                            AGOSTO
+                        </span>
+
+                        <strong>
+                            R$ 5.560
+                        </strong>
+
+                        <small>
+                            lucro líquido
+                        </small>
+
+                    </div>
+
+
+                    <div class="comparison-arrow">
+                        →
+                    </div>
+
+
+                    <div class="comparison-period current">
+
+                        <span>
+                            SETEMBRO
+                        </span>
+
+                        <strong>
+                            R$ 7.140
+                        </strong>
+
+                        <small>
+                            lucro líquido
+                        </small>
+
+                    </div>
+
+
+                    <div class="comparison-result positive">
+
+                        <strong>
+                            +28,4%
+                        </strong>
+
+                        <span>
+                            crescimento
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 CONCLUSÃO
+            =========================================== -->
+
+            <div class="analysis-insight">
+
+                <div class="insight-icon">
+                    ✦
+                </div>
+
+                <div class="insight-content">
+
+                    <span>
+                        DESTAQUE DO PERÍODO
+                    </span>
+
+                    <strong>
+                        O negócio apresentou crescimento saudável.
+                    </strong>
+
+                    <p>
+                        O faturamento cresceu 14,8%, enquanto o lucro líquido
+                        cresceu 28,5%. Isso indica que a operação está conseguindo
+                        aumentar o resultado sem aumentar os custos na mesma proporção.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Produtos | Controle de Vendas</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ==============================
+         MENU LATERAL
+    =============================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">CV</div>
+
+            <div class="logo-text">
+                <strong>Controle</strong>
+                <span>de Vendas</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+
+            <p class="menu-title">MENU PRINCIPAL</p>
+
+            <a href="index.html" class="menu-item">
+                <span class="menu-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="vendas.html" class="menu-item">
+                <span class="menu-icon">🛒</span>
+                <span>Vendas</span>
+            </a>
+
+            <a href="produtos.html" class="menu-item active">
+                <span class="menu-icon">▣</span>
+                <span>Produtos</span>
+            </a>
+
+            <a href="gastos.html" class="menu-item">
+                <span class="menu-icon">R$</span>
+                <span>Gastos</span>
+            </a>
+
+            <a href="analises.html" class="menu-item">
+                <span class="menu-icon">▥</span>
+                <span>Análises</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="menu-item">
+                <span class="menu-icon">⚙</span>
+                <span>Configurações</span>
+            </a>
+
+            <div class="user-box">
+
+                <div class="user-avatar">
+                    ML
+                </div>
+
+                <div class="user-info">
+                    <strong>Minha Loja</strong>
+                    <span>Administrador</span>
+                </div>
+
+                <button class="user-more">
+                    •••
+                </button>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ==============================
+         CONTEÚDO PRINCIPAL
+    =============================== -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <button class="mobile-menu">
+                ☰
+            </button>
+
+            <div class="page-title">
+
+                <span class="breadcrumb">
+                    Início / Produtos
+                </span>
+
+                <h1>Produtos</h1>
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <button class="icon-button notification">
+                    🔔
+                    <span class="notification-dot"></span>
+                </button>
+
+                <div class="topbar-date">
+
+                    <span>Período</span>
+
+                    <button class="period-button">
+                        Este mês
+                        <span>⌄</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==============================
+             PÁGINA
+        =============================== -->
+
+        <section class="page-container">
+
+
+            <!-- CABEÇALHO -->
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        CONTROLE DE ESTOQUE
+                    </span>
+
+                    <h2>
+                        Produtos
+                    </h2>
+
+                    <p>
+                        Cadastre suas peças e acompanhe o estoque.
+                    </p>
+
+                </div>
+
+                <button class="primary-button">
+                    <span>+</span>
+                    Novo produto
+                </button>
+
+            </div>
+
+
+            <!-- RESUMO DO ESTOQUE -->
+
+            <div class="metrics-grid product-summary">
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon sales-icon">
+                            📦
+                        </div>
+
+                        <span class="metric-period">
+                            Atual
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Produtos cadastrados
+                    </span>
+
+                    <strong class="metric-value">
+                        42
+                    </strong>
+
+                    <div class="metric-footer">
+                        <small>
+                            produtos ativos
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon profit-icon">
+                            ✓
+                        </div>
+
+                        <span class="metric-period">
+                            Atual
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Estoque normal
+                    </span>
+
+                    <strong class="metric-value">
+                        35
+                    </strong>
+
+                    <div class="metric-footer positive">
+                        83,3%
+                        <small>dos produtos</small>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon cost-icon">
+                            ⚠
+                        </div>
+
+                        <span class="metric-period">
+                            Atenção
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Estoque baixo
+                    </span>
+
+                    <strong class="metric-value">
+                        3
+                    </strong>
+
+                    <div class="metric-footer negative">
+                        Reposição necessária
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon order-icon">
+                            R$
+                        </div>
+
+                        <span class="metric-period">
+                            Atual
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Valor em estoque
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 8.450
+                    </strong>
+
+                    <div class="metric-footer">
+                        <small>
+                            custo total estimado
+                        </small>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FILTROS -->
+
+            <div class="card filters-card">
+
+                <div class="filters">
+
+                    <div class="search-box">
+
+                        <span>⌕</span>
+
+                        <input
+                            type="text"
+                            placeholder="Pesquisar produto ou SKU..."
+                        >
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label>
+                            Categoria
+                        </label>
+
+                        <select>
+
+                            <option>
+                                Todas as categorias
+                            </option>
+
+                            <option>
+                                Telas
+                            </option>
+
+                            <option>
+                                Baterias
+                            </option>
+
+                            <option>
+                                Conectores
+                            </option>
+
+                            <option>
+                                Outros
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label>
+                            Estoque
+                        </label>
+
+                        <select>
+
+                            <option>
+                                Todos
+                            </option>
+
+                            <option>
+                                Estoque normal
+                            </option>
+
+                            <option>
+                                Estoque baixo
+                            </option>
+
+                            <option>
+                                Sem estoque
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button class="secondary-button">
+                        Limpar filtros
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- TABELA DE PRODUTOS -->
+
+            <div class="card table-card">
+
+                <div class="card-header table-header">
+
+                    <div>
+
+                        <h3>
+                            Produtos cadastrados
+                        </h3>
+
+                        <p>
+                            42 produtos encontrados
+                        </p>
+
+                    </div>
+
+                    <button class="secondary-button">
+                        Exportar
+                    </button>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Produto
+                                </th>
+
+                                <th>
+                                    Categoria
+                                </th>
+
+                                <th>
+                                    SKU
+                                </th>
+
+                                <th>
+                                    Custo
+                                </th>
+
+                                <th>
+                                    Preço venda
+                                </th>
+
+                                <th>
+                                    Estoque
+                                </th>
+
+                                <th>
+                                    Margem
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th></th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            <!-- PRODUTO 1 -->
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            📱
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                Tela iPhone 11 OLED
+                                            </strong>
+
+                                            <span>
+                                                Tela de reposição
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    Telas
+                                </td>
+
+                                <td>
+                                    IP11-OLED
+                                </td>
+
+                                <td>
+                                    R$ 180,00
+                                </td>
+
+                                <td>
+                                    R$ 350,00
+                                </td>
+
+                                <td>
+
+                                    <strong>
+                                        5
+                                    </strong>
+
+                                    <span class="table-subtext">
+                                        unidades
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <strong class="positive">
+                                        48,6%
+                                    </strong>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="status success">
+                                        Normal
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- PRODUTO 2 -->
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            🔋
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                Bateria iPhone 11
+                                            </strong>
+
+                                            <span>
+                                                Bateria de reposição
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    Baterias
+                                </td>
+
+                                <td>
+                                    BAT-IP11
+                                </td>
+
+                                <td>
+                                    R$ 80,00
+                                </td>
+
+                                <td>
+                                    R$ 180,00
+                                </td>
+
+                                <td>
+
+                                    <strong>
+                                        8
+                                    </strong>
+
+                                    <span class="table-subtext">
+                                        unidades
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <strong class="positive">
+                                        55,6%
+                                    </strong>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="status success">
+                                        Normal
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- PRODUTO 3 -->
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            🔌
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                Conector USB-C
+                                            </strong>
+
+                                            <span>
+                                                Conector de carga
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    Conectores
+                                </td>
+
+                                <td>
+                                    CON-USBC
+                                </td>
+
+                                <td>
+                                    R$ 25,00
+                                </td>
+
+                                <td>
+                                    R$ 70,00
+                                </td>
+
+                                <td>
+
+                                    <strong>
+                                        12
+                                    </strong>
+
+                                    <span class="table-subtext">
+                                        unidades
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <strong class="positive">
+                                        64,3%
+                                    </strong>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="status success">
+                                        Normal
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- PRODUTO 4 -->
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            📱
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                Tela Samsung A12
+                                            </strong>
+
+                                            <span>
+                                                Tela de reposição
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    Telas
+                                </td>
+
+                                <td>
+                                    SAM-A12
+                                </td>
+
+                                <td>
+                                    R$ 190,00
+                                </td>
+
+                                <td>
+                                    R$ 350,00
+                                </td>
+
+                                <td>
+
+                                    <strong>
+                                        1
+                                    </strong>
+
+                                    <span class="table-subtext">
+                                        unidade
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <strong class="positive">
+                                        45,7%
+                                    </strong>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="status warning">
+                                        Estoque baixo
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+                            <!-- PRODUTO 5 -->
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            🔋
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                Bateria Samsung A12
+                                            </strong>
+
+                                            <span>
+                                                Bateria de reposição
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    Baterias
+                                </td>
+
+                                <td>
+                                    BAT-A12
+                                </td>
+
+                                <td>
+                                    R$ 65,00
+                                </td>
+
+                                <td>
+                                    R$ 150,00
+                                </td>
+
+                                <td>
+
+                                    <strong class="negative">
+                                        0
+                                    </strong>
+
+                                    <span class="table-subtext">
+                                        sem estoque
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <strong class="positive">
+                                        56,7%
+                                    </strong>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="status danger">
+                                        Sem estoque
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- PAGINAÇÃO -->
+
+                <div class="pagination">
+
+                    <span>
+                        Mostrando 1–5 de 42 produtos
+                    </span>
+
+                    <div class="pagination-buttons">
+
+                        <button disabled>
+                            ‹
+                        </button>
+
+                        <button class="active">
+                            1
+                        </button>
+
+                        <button>
+                            2
+                        </button>
+
+                        <button>
+                            3
+                        </button>
+
+                        <span>
+                            ...
+                        </span>
+
+                        <button>
+                            9
+                        </button>
+
+                        <button>
+                            ›
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- AVISO -->
+
+            <div class="stock-alert">
+
+                <div class="stock-alert-icon">
+                    ⚠
+                </div>
+
+                <div class="stock-alert-text">
+
+                    <strong>
+                        Atenção ao estoque
+                    </strong>
+
+                    <span>
+                        3 produtos estão abaixo do estoque mínimo.
+                    </span>
+
+                </div>
+
+                <button>
+                    Ver produtos
+                </button>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</body>
+</html>

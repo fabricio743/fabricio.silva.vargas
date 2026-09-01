@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Vendas | Controle de Vendas</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- MENU LATERAL -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">CV</div>
+
+            <div class="logo-text">
+                <strong>Controle</strong>
+                <span>de Vendas</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+
+            <p class="menu-title">MENU PRINCIPAL</p>
+
+            <a href="index.html" class="menu-item">
+                <span class="menu-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="vendas.html" class="menu-item active">
+                <span class="menu-icon">🛒</span>
+                <span>Vendas</span>
+            </a>
+
+            <a href="produtos.html" class="menu-item">
+                <span class="menu-icon">▣</span>
+                <span>Produtos</span>
+            </a>
+
+            <a href="gastos.html" class="menu-item">
+                <span class="menu-icon">R$</span>
+                <span>Gastos</span>
+            </a>
+
+            <a href="analises.html" class="menu-item">
+                <span class="menu-icon">▥</span>
+                <span>Análises</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="menu-item">
+                <span class="menu-icon">⚙</span>
+                <span>Configurações</span>
+            </a>
+
+            <div class="user-box">
+
+                <div class="user-avatar">
+                    ML
+                </div>
+
+                <div class="user-info">
+                    <strong>Minha Loja</strong>
+                    <span>Administrador</span>
+                </div>
+
+                <button class="user-more">•••</button>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- CONTEÚDO -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <button class="mobile-menu">
+                ☰
+            </button>
+
+            <div class="page-title">
+
+                <span class="breadcrumb">
+                    Início / Vendas
+                </span>
+
+                <h1>Vendas</h1>
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <button class="icon-button notification">
+                    🔔
+                    <span class="notification-dot"></span>
+                </button>
+
+                <div class="topbar-date">
+
+                    <span>Período</span>
+
+                    <button class="period-button">
+                        Este mês
+                        <span>⌄</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- PÁGINA -->
+
+        <section class="page-container">
+
+
+            <!-- CABEÇALHO -->
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        CONTROLE DE VENDAS
+                    </span>
+
+                    <h2>
+                        Suas vendas
+                    </h2>
+
+                    <p>
+                        Registre e acompanhe todas as vendas da sua loja.
+                    </p>
+
+                </div>
+
+                <button class="primary-button">
+                    <span>+</span>
+                    Nova venda
+                </button>
+
+            </div>
+
+
+            <!-- RESUMO -->
+
+            <div class="metrics-grid sales-summary">
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon sales-icon">
+                            🛒
+                        </div>
+
+                        <span class="metric-period">
+                            Setembro
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Faturamento
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 15.840,00
+                    </strong>
+
+                    <div class="metric-footer positive">
+                        ↑ 12,5%
+                        <small>vs. mês anterior</small>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon profit-icon">
+                            R$
+                        </div>
+
+                        <span class="metric-period">
+                            Setembro
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Lucro das vendas
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 5.640,00
+                    </strong>
+
+                    <div class="metric-footer positive">
+                        ↑ 16,8%
+                        <small>vs. mês anterior</small>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon order-icon">
+                            #
+                        </div>
+
+                        <span class="metric-period">
+                            Setembro
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Vendas realizadas
+                    </span>
+
+                    <strong class="metric-value">
+                        68
+                    </strong>
+
+                    <div class="metric-footer positive">
+                        ↑ 9,6%
+                        <small>vs. mês anterior</small>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon cost-icon">
+                            🧾
+                        </div>
+
+                        <span class="metric-period">
+                            Setembro
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Ticket médio
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 232,94
+                    </strong>
+
+                    <div class="metric-footer positive">
+                        ↑ 4,2%
+                        <small>vs. mês anterior</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FILTROS -->
+
+            <div class="card filters-card">
+
+                <div class="filters">
+
+                    <div class="search-box">
+
+                        <span>⌕</span>
+
+                        <input
+                            type="text"
+                            placeholder="Pesquisar produto ou SKU..."
+                        >
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label>Período</label>
+
+                        <select>
+                            <option>Este mês</option>
+                            <option>Hoje</option>
+                            <option>Esta semana</option>
+                            <option>Mês anterior</option>
+                            <option>Personalizado</option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="filter-group">
+
+                        <label>Produto</label>
+
+                        <select>
+
+                            <option>Todos os produtos</option>
+                            <option>Tela iPhone 11 OLED</option>
+                            <option>Bateria iPhone 11</option>
+                            <option>Conector USB-C</option>
+                            <option>Tela Samsung A12</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button class="secondary-button">
+                        Limpar filtros
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- TABELA -->
+
+            <div class="card table-card">
+
+                <div class="card-header table-header">
+
+                    <div>
+
+                        <h3>
+                            Histórico de vendas
+                        </h3>
+
+                        <p>
+                            68 vendas encontradas
+                        </p>
+
+                    </div>
+
+                    <button class="secondary-button">
+                        Exportar
+                    </button>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Data</th>
+
+                                <th>Produto</th>
+
+                                <th>Qtd.</th>
+
+                                <th>Venda</th>
+
+                                <th>Custo</th>
+
+                                <th>Taxas</th>
+
+                                <th>Lucro</th>
+
+                                <th>Status</th>
+
+                                <th></th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>
+                                    <strong>01/09/2026</strong>
+                                    <span class="table-subtext">
+                                        11:32
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            📱
+                                        </div>
+
+                                        <div>
+                                            <strong>
+                                                Tela iPhone 11 OLED
+                                            </strong>
+
+                                            <span>
+                                                IP11-OLED
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>1</td>
+
+                                <td>
+                                    R$ 350,00
+                                </td>
+
+                                <td>
+                                    R$ 180,00
+                                </td>
+
+                                <td>
+                                    R$ 55,00
+                                </td>
+
+                                <td>
+                                    <strong class="positive">
+                                        R$ 115,00
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="status success">
+                                        Concluída
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <strong>01/09/2026</strong>
+                                    <span class="table-subtext">
+                                        10:18
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            🔋
+                                        </div>
+
+                                        <div>
+                                            <strong>
+                                                Bateria iPhone 11
+                                            </strong>
+
+                                            <span>
+                                                BAT-IP11
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>1</td>
+
+                                <td>
+                                    R$ 180,00
+                                </td>
+
+                                <td>
+                                    R$ 80,00
+                                </td>
+
+                                <td>
+                                    R$ 30,00
+                                </td>
+
+                                <td>
+                                    <strong class="positive">
+                                        R$ 70,00
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="status success">
+                                        Concluída
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <strong>31/08/2026</strong>
+                                    <span class="table-subtext">
+                                        18:42
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            🔌
+                                        </div>
+
+                                        <div>
+                                            <strong>
+                                                Conector USB-C
+                                            </strong>
+
+                                            <span>
+                                                CON-USBC
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>1</td>
+
+                                <td>
+                                    R$ 70,00
+                                </td>
+
+                                <td>
+                                    R$ 25,00
+                                </td>
+
+                                <td>
+                                    R$ 15,00
+                                </td>
+
+                                <td>
+                                    <strong class="positive">
+                                        R$ 30,00
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="status success">
+                                        Concluída
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <strong>31/08/2026</strong>
+                                    <span class="table-subtext">
+                                        15:20
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            📱
+                                        </div>
+
+                                        <div>
+                                            <strong>
+                                                Tela Samsung A12
+                                            </strong>
+
+                                            <span>
+                                                SAM-A12
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>1</td>
+
+                                <td>
+                                    R$ 350,00
+                                </td>
+
+                                <td>
+                                    R$ 190,00
+                                </td>
+
+                                <td>
+                                    R$ 40,00
+                                </td>
+
+                                <td>
+                                    <strong class="positive">
+                                        R$ 120,00
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="status success">
+                                        Concluída
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <strong>31/08/2026</strong>
+                                    <span class="table-subtext">
+                                        14:05
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            📱
+                                        </div>
+
+                                        <div>
+                                            <strong>
+                                                Tela iPhone 11 OLED
+                                            </strong>
+
+                                            <span>
+                                                IP11-OLED
+                                            </span>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>2</td>
+
+                                <td>
+                                    R$ 700,00
+                                </td>
+
+                                <td>
+                                    R$ 360,00
+                                </td>
+
+                                <td>
+                                    R$ 110,00
+                                </td>
+
+                                <td>
+                                    <strong class="positive">
+                                        R$ 230,00
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <span class="status success">
+                                        Concluída
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <!-- PAGINAÇÃO -->
+
+                <div class="pagination">
+
+                    <span>
+                        Mostrando 1–5 de 68 vendas
+                    </span>
+
+                    <div class="pagination-buttons">
+
+                        <button disabled>
+                            ‹
+                        </button>
+
+                        <button class="active">
+                            1
+                        </button>
+
+                        <button>
+                            2
+                        </button>
+
+                        <button>
+                            3
+                        </button>
+
+                        <span>...</span>
+
+                        <button>
+                            14
+                        </button>
+
+                        <button>
+                            ›
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+</html>
+
