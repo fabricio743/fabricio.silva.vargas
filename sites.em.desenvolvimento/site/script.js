@@ -1,11 +1,15 @@
-
 /* =========================================================
    ESTOQUE DE BATERIAS
-   V1 - FUNCIONAMENTO LOCAL
-
-   Nesta primeira etapa os dados ficam no navegador.
-   Depois vamos substituir por Google Sheets.
+   V1 — GOOGLE SHEETS
 ========================================================= */
+
+
+/* =========================================================
+   CONFIGURAÇÃO
+========================================================= */
+
+const URL_SCRIPT =
+    "https://script.google.com/macros/s/AKfycbwYtirtEpFjtr9FFd7IGontgsc1HlRs6es0VEFQjefYK5c5lPsjLaPdi3SI90gRR6qz/exec";
 
 
 /* =========================================================
@@ -18,12 +22,14 @@ let indiceEditando = null;
 
 
 /* =========================================================
-   ELEMENTOS DO HTML
+   ELEMENTOS
 ========================================================= */
 
-const modal = document.getElementById("modal");
+const modal =
+    document.getElementById("modal");
 
-const btnAdicionar = document.getElementById("btnAdicionar");
+const btnAdicionar =
+    document.getElementById("btnAdicionar");
 
 const btnAdicionarVazio =
     document.getElementById("btnAdicionarVazio");
@@ -60,13 +66,133 @@ const totalModelos =
    INICIALIZAÇÃO
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    carregarEstoque
+);
 
-    carregarEstoque();
 
-    mostrarEstoque();
+/* =========================================================
+   CARREGAR ESTOQUE
+========================================================= */
 
-});
+async function carregarEstoque() {
+
+    try {
+
+        mostrarCarregando();
+
+
+        const resposta =
+            await fetch(
+                `${URL_SCRIPT}?acao=listarEstoque`
+            );
+
+
+        if (!resposta.ok) {
+
+            throw new Error(
+                "Não foi possível conectar ao servidor."
+            );
+
+        }
+
+
+        const dados =
+            await resposta.json();
+
+
+        if (!dados.sucesso) {
+
+            throw new Error(
+                dados.mensagem ||
+                "Erro ao carregar estoque."
+            );
+
+        }
+
+
+        estoque =
+            dados.estoque || [];
+
+
+        mostrarEstoque();
+
+
+    }
+
+    catch (erro) {
+
+        console.error(
+            "Erro ao carregar estoque:",
+            erro
+        );
+
+
+        mostrarErro(
+            "Não foi possível carregar o estoque."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ESTADO DE CARREGAMENTO
+========================================================= */
+
+function mostrarCarregando() {
+
+    listaEstoque.innerHTML = `
+
+        <tr>
+
+            <td colspan="6"
+                style="text-align:center;padding:30px;">
+
+                Carregando estoque...
+
+            </td>
+
+        </tr>
+
+    `;
+
+}
+
+
+/* =========================================================
+   MOSTRAR ERRO
+========================================================= */
+
+function mostrarErro(mensagem) {
+
+    listaEstoque.innerHTML = `
+
+        <tr>
+
+            <td colspan="6"
+                style="text-align:center;padding:30px;">
+
+                ${escaparHTML(mensagem)}
+
+                <br><br>
+
+                <button
+                    class="btn-primary"
+                    onclick="carregarEstoque()"
+                >
+                    Tentar novamente
+                </button>
+
+            </td>
+
+        </tr>
+
+    `;
+
+}
 
 
 /* =========================================================
@@ -77,15 +203,19 @@ function abrirModal() {
 
     indiceEditando = null;
 
-    modalTitulo.textContent = "Adicionar bateria";
+    modalTitulo.textContent =
+        "Adicionar bateria";
 
     formBateria.reset();
 
     modal.classList.add("aberto");
 
+
     setTimeout(() => {
 
-        document.getElementById("modelo").focus();
+        document
+            .getElementById("modelo")
+            .focus();
 
     }, 100);
 
@@ -108,7 +238,7 @@ function fecharModal() {
 
 
 /* =========================================================
-   EVENTOS DOS BOTÕES
+   EVENTOS
 ========================================================= */
 
 btnAdicionar.addEventListener(
@@ -135,73 +265,90 @@ btnCancelar.addEventListener(
 );
 
 
-/* =========================================================
-   FECHAR MODAL CLICANDO FORA
-========================================================= */
+modal.addEventListener(
+    "click",
+    evento => {
 
-modal.addEventListener("click", (evento) => {
-
-    if (evento.target === modal) {
-
-        fecharModal();
-
-    }
-
-});
-
-
-/* =========================================================
-   FECHAR COM ESC
-========================================================= */
-
-document.addEventListener("keydown", (evento) => {
-
-    if (evento.key === "Escape") {
-
-        if (modal.classList.contains("aberto")) {
+        if (
+            evento.target === modal
+        ) {
 
             fecharModal();
 
         }
 
     }
+);
 
-});
+
+document.addEventListener(
+    "keydown",
+    evento => {
+
+        if (
+            evento.key === "Escape"
+            &&
+            modal.classList.contains("aberto")
+        ) {
+
+            fecharModal();
+
+        }
+
+    }
+);
 
 
 /* =========================================================
-   SALVAR BATERIA
+   SALVAR
 ========================================================= */
 
-formBateria.addEventListener("submit", (evento) => {
+formBateria.addEventListener(
+    "submit",
+    salvarBateria
+);
+
+
+async function salvarBateria(evento) {
 
     evento.preventDefault();
 
-    salvarBateria();
-
-});
-
-
-function salvarBateria() {
 
     const modelo =
-        document.getElementById("modelo").value.trim();
+        document
+            .getElementById("modelo")
+            .value
+            .trim();
+
 
     const capacidade =
-        document.getElementById("capacidade").value.trim();
+        document
+            .getElementById("capacidade")
+            .value
+            .trim();
+
 
     const quantidade =
         Number(
-            document.getElementById("quantidade").value
+            document
+                .getElementById("quantidade")
+                .value
         );
+
 
     const custo =
         Number(
-            document.getElementById("custo").value
+            document
+                .getElementById("custo")
+                .value
         );
 
+
     const observacao =
-        document.getElementById("observacao").value.trim();
+        document
+            .getElementById("observacao")
+            .value
+            .trim();
 
 
     /* -----------------------------------------
@@ -210,7 +357,9 @@ function salvarBateria() {
 
     if (!modelo) {
 
-        alert("Selecione o modelo do iPhone.");
+        alert(
+            "Selecione o modelo do iPhone."
+        );
 
         return;
 
@@ -219,56 +368,38 @@ function salvarBateria() {
 
     if (!capacidade) {
 
-        alert("Selecione a capacidade da bateria.");
-
-        return;
-
-    }
-
-
-    if (!Number.isInteger(quantidade) || quantidade < 0) {
-
-        alert("Informe uma quantidade válida.");
-
-        return;
-
-    }
-
-
-    if (isNaN(custo) || custo < 0) {
-
-        alert("Informe um custo válido.");
-
-        return;
-
-    }
-
-
-    /* -----------------------------------------
-       VERIFICAR DUPLICIDADE
-    ------------------------------------------ */
-
-    const duplicado = estoque.findIndex((produto, index) => {
-
-        if (index === indiceEditando) {
-
-            return false;
-
-        }
-
-        return (
-            produto.modelo.toLowerCase() === modelo.toLowerCase()
-            &&
-            produto.capacidade.toLowerCase() === capacidade.toLowerCase()
+        alert(
+            "Selecione a capacidade da bateria."
         );
 
-    });
+        return;
+
+    }
 
 
-    if (duplicado !== -1) {
+    if (
+        !Number.isInteger(quantidade)
+        ||
+        quantidade < 0
+    ) {
 
         alert(
-            "Já existe uma bateria cadastrada para este modelo e capacidade."
+            "Informe uma quantidade válida."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        isNaN(custo)
+        ||
+        custo < 0
+    ) {
+
+        alert(
+            "Informe um custo válido."
         );
 
         return;
@@ -277,78 +408,152 @@ function salvarBateria() {
 
 
     /* -----------------------------------------
-       EDITAR
+       PREPARAR DADOS
     ------------------------------------------ */
+
+    const dados = {
+
+        acao:
+            indiceEditando === null
+                ? "adicionarBateria"
+                : "editarBateria",
+
+        modelo:
+            modelo,
+
+        capacidade:
+            capacidade,
+
+        quantidade:
+            quantidade,
+
+        custo:
+            custo,
+
+        observacao:
+            observacao
+
+    };
+
 
     if (indiceEditando !== null) {
 
-        estoque[indiceEditando] = {
-
-            ...estoque[indiceEditando],
-
-            modelo: modelo,
-
-            capacidade: capacidade,
-
-            quantidade: quantidade,
-
-            custo: custo,
-
-            observacao: observacao
-
-        };
+        dados.id =
+            estoque[indiceEditando].id;
 
     }
 
 
     /* -----------------------------------------
-       NOVO CADASTRO
+       DESABILITAR BOTÃO
     ------------------------------------------ */
 
-    else {
-
-        const novaBateria = {
-
-            id: gerarID(),
-
-            modelo: modelo,
-
-            capacidade: capacidade,
-
-            quantidade: quantidade,
-
-            custo: custo,
-
-            observacao: observacao
-
-        };
+    const botaoSalvar =
+        formBateria.querySelector(
+            'button[type="submit"]'
+        );
 
 
-        estoque.push(novaBateria);
+    botaoSalvar.disabled = true;
+
+    botaoSalvar.textContent =
+        "Salvando...";
+
+
+    try {
+
+        const resultado =
+            await enviarDados(dados);
+
+
+        if (!resultado.sucesso) {
+
+            throw new Error(
+                resultado.mensagem ||
+                "Não foi possível salvar."
+            );
+
+        }
+
+
+        fecharModal();
+
+
+        await carregarEstoque();
+
 
     }
 
+    catch (erro) {
 
-    /* -----------------------------------------
-       SALVAR
-    ------------------------------------------ */
+        console.error(
+            "Erro ao salvar:",
+            erro
+        );
 
-    salvarEstoque();
 
-    mostrarEstoque();
+        alert(
+            erro.message ||
+            "Erro ao salvar bateria."
+        );
 
-    fecharModal();
+    }
+
+    finally {
+
+        botaoSalvar.disabled = false;
+
+        botaoSalvar.textContent =
+            "Salvar bateria";
+
+    }
 
 }
 
 
 /* =========================================================
-   GERAR ID
+   ENVIAR DADOS PARA O APPS SCRIPT
 ========================================================= */
 
-function gerarID() {
+async function enviarDados(dados) {
 
-    return Date.now().toString();
+    const formulario =
+        new URLSearchParams();
+
+
+    Object.keys(dados).forEach(chave => {
+
+        formulario.append(
+            chave,
+            dados[chave]
+        );
+
+    });
+
+
+    const resposta =
+        await fetch(
+            URL_SCRIPT,
+            {
+
+                method: "POST",
+
+                body: formulario
+
+            }
+        );
+
+
+    if (!resposta.ok) {
+
+        throw new Error(
+            "Erro de comunicação com o servidor."
+        );
+
+    }
+
+
+    return await resposta.json();
 
 }
 
@@ -360,45 +565,37 @@ function gerarID() {
 function mostrarEstoque() {
 
     const pesquisa =
-        campoPesquisa.value
+        campoPesquisa
+            .value
             .trim()
             .toLowerCase();
 
 
-    let produtos = estoque;
+    let produtos =
+        estoque;
 
-
-    /* -----------------------------------------
-       FILTRO
-    ------------------------------------------ */
 
     if (pesquisa) {
 
-        produtos = estoque.filter((produto) => {
+        produtos =
+            estoque.filter(produto => {
 
-            return produto.modelo
-                .toLowerCase()
-                .includes(pesquisa);
+                return produto.modelo
+                    .toLowerCase()
+                    .includes(pesquisa);
 
-        });
+            });
 
     }
 
 
-    /* -----------------------------------------
-       LIMPAR TABELA
-    ------------------------------------------ */
-
     listaEstoque.innerHTML = "";
 
 
-    /* -----------------------------------------
-       ESTADO VAZIO
-    ------------------------------------------ */
-
     if (produtos.length === 0) {
 
-        estadoVazio.style.display = "flex";
+        estadoVazio.style.display =
+            "flex";
 
         atualizarResumo();
 
@@ -407,49 +604,57 @@ function mostrarEstoque() {
     }
 
 
-    estadoVazio.style.display = "none";
+    estadoVazio.style.display =
+        "none";
 
 
-    /* -----------------------------------------
-       CRIAR LINHAS
-    ------------------------------------------ */
-
-    produtos.forEach((produto) => {
+    produtos.forEach(produto => {
 
         const linha =
             document.createElement("tr");
 
 
         const valorEstoque =
-            produto.quantidade * produto.custo;
+            produto.quantidade *
+            produto.custo;
 
 
         linha.innerHTML = `
 
             <td>
+
                 <strong>
                     ${escaparHTML(produto.modelo)}
                 </strong>
+
             </td>
 
 
             <td>
+
                 ${escaparHTML(produto.capacidade)}
+
             </td>
 
 
             <td>
+
                 ${produto.quantidade}
+
             </td>
 
 
             <td>
+
                 ${formatarMoeda(produto.custo)}
+
             </td>
 
 
             <td>
+
                 ${formatarMoeda(valorEstoque)}
+
             </td>
 
 
@@ -460,7 +665,6 @@ function mostrarEstoque() {
                     <button
                         class="btn-editar"
                         title="Editar"
-                        onclick="editarBateria('${produto.id}')"
                     >
                         ✎
                     </button>
@@ -469,7 +673,6 @@ function mostrarEstoque() {
                     <button
                         class="btn-excluir"
                         title="Excluir"
-                        onclick="excluirBateria('${produto.id}')"
                     >
                         ×
                     </button>
@@ -479,6 +682,30 @@ function mostrarEstoque() {
             </td>
 
         `;
+
+
+        /* -----------------------------------------
+           EVENTO EDITAR
+        ------------------------------------------ */
+
+        linha
+            .querySelector(".btn-editar")
+            .addEventListener(
+                "click",
+                () => editarBateria(produto.id)
+            );
+
+
+        /* -----------------------------------------
+           EVENTO EXCLUIR
+        ------------------------------------------ */
+
+        linha
+            .querySelector(".btn-excluir")
+            .addEventListener(
+                "click",
+                () => excluirBateria(produto.id)
+            );
 
 
         listaEstoque.appendChild(linha);
@@ -492,20 +719,17 @@ function mostrarEstoque() {
 
 
 /* =========================================================
-   ATUALIZAR RESUMO
+   RESUMO
 ========================================================= */
 
 function atualizarResumo() {
-
-    /* -----------------------------------------
-       QUANTIDADE TOTAL
-    ------------------------------------------ */
 
     const quantidadeTotal =
         estoque.reduce(
             (total, produto) => {
 
-                return total + produto.quantidade;
+                return total +
+                    Number(produto.quantidade || 0);
 
             },
             0
@@ -515,10 +739,6 @@ function atualizarResumo() {
     totalEstoque.textContent =
         quantidadeTotal;
 
-
-    /* -----------------------------------------
-       MODELOS CADASTRADOS
-    ------------------------------------------ */
 
     const modelos =
         new Set(
@@ -535,18 +755,25 @@ function atualizarResumo() {
 
 
 /* =========================================================
-   EDITAR BATERIA
+   EDITAR
 ========================================================= */
 
 function editarBateria(id) {
 
     const indice =
         estoque.findIndex(
-            produto => produto.id === id
+            produto =>
+                String(produto.id)
+                ===
+                String(id)
         );
 
 
     if (indice === -1) {
+
+        alert(
+            "Bateria não encontrada."
+        );
 
         return;
 
@@ -557,30 +784,41 @@ function editarBateria(id) {
         estoque[indice];
 
 
-    indiceEditando = indice;
+    indiceEditando =
+        indice;
 
 
     modalTitulo.textContent =
         "Editar bateria";
 
 
-    document.getElementById("modelo").value =
+    document
+        .getElementById("modelo")
+        .value =
         produto.modelo;
 
 
-    document.getElementById("capacidade").value =
+    document
+        .getElementById("capacidade")
+        .value =
         produto.capacidade;
 
 
-    document.getElementById("quantidade").value =
+    document
+        .getElementById("quantidade")
+        .value =
         produto.quantidade;
 
 
-    document.getElementById("custo").value =
+    document
+        .getElementById("custo")
+        .value =
         produto.custo;
 
 
-    document.getElementById("observacao").value =
+    document
+        .getElementById("observacao")
+        .value =
         produto.observacao || "";
 
 
@@ -590,31 +828,30 @@ function editarBateria(id) {
 
 
 /* =========================================================
-   EXCLUIR BATERIA
+   EXCLUIR
 ========================================================= */
 
-function excluirBateria(id) {
+async function excluirBateria(id) {
 
-    const indice =
-        estoque.findIndex(
-            produto => produto.id === id
+    const produto =
+        estoque.find(
+            item =>
+                String(item.id)
+                ===
+                String(id)
         );
 
 
-    if (indice === -1) {
+    if (!produto) {
 
         return;
 
     }
 
 
-    const produto =
-        estoque[indice];
-
-
     const confirmar =
         confirm(
-            `Deseja realmente excluir a bateria ${produto.modelo}?`
+            `Deseja realmente excluir ${produto.modelo}?`
         );
 
 
@@ -625,12 +862,49 @@ function excluirBateria(id) {
     }
 
 
-    estoque.splice(indice, 1);
+    try {
+
+        const resultado =
+            await enviarDados({
+
+                acao:
+                    "excluirBateria",
+
+                id:
+                    id
+
+            });
 
 
-    salvarEstoque();
+        if (!resultado.sucesso) {
 
-    mostrarEstoque();
+            throw new Error(
+                resultado.mensagem ||
+                "Não foi possível excluir."
+            );
+
+        }
+
+
+        await carregarEstoque();
+
+
+    }
+
+    catch (erro) {
+
+        console.error(
+            "Erro ao excluir:",
+            erro
+        );
+
+
+        alert(
+            erro.message ||
+            "Erro ao excluir bateria."
+        );
+
+    }
 
 }
 
@@ -646,72 +920,7 @@ campoPesquisa.addEventListener(
 
 
 /* =========================================================
-   LOCAL STORAGE
-=========================================================
-
-   Temporariamente usamos o armazenamento
-   do navegador.
-
-   Depois será substituído pelo Google Sheets.
-========================================================= */
-
-function salvarEstoque() {
-
-    localStorage.setItem(
-        "estoqueBaterias",
-        JSON.stringify(estoque)
-    );
-
-}
-
-
-function carregarEstoque() {
-
-    const dados =
-        localStorage.getItem(
-            "estoqueBaterias"
-        );
-
-
-    if (!dados) {
-
-        estoque = [];
-
-        return;
-
-    }
-
-
-    try {
-
-        estoque =
-            JSON.parse(dados);
-
-
-        if (!Array.isArray(estoque)) {
-
-            estoque = [];
-
-        }
-
-    }
-
-    catch (erro) {
-
-        console.error(
-            "Erro ao carregar estoque:",
-            erro
-        );
-
-        estoque = [];
-
-    }
-
-}
-
-
-/* =========================================================
-   FORMATAÇÃO DE MOEDA
+   MOEDA
 ========================================================= */
 
 function formatarMoeda(valor) {
@@ -719,30 +928,50 @@ function formatarMoeda(valor) {
     return new Intl.NumberFormat(
         "pt-BR",
         {
+
             style: "currency",
+
             currency: "BRL"
+
         }
-    ).format(valor);
+    ).format(
+        Number(valor) || 0
+    );
 
 }
 
 
 /* =========================================================
    SEGURANÇA
-=========================================================
-
-   Evita inserir HTML diretamente
-   vindo dos dados cadastrados.
 ========================================================= */
 
 function escaparHTML(valor) {
 
     return String(valor)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
-
