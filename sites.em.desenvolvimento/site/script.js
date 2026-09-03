@@ -61,6 +61,7 @@ const totalEstoque =
 const totalModelos =
     document.getElementById("totalModelos");
 
+const btnAtualizar = document.getElementById("btnAtualizar");
 
 /* =========================================================
    INICIALIZAÇÃO
@@ -297,6 +298,20 @@ document.addEventListener(
 
     }
 );
+
+btnAtualizar.addEventListener("click", async () => {
+    btnAtualizar.disabled = true;
+    btnAtualizar.innerHTML = "⏳ Atualizando...";
+
+    try {
+        await carregarEstoque();
+    } catch (erro) {
+        console.error("Erro ao atualizar estoque:", erro);
+    } finally {
+        btnAtualizar.disabled = false;
+        btnAtualizar.innerHTML = "🔄 Atualizar";
+    }
+});
 
 
 /* =========================================================
