@@ -1,5 +1,4 @@
-const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxsJyCtKe5oSAFsOPDOYf3dok_XYD6iAQSEwp_261dT0K48zimEw6e3J_KgmR9Slcnm/exec";
-
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbwoFwwCpUFqzRLT9R1IJ-_wL1OZSV0gLScFU1YMR4yY3JDQNU3YtdG-uOm7tsSfmnPs/exec";
 
 let categorias = [];
 let receitas = [];
@@ -8,11 +7,25 @@ let guardado = [];
 
 document.addEventListener("DOMContentLoaded", iniciarSistema);
 
-function iniciarSistema() {
-    definirDataAtual();
-    definirMesAtual();
-    configurarFormularios();
-    carregarTudo();
+async function iniciarSistema() {
+    mostrarLoading("Carregando sistema...");
+
+    try {
+        definirDataAtual();
+        definirMesAtual();
+        configurarFormularios();
+
+        await carregarTudo();
+
+    } catch (erro) {
+        console.error(
+            "Erro ao iniciar sistema:",
+            erro
+        );
+
+    } finally {
+        esconderLoading();
+    }
 }
 
 function mostrarTela(idTela, botao) {
@@ -62,13 +75,24 @@ function configurarFormularios() {
     document.getElementById("formCategoria").addEventListener("submit", salvarCategoria);
 }
 
-async function carregarTudo() {
-    await carregarCategorias();
-    await carregarReceitas();
-    await carregarDespesas();
-    await carregarGuardado();
+async function carregarTudo(mostrarCarregamento = false) {
+    if (mostrarCarregamento) {
+        mostrarLoading("Atualizando informações...");
+    }
 
-    atualizarTudoNaTela();
+    try {
+        await carregarCategorias();
+        await carregarReceitas();
+        await carregarDespesas();
+        await carregarGuardado();
+
+        atualizarTudoNaTela();
+
+    } finally {
+        if (mostrarCarregamento) {
+            esconderLoading();
+        }
+    }
 }
 
 async function carregarCategorias() {
@@ -78,23 +102,16 @@ async function carregarCategorias() {
         );
 
         if (!resultado.sucesso) {
-            console.error(
-                "Erro ao carregar categorias:",
-                resultado.mensagem
-            );
+            console.error("Erro ao carregar categorias:", resultado.mensagem);
             return;
         }
 
         categorias = resultado.categorias || [];
-
         preencherSelectsCategorias();
         listarCategoriasNaTela();
 
     } catch (erro) {
-        console.error(
-            "Erro ao carregar categorias:",
-            erro
-        );
+        console.error("Erro ao carregar categorias:", erro);
     }
 }
 
@@ -150,7 +167,7 @@ async function carregarReceitas() {
 
 function buscarJSONP(url) {
     return new Promise((resolve, reject) => {
-        const callbackName = "jsonpCallback_" + Date.now();
+        const callbackName = `jsonpCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
 
         window[callbackName] = function (dados) {
             resolve(dados);
@@ -219,19 +236,34 @@ async function carregarGuardado() {
 async function salvarReceita(evento) {
     evento.preventDefault();
 
-    const botao = evento.submitter;
-    ativarLoadingBotao(botao);
+    const linha =
+        document.getElementById("linhaReceita").value;
+
+    mostrarLoading(
+        linha
+            ? "Atualizando receita..."
+            : "Salvando receita..."
+    );
 
     try {
-        const linha = document.getElementById("linhaReceita").value;
-
         const dados = {
-            action: linha ? "editarReceita" : "novaReceita",
+            action: linha
+                ? "editarReceita"
+                : "novaReceita",
+
             linha: linha,
-            data: document.getElementById("dataReceita").value,
-            tipo: document.getElementById("tipoReceita").value,
-            informacoes: document.getElementById("infoReceita").value,
-            valor: document.getElementById("valorReceita").value
+
+            data:
+                document.getElementById("dataReceita").value,
+
+            tipo:
+                document.getElementById("tipoReceita").value,
+
+            informacoes:
+                document.getElementById("infoReceita").value,
+
+            valor:
+                document.getElementById("valorReceita").value
         };
 
         await enviarDados(dados);
@@ -239,29 +271,54 @@ async function salvarReceita(evento) {
         limparFormReceita();
         await carregarTudo();
 
+    } catch (erro) {
+        console.error(
+            "Erro ao salvar receita:",
+            erro
+        );
+
     } finally {
-        desativarLoadingBotao(botao);
+        esconderLoading();
     }
 }
 
 async function salvarDespesa(evento) {
     evento.preventDefault();
 
-    const botao = evento.submitter;
-    ativarLoadingBotao(botao);
+    const linha =
+        document.getElementById("linhaDespesa").value;
+
+    mostrarLoading(
+        linha
+            ? "Atualizando despesa..."
+            : "Salvando despesa..."
+    );
 
     try {
-        const linha = document.getElementById("linhaDespesa").value;
-
         const dados = {
-            action: linha ? "editarDespesa" : "novaDespesa",
+            action: linha
+                ? "editarDespesa"
+                : "novaDespesa",
+
             linha: linha,
-            data: document.getElementById("dataDespesa").value,
-            tipo: document.getElementById("tipoDespesa").value,
-            informacoes: document.getElementById("infoDespesa").value,
-            valor: document.getElementById("valorDespesa").value,
-            metodoPagamento: document.getElementById("metodoDespesa").value,
-            status: document.getElementById("statusDespesa").value
+
+            data:
+                document.getElementById("dataDespesa").value,
+
+            tipo:
+                document.getElementById("tipoDespesa").value,
+
+            informacoes:
+                document.getElementById("infoDespesa").value,
+
+            valor:
+                document.getElementById("valorDespesa").value,
+
+            metodoPagamento:
+                document.getElementById("metodoDespesa").value,
+
+            status:
+                document.getElementById("statusDespesa").value
         };
 
         await enviarDados(dados);
@@ -269,27 +326,48 @@ async function salvarDespesa(evento) {
         limparFormDespesa();
         await carregarTudo();
 
+    } catch (erro) {
+        console.error(
+            "Erro ao salvar despesa:",
+            erro
+        );
+
     } finally {
-        desativarLoadingBotao(botao);
+        esconderLoading();
     }
 }
 
 async function salvarGuardado(evento) {
     evento.preventDefault();
 
-    const botao = evento.submitter;
-    ativarLoadingBotao(botao);
+    const linha =
+        document.getElementById("linhaGuardado").value;
+
+    mostrarLoading(
+        linha
+            ? "Atualizando valor guardado..."
+            : "Salvando valor guardado..."
+    );
 
     try {
-        const linha = document.getElementById("linhaGuardado").value;
-
         const dados = {
-            action: linha ? "editarGuardado" : "novoGuardado",
+            action: linha
+                ? "editarGuardado"
+                : "novoGuardado",
+
             linha: linha,
-            data: document.getElementById("dataGuardado").value,
-            tipo: document.getElementById("tipoGuardado").value,
-            informacoes: document.getElementById("infoGuardado").value,
-            valor: document.getElementById("valorGuardado").value
+
+            data:
+                document.getElementById("dataGuardado").value,
+
+            tipo:
+                document.getElementById("tipoGuardado").value,
+
+            informacoes:
+                document.getElementById("infoGuardado").value,
+
+            valor:
+                document.getElementById("valorGuardado").value
         };
 
         await enviarDados(dados);
@@ -297,26 +375,45 @@ async function salvarGuardado(evento) {
         limparFormGuardado();
         await carregarTudo();
 
+    } catch (erro) {
+        console.error(
+            "Erro ao salvar valor guardado:",
+            erro
+        );
+
     } finally {
-        desativarLoadingBotao(botao);
+        esconderLoading();
     }
 }
 
 async function salvarCategoria(evento) {
     evento.preventDefault();
 
-    const botao = evento.submitter;
-    ativarLoadingBotao(botao);
+    const linha =
+        document.getElementById("linhaCategoria").value;
+
+    mostrarLoading(
+        linha
+            ? "Atualizando categoria..."
+            : "Salvando categoria..."
+    );
 
     try {
-        const linha = document.getElementById("linhaCategoria").value;
-
         const dados = {
-            action: linha ? "editarCategoria" : "novaCategoria",
+            action: linha
+                ? "editarCategoria"
+                : "novaCategoria",
+
             linha: linha,
-            area: document.getElementById("areaCategoria").value,
-            tipo: document.getElementById("tipoCategoria").value,
-            ativo: document.getElementById("ativoCategoria").value
+
+            area:
+                document.getElementById("areaCategoria").value,
+
+            tipo:
+                document.getElementById("tipoCategoria").value,
+
+            ativo:
+                document.getElementById("ativoCategoria").value
         };
 
         await enviarDados(dados);
@@ -324,8 +421,14 @@ async function salvarCategoria(evento) {
         limparFormCategoria();
         await carregarTudo();
 
+    } catch (erro) {
+        console.error(
+            "Erro ao salvar categoria:",
+            erro
+        );
+
     } finally {
-        desativarLoadingBotao(botao);
+        esconderLoading();
     }
 }
 
@@ -333,21 +436,25 @@ async function enviarDados(dados) {
     try {
         const resposta = await fetch(URL_SCRIPT, {
             method: "POST",
+            headers: {
+                "Content-Type": "text/plain;charset=utf-8"
+            },
             body: JSON.stringify(dados)
         });
 
         const resultado = await resposta.json();
 
         if (!resultado.sucesso) {
-            alert(resultado.mensagem || "Erro ao salvar.");
-            return;
+            throw new Error(resultado.mensagem || "Erro ao salvar.");
         }
 
         alert(resultado.mensagem || "Salvo com sucesso.");
+        return resultado;
 
     } catch (erro) {
         console.error("Erro ao enviar dados:", erro);
-        alert("Erro ao enviar dados.");
+        alert(erro.message || "Erro ao enviar dados.");
+        throw erro;
     }
 }
 
@@ -369,11 +476,11 @@ function listarReceitasNaTela() {
     receitasFiltradas.forEach(item => {
         tbody.innerHTML += `
             <tr>
-                <td>${formatarData(item.data)}</td>
-                <td>${item.tipo}</td>
-                <td>${item.informacoes || ""}</td>
-                <td>${formatarMoeda(item.valor)}</td>
-                <td>
+                <td data-label="Data">${formatarData(item.data)}</td>
+                <td data-label="Tipo">${item.tipo}</td>
+                <td data-label="Informações">${item.informacoes || ""}</td>
+                <td data-label="Valor">${formatarMoeda(item.valor)}</td>
+                <td data-label="Ação">
                     <button class="btn editar" onclick="editarReceita(${item.linha})">
                         Editar
                     </button>
@@ -401,13 +508,13 @@ function listarDespesasNaTela() {
     despesasFiltradas.forEach(item => {
         tbody.innerHTML += `
             <tr>
-                <td>${formatarData(item.data)}</td>
-                <td>${item.tipo}</td>
-                <td>${item.informacoes || ""}</td>
-                <td>${formatarMoeda(item.valor)}</td>
-                <td>${item.metodoPagamento || ""}</td>
-                <td>${item.status || ""}</td>
-                <td>
+                <td data-label="Data">${formatarData(item.data)}</td>
+                <td data-label="Tipo">${item.tipo}</td>
+                <td data-label="Informações">${item.informacoes || ""}</td>
+                <td data-label="Valor">${formatarMoeda(item.valor)}</td>
+                <td data-label="Pagamento">${item.metodoPagamento || ""}</td>
+                <td data-label="Status">${item.status || ""}</td>
+                <td data-label="Ação">
                     <button class="btn editar" onclick="editarDespesa(${item.linha})">
                         Editar
                     </button>
@@ -435,11 +542,11 @@ function listarGuardadoNaTela() {
     guardadoFiltrado.forEach(item => {
         tbody.innerHTML += `
             <tr>
-                <td>${formatarData(item.data)}</td>
-                <td>${item.tipo}</td>
-                <td>${item.informacoes || ""}</td>
-                <td>${formatarMoeda(item.valor)}</td>
-                <td>
+                <td data-label="Data">${formatarData(item.data)}</td>
+                <td data-label="Tipo">${item.tipo}</td>
+                <td data-label="Informações">${item.informacoes || ""}</td>
+                <td data-label="Valor">${formatarMoeda(item.valor)}</td>
+                <td data-label="Ação">
                     <button class="btn editar" onclick="editarGuardado(${item.linha})">
                         Editar
                     </button>
@@ -456,10 +563,10 @@ function listarCategoriasNaTela() {
     categorias.forEach(item => {
         tbody.innerHTML += `
             <tr>
-                <td>${item.area}</td>
-                <td>${item.tipo}</td>
-                <td>${item.ativo}</td>
-                <td>
+                <td data-label="Área">${item.area}</td>
+                <td data-label="Tipo">${item.tipo}</td>
+                <td data-label="Ativo">${item.ativo}</td>
+                <td data-label="Ação">
                     <button class="btn editar" onclick="editarCategoria(${item.linha})">
                         Editar
                     </button>
@@ -470,7 +577,8 @@ function listarCategoriasNaTela() {
 }
 
 function editarReceita(linha) {
-    mostrarLoadingEdicao();
+    mostrarLoading("Carregando dados...");
+    esconderLoading();
 
     setTimeout(() => {
         const item = receitas.find(r => r.linha === linha);
@@ -488,11 +596,12 @@ function editarReceita(linha) {
         mostrarTela("receitas", document.querySelectorAll(".menu-item")[1]);
 
         esconderLoadingEdicao();
-    }, 500);
+    }, 250);
 }
 
 function editarDespesa(linha) {
-    mostrarLoadingEdicao();
+    mostrarLoading("Carregando dados...");
+    esconderLoading();
 
     setTimeout(() => {
         const item = despesas.find(d => d.linha === linha);
@@ -512,11 +621,12 @@ function editarDespesa(linha) {
         mostrarTela("despesas", document.querySelectorAll(".menu-item")[2]);
 
         esconderLoadingEdicao();
-    }, 500);
+    }, 250);
 }
 
 function editarGuardado(linha) {
-    mostrarLoadingEdicao();
+    mostrarLoading("Carregando dados...");
+    esconderLoading();
 
     setTimeout(() => {
         const item = guardado.find(g => g.linha === linha);
@@ -534,11 +644,12 @@ function editarGuardado(linha) {
         mostrarTela("guardado", document.querySelectorAll(".menu-item")[3]);
 
         esconderLoadingEdicao();
-    }, 500);
+    }, 250);
 }
 
 function editarCategoria(linha) {
-    mostrarLoadingEdicao();
+   mostrarLoading("Carregando dados...");
+esconderLoading();
 
     setTimeout(() => {
         const item = categorias.find(c => c.linha === linha);
@@ -555,7 +666,7 @@ function editarCategoria(linha) {
         mostrarTela("categorias", document.querySelectorAll(".menu-item")[4]);
 
         esconderLoadingEdicao();
-    }, 500);
+    }, 250);
 }
 
 function mostrarLoadingEdicao() {
@@ -584,26 +695,16 @@ function obterMesSelecionado() {
 function filtrarPorMes(lista) {
     const filtro = obterMesSelecionado();
 
-    if (!filtro) {
-        return lista;
-    }
+    if (!filtro) return lista;
 
     return lista.filter(item => {
         const dataTexto = String(item.data || "").trim();
+        const correspondencia = /^(\d{4})-(\d{2})-(\d{2})/.exec(dataTexto);
 
-        const partes = dataTexto.split("-");
+        if (!correspondencia) return false;
 
-        if (partes.length !== 3) {
-            return false;
-        }
-
-        const anoItem = Number(partes[0]);
-        const mesItem = Number(partes[1]);
-
-        return (
-            anoItem === filtro.ano &&
-            mesItem === filtro.mes
-        );
+        return Number(correspondencia[1]) === filtro.ano
+            && Number(correspondencia[2]) === filtro.mes;
     });
 }
 
@@ -647,57 +748,91 @@ function desativarLoadingBotao(botao) {
 }
 
 function montarResumoCategorias(receitasFiltradas, despesasFiltradas, guardadoFiltrado) {
-    const tbody = document.getElementById("resumoCategorias");
-    tbody.innerHTML = "";
+    montarGrupoResumo("resumoReceitas", "totalResumoReceitas", receitasFiltradas);
+    montarGrupoResumo("resumoDespesas", "totalResumoDespesas", despesasFiltradas);
+    montarGrupoResumo("resumoGuardado", "totalResumoGuardado", guardadoFiltrado);
+}
 
-    const resumo = [];
+function montarGrupoResumo(idLista, idTotal, lista) {
+    const elementoLista = document.getElementById(idLista);
+    const elementoTotal = document.getElementById(idTotal);
 
-    categorias.forEach(cat => {
-        let lista = [];
+    if (!elementoLista || !elementoTotal) return;
 
-        if (cat.area === "receita") {
-            lista = receitasFiltradas;
+    const agrupados = new Map();
+
+    lista.forEach(item => {
+        const tipo = String(item.tipo || "Sem categoria").trim();
+        const chave = normalizarTexto(tipo);
+
+        if (!agrupados.has(chave)) {
+            agrupados.set(chave, { tipo, total: 0 });
         }
 
-        if (cat.area === "despesas") {
-            lista = despesasFiltradas;
-        }
-
-        if (cat.area === "guardado") {
-            lista = guardadoFiltrado;
-        }
-
-        const total = lista
-            .filter(item => item.tipo === cat.tipo)
-            .reduce((soma, item) => soma + Number(item.valor || 0), 0);
-
-        if (total > 0) {
-            resumo.push({
-                area: cat.area,
-                tipo: cat.tipo,
-                total: total
-            });
-        }
+        agrupados.get(chave).total += converterValorNumero(item.valor);
     });
 
-    if (resumo.length === 0) {
-        tbody.innerHTML = `
-            <tr>
-                <td colspan="3">Nenhum valor lançado neste mês.</td>
-            </tr>
+    const itens = Array.from(agrupados.values())
+        .sort((a, b) => b.total - a.total);
+
+    if (itens.length === 0) {
+        elementoLista.innerHTML = `
+            <div class="resumo-vazio">
+                Nenhum lançamento neste mês
+            </div>
         `;
-        return;
+    } else {
+        elementoLista.innerHTML = itens.map(item => `
+            <div class="resumo-item">
+                <span>${escaparHTML(item.tipo)}</span>
+                <strong>${formatarMoeda(item.total)}</strong>
+            </div>
+        `).join("");
     }
 
-    resumo.forEach(item => {
-        tbody.innerHTML += `
-            <tr>
-                <td>${item.area}</td>
-                <td>${item.tipo}</td>
-                <td>${formatarMoeda(item.total)}</td>
-            </tr>
-        `;
-    });
+    elementoTotal.textContent = formatarMoeda(
+        itens.reduce((soma, item) => soma + item.total, 0)
+    );
+}
+
+function normalizarTexto(texto) {
+    return String(texto || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+}
+
+function converterValorNumero(valor) {
+    if (typeof valor === "number") {
+        return Number.isFinite(valor) ? valor : 0;
+    }
+
+    let texto = String(valor || "")
+        .replace("R$", "")
+        .replace(/\s/g, "")
+        .trim();
+
+    if (!texto) return 0;
+
+    if (texto.includes(",") && texto.includes(".")) {
+        texto = texto.replace(/\./g, "").replace(",", ".");
+    } else if (texto.includes(",")) {
+        texto = texto.replace(",", ".");
+    }
+
+    const numero = Number(texto);
+    return Number.isFinite(numero) ? numero : 0;
+}
+
+function escaparHTML(texto) {
+    return String(texto || "").replace(/[&<>'"]/g, caractere => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "'": "&#39;",
+        '"': "&quot;"
+    })[caractere]);
 }
 
 function somarValores(lista) {
@@ -740,27 +875,58 @@ function formatarData(data) {
     if (!data) return "";
 
     const texto = String(data).trim();
-    const partes = texto.split("-");
+    const correspondencia = /^(\d{4})-(\d{2})-(\d{2})/.exec(texto);
 
-    if (partes.length === 3) {
-        const ano = partes[0];
-        const mes = partes[1];
-        const dia = partes[2].substring(0, 2);
+    if (!correspondencia) return texto;
 
-        return `${dia}/${mes}/${ano}`;
-    }
-
-    return texto;
+    return `${correspondencia[3]}/${correspondencia[2]}/${correspondencia[1]}`;
 }
 
 function converterDataInput(data) {
     if (!data) return "";
 
     const texto = String(data).trim();
+    const correspondencia = /^(\d{4})-(\d{2})-(\d{2})/.exec(texto);
 
-    if (/^\d{4}-\d{2}-\d{2}/.test(texto)) {
-        return texto.substring(0, 10);
+    return correspondencia
+        ? `${correspondencia[1]}-${correspondencia[2]}-${correspondencia[3]}`
+        : "";
+}
+
+let quantidadeCarregamentos = 0;
+
+function mostrarLoading(texto = "Carregando...") {
+    quantidadeCarregamentos++;
+
+    const loading = document.getElementById("loadingGeral");
+    const loadingTexto = document.getElementById("loadingTexto");
+
+    if (!loading) return;
+
+    if (loadingTexto) {
+        loadingTexto.textContent = texto;
     }
 
-    return "";
+    loading.classList.add("ativo");
+
+    document.body.style.overflow = "hidden";
+}
+
+
+function esconderLoading() {
+    quantidadeCarregamentos--;
+
+    if (quantidadeCarregamentos > 0) {
+        return;
+    }
+
+    quantidadeCarregamentos = 0;
+
+    const loading = document.getElementById("loadingGeral");
+
+    if (!loading) return;
+
+    loading.classList.remove("ativo");
+
+    document.body.style.overflow = "";
 }

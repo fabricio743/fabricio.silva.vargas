@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Controle de Vendas</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ==============================
+         MENU LATERAL
+    =============================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">CV</div>
+
+            <div class="logo-text">
+                <strong>Controle</strong>
+                <span>de Vendas</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+
+            <p class="menu-title">MENU PRINCIPAL</p>
+
+            <a href="#" class="menu-item active">
+                <span class="menu-icon">⌂</span>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="vendas.html" class="menu-item">
+                <span class="menu-icon">🛒</span>
+                <span>Vendas</span>
+            </a>
+
+            <a href="produtos.html" class="menu-item">
+                <span class="menu-icon">▣</span>
+                <span>Produtos</span>
+            </a>
+
+            <a href="gastos.html" class="menu-item">
+                <span class="menu-icon">R$</span>
+                <span>Gastos</span>
+            </a>
+
+            <a href="analises.html" class="menu-item">
+                <span class="menu-icon">▥</span>
+                <span>Análises</span>
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="menu-item">
+                <span class="menu-icon">⚙</span>
+                <span>Configurações</span>
+            </a>
+
+            <div class="user-box">
+
+                <div class="user-avatar">
+                    ML
+                </div>
+
+                <div class="user-info">
+                    <strong>Minha Loja</strong>
+                    <span>Administrador</span>
+                </div>
+
+                <button class="user-more">•••</button>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ==============================
+         CONTEÚDO PRINCIPAL
+    =============================== -->
+
+    <main class="main-content">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <button class="mobile-menu">
+                ☰
+            </button>
+
+            <div class="page-title">
+
+                <span class="breadcrumb">Início</span>
+
+                <h1>Dashboard</h1>
+
+            </div>
+
+            <div class="topbar-actions">
+
+                <button class="icon-button notification">
+                    🔔
+                    <span class="notification-dot"></span>
+                </button>
+
+                <div class="topbar-date">
+                    <span>Período</span>
+
+                    <button class="period-button">
+                        Este mês
+                        <span>⌄</span>
+                    </button>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==============================
+             DASHBOARD
+        =============================== -->
+
+        <section class="dashboard">
+
+
+            <!-- BANNER DE BOAS-VINDAS -->
+
+            <div class="welcome">
+
+                <div>
+                    <span class="welcome-small">VISÃO GERAL</span>
+
+                    <h2>Olá, seja bem-vindo! 👋</h2>
+
+                    <p>
+                        Acompanhe o desempenho da sua loja e veja
+                        como estão seus resultados.
+                    </p>
+                </div>
+
+                <div class="welcome-date">
+                    Setembro 2026
+                </div>
+
+            </div>
+
+
+            <!-- CARDS PRINCIPAIS -->
+
+            <div class="metrics-grid">
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon sales-icon">
+                            🛒
+                        </div>
+
+                        <span class="metric-period">
+                            Este mês
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Faturamento
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 15.840,00
+                    </strong>
+
+                    <div class="metric-footer positive">
+                        <span>↑ 12,5%</span>
+                        <small>vs. mês anterior</small>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon cost-icon">
+                            📦
+                        </div>
+
+                        <span class="metric-period">
+                            Este mês
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Custos
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 7.200,00
+                    </strong>
+
+                    <div class="metric-footer negative">
+                        <span>↑ 8,2%</span>
+                        <small>vs. mês anterior</small>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon profit-icon">
+                            R$
+                        </div>
+
+                        <span class="metric-period">
+                            Este mês
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Lucro líquido
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 5.640,00
+                    </strong>
+
+                    <div class="metric-footer positive">
+                        <span>↑ 16,8%</span>
+                        <small>vs. mês anterior</small>
+                    </div>
+
+                </div>
+
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon order-icon">
+                            #
+                        </div>
+
+                        <span class="metric-period">
+                            Este mês
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Vendas realizadas
+                    </span>
+
+                    <strong class="metric-value">
+                        68
+                    </strong>
+
+                    <div class="metric-footer positive">
+                        <span>↑ 9,6%</span>
+                        <small>vs. mês anterior</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SEGUNDA LINHA DE INDICADORES -->
+
+            <div class="small-metrics">
+
+                <div class="small-metric">
+
+                    <div class="small-metric-icon">
+                        🎯
+                    </div>
+
+                    <div>
+                        <span>Margem de lucro</span>
+                        <strong>35,6%</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="small-metric">
+
+                    <div class="small-metric-icon">
+                        🧾
+                    </div>
+
+                    <div>
+                        <span>Ticket médio</span>
+                        <strong>R$ 232,94</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="small-metric">
+
+                    <div class="small-metric-icon">
+                        📦
+                    </div>
+
+                    <div>
+                        <span>Produtos em estoque</span>
+                        <strong>42</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="small-metric warning">
+
+                    <div class="small-metric-icon">
+                        ⚠
+                    </div>
+
+                    <div>
+                        <span>Estoque baixo</span>
+                        <strong>3 produtos</strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- GRÁFICOS -->
+
+            <div class="charts-grid">
+
+
+                <!-- GRÁFICO DE FATURAMENTO -->
+
+                <div class="card chart-card large-chart">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Faturamento</h3>
+                            <p>Acompanhe suas vendas ao longo do mês</p>
+                        </div>
+
+                        <button class="card-filter">
+                            Últimos 30 dias
+                            <span>⌄</span>
+                        </button>
+
+                    </div>
+
+
+                    <div class="chart-summary">
+
+                        <strong>R$ 15.840,00</strong>
+
+                        <span class="positive">
+                            +12,5%
+                        </span>
+
+                    </div>
+
+
+                    <div class="fake-chart">
+
+                        <div class="y-labels">
+                            <span>R$ 2.000</span>
+                            <span>R$ 1.500</span>
+                            <span>R$ 1.000</span>
+                            <span>R$ 500</span>
+                            <span>R$ 0</span>
+                        </div>
+
+                        <div class="chart-area">
+
+                            <div class="chart-lines">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                            <svg
+                                class="chart-line"
+                                viewBox="0 0 700 220"
+                                preserveAspectRatio="none"
+                            >
+
+                                <defs>
+                                    <linearGradient
+                                        id="areaGradient"
+                                        x1="0"
+                                        x2="0"
+                                        y1="0"
+                                        y2="1"
+                                    >
+                                        <stop
+                                            offset="0%"
+                                            stop-opacity=".25"
+                                        />
+                                        <stop
+                                            offset="100%"
+                                            stop-opacity="0"
+                                        />
+                                    </linearGradient>
+                                </defs>
+
+                                <path
+                                    class="area"
+                                    d="M0,170
+                                       C35,160 50,145 80,150
+                                       C110,155 120,125 155,130
+                                       C190,135 200,145 235,115
+                                       C270,85 285,100 320,105
+                                       C355,110 375,75 405,80
+                                       C435,85 450,95 480,65
+                                       C510,35 535,60 560,50
+                                       C590,40 610,55 640,25
+                                       C665,5 685,30 700,15
+                                       L700,220
+                                       L0,220 Z"
+                                />
+
+                                <path
+                                    class="line"
+                                    d="M0,170
+                                       C35,160 50,145 80,150
+                                       C110,155 120,125 155,130
+                                       C190,135 200,145 235,115
+                                       C270,85 285,100 320,105
+                                       C355,110 375,75 405,80
+                                       C435,85 450,95 480,65
+                                       C510,35 535,60 560,50
+                                       C590,40 610,55 640,25
+                                       C665,5 685,30 700,15"
+                                />
+
+                            </svg>
+
+                            <div class="chart-dates">
+                                <span>01 Set</span>
+                                <span>05 Set</span>
+                                <span>10 Set</span>
+                                <span>15 Set</span>
+                                <span>20 Set</span>
+                                <span>25 Set</span>
+                                <span>30 Set</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESUMO FINANCEIRO -->
+
+                <div class="card financial-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Resumo financeiro</h3>
+                            <p>Composição do resultado</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="financial-chart">
+
+                        <div class="donut">
+                            <div class="donut-center">
+                                <strong>35,6%</strong>
+                                <span>Margem</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="financial-legend">
+
+                        <div>
+                            <span class="legend-dot revenue"></span>
+
+                            <div>
+                                <strong>Faturamento</strong>
+                                <small>R$ 15.840</small>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <span class="legend-dot costs"></span>
+
+                            <div>
+                                <strong>Custos</strong>
+                                <small>R$ 7.200</small>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <span class="legend-dot expenses"></span>
+
+                            <div>
+                                <strong>Despesas</strong>
+                                <small>R$ 3.000</small>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <span class="legend-dot profit"></span>
+
+                            <div>
+                                <strong>Lucro</strong>
+                                <small>R$ 5.640</small>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TERCEIRA LINHA -->
+
+            <div class="bottom-grid">
+
+
+                <!-- PRODUTOS MAIS VENDIDOS -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Produtos mais vendidos</h3>
+                            <p>Ranking deste mês</p>
+                        </div>
+
+                        <button class="text-button">
+                            Ver todos
+                        </button>
+
+                    </div>
+
+
+                    <div class="products-ranking">
+
+                        <div class="ranking-item">
+
+                            <div class="ranking-position">
+                                01
+                            </div>
+
+                            <div class="product-info">
+
+                                <div class="product-image">
+                                    📱
+                                </div>
+
+                                <div>
+                                    <strong>Tela iPhone 11 OLED</strong>
+                                    <span>18 unidades vendidas</span>
+                                </div>
+
+                            </div>
+
+                            <strong class="ranking-value">
+                                R$ 6.300
+                            </strong>
+
+                        </div>
+
+
+                        <div class="ranking-item">
+
+                            <div class="ranking-position">
+                                02
+                            </div>
+
+                            <div class="product-info">
+
+                                <div class="product-image">
+                                    🔋
+                                </div>
+
+                                <div>
+                                    <strong>Bateria iPhone 11</strong>
+                                    <span>13 unidades vendidas</span>
+                                </div>
+
+                            </div>
+
+                            <strong class="ranking-value">
+                                R$ 2.340
+                            </strong>
+
+                        </div>
+
+
+                        <div class="ranking-item">
+
+                            <div class="ranking-position">
+                                03
+                            </div>
+
+                            <div class="product-info">
+
+                                <div class="product-image">
+                                    🔌
+                                </div>
+
+                                <div>
+                                    <strong>Conector USB-C</strong>
+                                    <span>9 unidades vendidas</span>
+                                </div>
+
+                            </div>
+
+                            <strong class="ranking-value">
+                                R$ 630
+                            </strong>
+
+                        </div>
+
+
+                        <div class="ranking-item">
+
+                            <div class="ranking-position">
+                                04
+                            </div>
+
+                            <div class="product-info">
+
+                                <div class="product-image">
+                                    📱
+                                </div>
+
+                                <div>
+                                    <strong>Tela Samsung A12</strong>
+                                    <span>6 unidades vendidas</span>
+                                </div>
+
+                            </div>
+
+                            <strong class="ranking-value">
+                                R$ 2.100
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VENDAS RECENTES -->
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Vendas recentes</h3>
+                            <p>Últimas vendas registradas</p>
+                        </div>
+
+                        <button class="text-button">
+                            Ver todas
+                        </button>
+
+                    </div>
+
+
+                    <div class="sales-list">
+
+                        <div class="sale-item">
+
+                            <div class="sale-product">
+                                <div class="product-image">
+                                    📱
+                                </div>
+
+                                <div>
+                                    <strong>Tela iPhone 11 OLED</strong>
+                                    <span>Hoje, 11:32</span>
+                                </div>
+                            </div>
+
+                            <div class="sale-value">
+                                <strong>R$ 350,00</strong>
+                                <span class="positive">+ R$ 115</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="sale-item">
+
+                            <div class="sale-product">
+                                <div class="product-image">
+                                    🔋
+                                </div>
+
+                                <div>
+                                    <strong>Bateria iPhone 11</strong>
+                                    <span>Hoje, 10:18</span>
+                                </div>
+                            </div>
+
+                            <div class="sale-value">
+                                <strong>R$ 180,00</strong>
+                                <span class="positive">+ R$ 70</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="sale-item">
+
+                            <div class="sale-product">
+                                <div class="product-image">
+                                    🔌
+                                </div>
+
+                                <div>
+                                    <strong>Conector USB-C</strong>
+                                    <span>Ontem, 18:42</span>
+                                </div>
+                            </div>
+
+                            <div class="sale-value">
+                                <strong>R$ 70,00</strong>
+                                <span class="positive">+ R$ 30</span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="sale-item">
+
+                            <div class="sale-product">
+                                <div class="product-image">
+                                    📱
+                                </div>
+
+                                <div>
+                                    <strong>Tela Samsung A12</strong>
+                                    <span>Ontem, 15:20</span>
+                                </div>
+                            </div>
+
+                            <div class="sale-value">
+                                <strong>R$ 350,00</strong>
+                                <span class="positive">+ R$ 120</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ALERTA DE ESTOQUE -->
+
+            <div class="stock-alert">
+
+                <div class="stock-alert-icon">
+                    ⚠
+                </div>
+
+                <div class="stock-alert-text">
+
+                    <strong>
+                        Atenção ao estoque
+                    </strong>
+
+                    <span>
+                        3 produtos estão com estoque abaixo do mínimo.
+                    </span>
+
+                </div>
+
+                <button>
+                    Ver estoque
+                </button>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</body>
+</html>
+
+ 

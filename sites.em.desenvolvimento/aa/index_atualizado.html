@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle Financeiro</title>
 
-    <link rel="stylesheet" href="style.css">
-
-    <link href="https://script.google.com/macros/s/AKfycbyWFM9RESDSnkdXN6SGnDNzyTwhOmhyVKm9OS4hntuUuDHUmyFU-X98WgrO8W4kAWYZ/exec" rel="stylesheet">
+    <link rel="stylesheet" href="style_atualizado.css">
 </head>
 
 <body>
@@ -18,7 +16,7 @@
         <aside class="sidebar">
 
             <div class="logo">
-                <div class="logo-icon">💰</div>
+                <div class="logo-icon">$</div>
                 <div>
                     <h1>Financeiro</h1>
                     <p>Controle mensal</p>
@@ -27,23 +25,23 @@
 
             <nav class="menu">
                 <button class="menu-item active" onclick="mostrarTela('dashboard', this)">
-                    🏠 Principal
+                    ⌂ Principal
                 </button>
 
                 <button class="menu-item" onclick="mostrarTela('receitas', this)">
-                    💵 Receitas
+                    ＋ Receitas
                 </button>
 
                 <button class="menu-item" onclick="mostrarTela('despesas', this)">
-                    🧾 Despesas
+                    − Despesas
                 </button>
 
                 <button class="menu-item" onclick="mostrarTela('guardado', this)">
-                    🏦 Guardado
+                    ◇ Guardado
                 </button>
 
                 <button class="menu-item" onclick="mostrarTela('categorias', this)">
-                    ⚙️ Categorias
+                    ⚙ Categorias
                 </button>
             </nav>
 
@@ -63,53 +61,106 @@
                     <input type="month" id="filtroMes" onchange="atualizarTudoNaTela()">
                 </div>
             </header>
-
             <!-- DASHBOARD -->
             <section id="dashboard" class="tela ativa">
 
-                <div class="cards">
+                <div class="dashboard-grid">
+                    <article class="saldo-destaque">
+                        <div class="saldo-topo">
+                            <div>
+                                <span class="saldo-legenda">Saldo disponível</span>
+                                <strong id="saldoLivre" class="saldo-numero">R$ 0,00</strong>
+                            </div>
+                            <div class="saldo-icone">↗</div>
+                        </div>
 
-                    <div class="card receita">
-                        <span>Receitas</span>
-                        <strong id="totalReceitas">R$ 0,00</strong>
-                    </div>
+                        <p class="saldo-descricao">
+                            Receitas menos despesas e valores guardados no mês selecionado.
+                        </p>
 
-                    <div class="card despesa">
-                        <span>Despesas</span>
-                        <strong id="totalDespesas">R$ 0,00</strong>
-                    </div>
+                        <div class="saldo-indicadores">
+                            <div class="indicador receita">
+                                <span>Receitas</span>
+                                <strong id="totalReceitas">R$ 0,00</strong>
+                            </div>
 
-                    <div class="card guardado">
-                        <span>Guardado</span>
-                        <strong id="totalGuardado">R$ 0,00</strong>
-                    </div>
+                            <div class="indicador despesa">
+                                <span>Despesas</span>
+                                <strong id="totalDespesas">R$ 0,00</strong>
+                            </div>
 
-                    <div class="card saldo">
-                        <span>Saldo livre</span>
-                        <strong id="saldoLivre">R$ 0,00</strong>
-                    </div>
+                            <div class="indicador guardado">
+                                <span>Guardado</span>
+                                <strong id="totalGuardado">R$ 0,00</strong>
+                            </div>
+                        </div>
+                    </article>
 
+                    <article class="painel painel-dica">
+                        <span class="dica-etiqueta">Visão mensal</span>
+                        <h3>Seu dinheiro, mais claro</h3>
+                        <p>
+                            Acompanhe onde o dinheiro entra, onde sai e quanto foi separado.
+                        </p>
+                        <div class="dica-ilustracao" aria-hidden="true">
+                            <span>R$</span>
+                        </div>
+                    </article>
                 </div>
 
-                <div class="painel">
-                    <h3>Resumo por categoria</h3>
+                <div class="painel painel-resumo">
+                    <div class="painel-header resumo-header">
+                        <div>
+                            <h3>Resumo por categoria</h3>
+                            <p>Valores agrupados pelos tipos cadastrados</p>
+                        </div>
+                    </div>
 
-                    <div class="tabela-wrapper">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Área</th>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
+                    <div class="resumo-colunas">
+                        <section class="resumo-grupo receita">
+                            <div class="resumo-titulo">
+                                <div class="resumo-icone">＋</div>
+                                <div>
+                                    <strong>Receitas</strong>
+                                    <span>Entradas do mês</span>
+                                </div>
+                            </div>
+                            <div id="resumoReceitas" class="resumo-lista"></div>
+                            <div class="resumo-total">
+                                <span>Total</span>
+                                <strong id="totalResumoReceitas">R$ 0,00</strong>
+                            </div>
+                        </section>
 
-                            <tbody id="resumoCategorias">
-                                <tr>
-                                    <td colspan="3">Nenhum dado carregado.</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <section class="resumo-grupo despesa">
+                            <div class="resumo-titulo">
+                                <div class="resumo-icone">−</div>
+                                <div>
+                                    <strong>Despesas</strong>
+                                    <span>Saídas do mês</span>
+                                </div>
+                            </div>
+                            <div id="resumoDespesas" class="resumo-lista"></div>
+                            <div class="resumo-total">
+                                <span>Total</span>
+                                <strong id="totalResumoDespesas">R$ 0,00</strong>
+                            </div>
+                        </section>
+
+                        <section class="resumo-grupo guardado">
+                            <div class="resumo-titulo">
+                                <div class="resumo-icone">◇</div>
+                                <div>
+                                    <strong>Guardado</strong>
+                                    <span>Reservas do mês</span>
+                                </div>
+                            </div>
+                            <div id="resumoGuardado" class="resumo-lista"></div>
+                            <div class="resumo-total">
+                                <span>Total</span>
+                                <strong id="totalResumoGuardado">R$ 0,00</strong>
+                            </div>
+                        </section>
                     </div>
                 </div>
 
@@ -382,11 +433,20 @@
         </main>
 
     </div>
-    <div id="loadingEdicao" class="loading-edicao">
-    <div class="spinner"></div>
-    <p>Carregando dados...</p>
+
+    <div id="loadingGeral" class="loading-geral ativo">
+    <div class="loading-card">
+        <div class="spinner-geral"></div>
+
+        <strong id="loadingTexto">
+            Carregando sistema...
+        </strong>
+
+        <span>Aguarde um momento</span>
     </div>
-    <script src="script.js"></script>
+    </div>
+
+    <script src="script_atualizado.js"></script>
 
 </body>
 

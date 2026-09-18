@@ -150,15 +150,34 @@ function mostrarOrdens(ordens){
                     id="status-${item.linha}"
                     onchange="salvarStatus(${item.linha})"
                 >
-                    <option ${item.status === "Em análise" ? "selected" : ""}>Em análise</option>
-                    <option ${item.status === "Aguardando peça" ? "selected" : ""}>Aguardando peça</option>
-                    <option ${item.status === "Finalizado" ? "selected" : ""}>Finalizado</option>
-                    <option ${item.status === "Retirado" ? "selected" : ""}>Retirado</option>
+                    <option ${normalizarStatus(item.status) === "em analise" ? "selected" : ""}>
+                        Em análise
+                    </option>
+
+                    <option ${normalizarStatus(item.status) === "aguardando aprovacao do cliente" ? "selected" : ""}>
+                        Aguardando aprovação do cliente
+                    </option>
+
+                    <option ${normalizarStatus(item.status) === "aguardando peca" ? "selected" : ""}>
+                        Aguardando peça
+                    </option>
+
+                    <option ${normalizarStatus(item.status) === "finalizado" ? "selected" : ""}>
+                        Finalizado
+                    </option>
+
+                    <option ${normalizarStatus(item.status) === "retirado" ? "selected" : ""}>
+                        Retirado
+                    </option>
+
                     <option ${
-                        item.status === "Sem conserto" || item.status === "Sem concerto"
+                        normalizarStatus(item.status) === "sem conserto" ||
+                        normalizarStatus(item.status) === "sem concerto"
                         ? "selected"
                         : ""
-                    }>Sem conserto</option>
+                    }>
+                        Sem conserto
+                    </option>
                 </select>
             </td>
 
@@ -228,7 +247,7 @@ function atualizarResumoOrdens(ordens){
 
         return (
             status === "em analise" ||
-            status === "aguardando aprovacao"
+            status === "aguardando aprovacao do cliente"
         );
     }).length;
 
@@ -507,9 +526,9 @@ function classeStatus(status){
         return "linha-analise";
     }
 
-    if(statusNormalizado === "aguardando aprovacao"){
-        return "linha-analise";
-    }
+    if(statusNormalizado === "aguardando aprovacao do cliente"){
+    return "linha-analise";
+}
 
     return "";
 
@@ -602,10 +621,11 @@ function abrirEditarOS(linha){
     document.getElementById("editarCustoPecaOS").value = ordem.custoPeca || "";
     document.getElementById("editarFornecedorOS").value = ordem.fornecedor || "";
 
-    if(ordem.status === "Sem concerto"){
+        if(normalizarStatus(ordem.status) === "sem concerto"){
         document.getElementById("editarStatusOS").value = "Sem conserto";
     } else {
-        document.getElementById("editarStatusOS").value = ordem.status || "Em análise";
+        document.getElementById("editarStatusOS").value =
+            ordem.status || "Em análise";
     }
 
     document.getElementById("editarSubtitulo").textContent =
@@ -752,8 +772,6 @@ function enviarWhatsAppFinalizado(ordem){
 Sua ordem de serviço nº ${ordem.os}, referente ao aparelho ${ordem.modelo}, foi finalizada e já está pronta para retirada.
 
 Valor total do serviço: R$ ${valorServico}
-
-O comprovante/termo de garantia será enviado em seguida.
 
 Aguardamos sua retirada. Obrigado!`;
 

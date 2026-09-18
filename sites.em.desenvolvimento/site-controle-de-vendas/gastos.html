@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gastos | Controle de Vendas</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+
+    <!-- ==========================================
+         MENU LATERAL
+    =========================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                CV
+            </div>
+
+            <div class="logo-text">
+
+                <strong>
+                    Controle
+                </strong>
+
+                <span>
+                    de Vendas
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="menu">
+
+            <p class="menu-title">
+                MENU PRINCIPAL
+            </p>
+
+
+            <a href="index.html" class="menu-item">
+
+                <span class="menu-icon">
+                    ⌂
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <a href="vendas.html" class="menu-item">
+
+                <span class="menu-icon">
+                    🛒
+                </span>
+
+                <span>
+                    Vendas
+                </span>
+
+            </a>
+
+
+            <a href="produtos.html" class="menu-item">
+
+                <span class="menu-icon">
+                    ▣
+                </span>
+
+                <span>
+                    Produtos
+                </span>
+
+            </a>
+
+
+            <a href="gastos.html" class="menu-item active">
+
+                <span class="menu-icon">
+                    R$
+                </span>
+
+                <span>
+                    Gastos
+                </span>
+
+            </a>
+
+
+            <a href="analises.html" class="menu-item">
+
+                <span class="menu-icon">
+                    ▥
+                </span>
+
+                <span>
+                    Análises
+                </span>
+
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="menu-item">
+
+                <span class="menu-icon">
+                    ⚙
+                </span>
+
+                <span>
+                    Configurações
+                </span>
+
+            </a>
+
+
+            <div class="user-box">
+
+                <div class="user-avatar">
+                    ML
+                </div>
+
+                <div class="user-info">
+
+                    <strong>
+                        Minha Loja
+                    </strong>
+
+                    <span>
+                        Administrador
+                    </span>
+
+                </div>
+
+                <button class="user-more">
+                    •••
+                </button>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ==========================================
+         CONTEÚDO PRINCIPAL
+    =========================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+
+            <button class="mobile-menu">
+                ☰
+            </button>
+
+
+            <div class="page-title">
+
+                <span class="breadcrumb">
+                    Início / Gastos
+                </span>
+
+                <h1>
+                    Gastos
+                </h1>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+
+                <button class="icon-button notification">
+
+                    🔔
+
+                    <span class="notification-dot"></span>
+
+                </button>
+
+
+                <div class="topbar-date">
+
+                    <span>
+                        Período
+                    </span>
+
+                    <button class="period-button">
+
+                        Este mês
+
+                        <span>
+                            ⌄
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- ==========================================
+             PÁGINA
+        =========================================== -->
+
+        <section class="page-container">
+
+
+            <!-- CABEÇALHO -->
+
+            <div class="page-heading">
+
+                <div>
+
+                    <span class="section-label">
+                        CONTROLE FINANCEIRO
+                    </span>
+
+                    <h2>
+                        Gastos
+                    </h2>
+
+                    <p>
+                        Acompanhe tudo que está sendo gasto no negócio.
+                    </p>
+
+                </div>
+
+
+                <button class="primary-button">
+
+                    <span>
+                        +
+                    </span>
+
+                    Novo gasto
+
+                </button>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 RESUMO
+            =========================================== -->
+
+            <div class="metrics-grid expense-summary">
+
+
+                <!-- TOTAL -->
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon cost-icon">
+                            R$
+                        </div>
+
+                        <span class="metric-period">
+                            Setembro
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Total de gastos
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 4.320,00
+                    </strong>
+
+                    <div class="metric-footer negative">
+
+                        ↑ 8,4%
+
+                        <small>
+                            vs. mês anterior
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- HOJE -->
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon cost-icon">
+                            ◷
+                        </div>
+
+                        <span class="metric-period">
+                            Hoje
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Gastos hoje
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 285,00
+                    </strong>
+
+                    <div class="metric-footer">
+
+                        <small>
+                            3 lançamentos
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SEMANA -->
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon order-icon">
+                            7D
+                        </div>
+
+                        <span class="metric-period">
+                            Semana
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Gastos esta semana
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 1.180,00
+                    </strong>
+
+                    <div class="metric-footer">
+
+                        <small>
+                            média de R$ 168/dia
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- MÉDIA -->
+
+                <div class="metric-card">
+
+                    <div class="metric-top">
+
+                        <div class="metric-icon profit-icon">
+                            ≈
+                        </div>
+
+                        <span class="metric-period">
+                            Média
+                        </span>
+
+                    </div>
+
+                    <span class="metric-label">
+                        Gasto médio diário
+                    </span>
+
+                    <strong class="metric-value">
+                        R$ 144,00
+                    </strong>
+
+                    <div class="metric-footer positive">
+
+                        ↓ 3,2%
+
+                        <small>
+                            últimos 30 dias
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 GRÁFICO DE GASTOS
+            =========================================== -->
+
+            <div class="card expense-chart-card">
+
+
+                <div class="card-header">
+
+                    <div>
+
+                        <h3>
+                            Evolução dos gastos
+                        </h3>
+
+                        <p>
+                            Acompanhe quanto foi gasto ao longo do mês.
+                        </p>
+
+                    </div>
+
+
+                    <select class="chart-select">
+
+                        <option>
+                            Últimos 30 dias
+                        </option>
+
+                        <option>
+                            Esta semana
+                        </option>
+
+                        <option>
+                            Este mês
+                        </option>
+
+                        <option>
+                            Últimos 3 meses
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="fake-chart expense-chart">
+
+                    <div class="chart-y">
+
+                        <span>
+                            R$ 600
+                        </span>
+
+                        <span>
+                            R$ 450
+                        </span>
+
+                        <span>
+                            R$ 300
+                        </span>
+
+                        <span>
+                            R$ 150
+                        </span>
+
+                        <span>
+                            R$ 0
+                        </span>
+
+                    </div>
+
+
+                    <div class="chart-area">
+
+                        <div class="chart-grid-lines">
+
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+
+                        </div>
+
+
+                        <div class="chart-bars">
+
+                            <div class="chart-bar" style="height: 32%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 46%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 28%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 62%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 42%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 72%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 51%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 37%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 64%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 45%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 29%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 54%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 76%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 43%;">
+                                <span></span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 57%;">
+                                <span></span>
+                            </div>
+
+                        </div>
+
+
+                        <div class="chart-x">
+
+                            <span>
+                                01
+                            </span>
+
+                            <span>
+                                05
+                            </span>
+
+                            <span>
+                                10
+                            </span>
+
+                            <span>
+                                15
+                            </span>
+
+                            <span>
+                                20
+                            </span>
+
+                            <span>
+                                25
+                            </span>
+
+                            <span>
+                                30
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 DUAS COLUNAS
+            =========================================== -->
+
+            <div class="two-column-grid">
+
+
+                <!-- CATEGORIAS -->
+
+                <div class="card">
+
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                Gastos por categoria
+                            </h3>
+
+                            <p>
+                                Onde o dinheiro está sendo gasto.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="expense-categories">
+
+
+                        <div class="expense-category">
+
+                            <div class="category-info">
+
+                                <span class="category-dot dot-one"></span>
+
+                                <div>
+
+                                    <strong>
+                                        Compra de peças
+                                    </strong>
+
+                                    <span>
+                                        46 lançamentos
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <strong>
+                                R$ 2.150,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="expense-progress">
+
+                            <span style="width: 68%;"></span>
+
+                        </div>
+
+
+
+                        <div class="expense-category">
+
+                            <div class="category-info">
+
+                                <span class="category-dot dot-two"></span>
+
+                                <div>
+
+                                    <strong>
+                                        Fretes
+                                    </strong>
+
+                                    <span>
+                                        21 lançamentos
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <strong>
+                                R$ 820,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="expense-progress">
+
+                            <span style="width: 42%;"></span>
+
+                        </div>
+
+
+
+                        <div class="expense-category">
+
+                            <div class="category-info">
+
+                                <span class="category-dot dot-three"></span>
+
+                                <div>
+
+                                    <strong>
+                                        Embalagens
+                                    </strong>
+
+                                    <span>
+                                        18 lançamentos
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <strong>
+                                R$ 490,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="expense-progress">
+
+                            <span style="width: 25%;"></span>
+
+                        </div>
+
+
+
+                        <div class="expense-category">
+
+                            <div class="category-info">
+
+                                <span class="category-dot dot-four"></span>
+
+                                <div>
+
+                                    <strong>
+                                        Outros
+                                    </strong>
+
+                                    <span>
+                                        12 lançamentos
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <strong>
+                                R$ 860,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="expense-progress">
+
+                            <span style="width: 31%;"></span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- MAIORES GASTOS -->
+
+                <div class="card">
+
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <h3>
+                                Maiores gastos
+                            </h3>
+
+                            <p>
+                                Últimos lançamentos.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="expense-list">
+
+
+                        <div class="expense-item">
+
+                            <div class="expense-item-icon">
+                                📦
+                            </div>
+
+                            <div class="expense-item-info">
+
+                                <strong>
+                                    Compra de telas
+                                </strong>
+
+                                <span>
+                                    01/09/2026
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                - R$ 850,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="expense-item">
+
+                            <div class="expense-item-icon">
+                                🚚
+                            </div>
+
+                            <div class="expense-item-info">
+
+                                <strong>
+                                    Frete fornecedor
+                                </strong>
+
+                                <span>
+                                    01/09/2026
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                - R$ 180,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="expense-item">
+
+                            <div class="expense-item-icon">
+                                📦
+                            </div>
+
+                            <div class="expense-item-info">
+
+                                <strong>
+                                    Embalagens
+                                </strong>
+
+                                <span>
+                                    31/08/2026
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                - R$ 145,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="expense-item">
+
+                            <div class="expense-item-icon">
+                                📢
+                            </div>
+
+                            <div class="expense-item-info">
+
+                                <strong>
+                                    Publicidade
+                                </strong>
+
+                                <span>
+                                    30/08/2026
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                - R$ 120,00
+                            </strong>
+
+                        </div>
+
+
+                        <div class="expense-item">
+
+                            <div class="expense-item-icon">
+                                📦
+                            </div>
+
+                            <div class="expense-item-info">
+
+                                <strong>
+                                    Compra de baterias
+                                </strong>
+
+                                <span>
+                                    29/08/2026
+                                </span>
+
+                            </div>
+
+                            <strong>
+                                - R$ 95,00
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ==========================================
+                 HISTÓRICO
+            =========================================== -->
+
+            <div class="card table-card">
+
+
+                <div class="card-header table-header">
+
+                    <div>
+
+                        <h3>
+                            Histórico de gastos
+                        </h3>
+
+                        <p>
+                            Todos os lançamentos financeiros.
+                        </p>
+
+                    </div>
+
+
+                    <div class="table-actions">
+
+                        <button class="secondary-button">
+                            Exportar
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Data
+                                </th>
+
+                                <th>
+                                    Descrição
+                                </th>
+
+                                <th>
+                                    Categoria
+                                </th>
+
+                                <th>
+                                    Forma de pagamento
+                                </th>
+
+                                <th>
+                                    Valor
+                                </th>
+
+                                <th>
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        01/09/2026
+                                    </strong>
+
+                                    <span class="table-subtext">
+                                        09:42
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            📦
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                Compra de telas
+                                            </strong>
+
+                                            <span>
+                                                Fornecedor de peças
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    Compra de peças
+                                </td>
+
+
+                                <td>
+                                    Pix
+                                </td>
+
+
+                                <td>
+
+                                    <strong class="negative">
+                                        - R$ 850,00
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        01/09/2026
+                                    </strong>
+
+                                    <span class="table-subtext">
+                                        08:15
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            🚚
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                Frete fornecedor
+                                            </strong>
+
+                                            <span>
+                                                Envio das peças
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    Fretes
+                                </td>
+
+
+                                <td>
+                                    Pix
+                                </td>
+
+
+                                <td>
+
+                                    <strong class="negative">
+                                        - R$ 180,00
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        31/08/2026
+                                    </strong>
+
+                                    <span class="table-subtext">
+                                        16:30
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            📦
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                Embalagens
+                                            </strong>
+
+                                            <span>
+                                                Caixas e plástico bolha
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    Embalagens
+                                </td>
+
+
+                                <td>
+                                    Cartão
+                                </td>
+
+
+                                <td>
+
+                                    <strong class="negative">
+                                        - R$ 145,00
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+
+                            <tr>
+
+                                <td>
+
+                                    <strong>
+                                        30/08/2026
+                                    </strong>
+
+                                    <span class="table-subtext">
+                                        14:20
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <div class="table-product">
+
+                                        <div class="product-image">
+                                            📢
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+                                                Publicidade
+                                            </strong>
+
+                                            <span>
+                                                Divulgação da loja
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                <td>
+                                    Marketing
+                                </td>
+
+
+                                <td>
+                                    Cartão
+                                </td>
+
+
+                                <td>
+
+                                    <strong class="negative">
+                                        - R$ 120,00
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    <button class="table-action">
+                                        ⋮
+                                    </button>
+
+                                </td>
+
+                            </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+                <div class="pagination">
+
+                    <span>
+                        Mostrando 1–4 de 97 gastos
+                    </span>
+
+
+                    <div class="pagination-buttons">
+
+                        <button disabled>
+                            ‹
+                        </button>
+
+                        <button class="active">
+                            1
+                        </button>
+
+                        <button>
+                            2
+                        </button>
+
+                        <button>
+                            3
+                        </button>
+
+                        <span>
+                            ...
+                        </span>
+
+                        <button>
+                            20
+                        </button>
+
+                        <button>
+                            ›
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+</body>
+
+</html>
+
