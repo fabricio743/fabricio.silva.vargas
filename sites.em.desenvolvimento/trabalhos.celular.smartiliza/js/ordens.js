@@ -322,6 +322,7 @@ function aplicarFiltrosOrdens(){
             );
 
         const bateMes =
+            texto !== "" ||
             mesSelecionado === "" ||
             obterAnoMes(item.data) === mesSelecionado;
 
