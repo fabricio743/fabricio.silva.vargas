@@ -9,7 +9,7 @@
 ========================================================= */
 
 const URL_SCRIPT =
-    "https://script.google.com/macros/s/AKfycbwYtirtEpFjtr9FFd7IGontgsc1HlRs6es0VEFQjefYK5c5lPsjLaPdi3SI90gRR6qz/exec";
+    "https://script.google.com/macros/s/AKfycbz18n3eTYCQoa2mc3pFs2MvcOcpWjXULuR0K3obyvuQ3EAs_V9hgZ05nm1sImNQpw0h/exec";
 
 
 /* =========================================================
@@ -62,6 +62,20 @@ const totalModelos =
     document.getElementById("totalModelos");
 
 const btnAtualizar = document.getElementById("btnAtualizar");
+
+const modalReposicao =
+    document.getElementById("modalReposicao");
+
+const formReposicao =
+    document.getElementById("formReposicao");
+
+const btnFecharReposicao =
+    document.getElementById("btnFecharReposicao");
+
+const btnCancelarReposicao =
+    document.getElementById("btnCancelarReposicao");
+
+let idReposicao = null;
 
 /* =========================================================
    INICIALIZAÇÃO
@@ -335,6 +349,11 @@ async function salvarBateria(evento) {
             .value
             .trim();
 
+    const marca =
+        document
+            .getElementById("marca")
+            .value
+            .trim();
 
     const capacidade =
         document
@@ -374,6 +393,16 @@ async function salvarBateria(evento) {
 
         alert(
             "Selecione o modelo do iPhone."
+        );
+
+        return;
+
+    }
+
+    if (!marca) {
+
+        alert(
+            "Informe a marca da bateria."
         );
 
         return;
@@ -436,6 +465,9 @@ async function salvarBateria(evento) {
         modelo:
             modelo,
 
+        marca:
+            marca,
+
         capacidade:
             capacidade,
 
@@ -459,71 +491,111 @@ async function salvarBateria(evento) {
     }
 
 
-    /* -----------------------------------------
-       DESABILITAR BOTÃO
-    ------------------------------------------ */
+/* -----------------------------------------
+    DESABILITAR BOTÃO
+------------------------------------------ */
 
     const botaoSalvar =
-        formBateria.querySelector(
-            'button[type="submit"]'
-        );
+            formBateria.querySelector(
+                'button[type="submit"]'
+            );
 
 
-    botaoSalvar.disabled = true;
+        botaoSalvar.disabled = true;
 
-    botaoSalvar.textContent =
-        "Salvando...";
-
-
-    try {
-
-        const resultado =
-            await enviarDados(dados);
+        botaoSalvar.textContent =
+            "Salvando...";
 
 
-        if (!resultado.sucesso) {
+        try {
 
-            throw new Error(
-                resultado.mensagem ||
-                "Não foi possível salvar."
+            const resultado =
+                await enviarDados(dados);
+
+
+            if (!resultado.sucesso) {
+
+                throw new Error(
+                    resultado.mensagem ||
+                    "Não foi possível salvar."
+                );
+
+            }
+
+
+            if (indiceEditando !== null) {
+
+                const idEditado =
+                    estoque[indiceEditando].id;
+
+                const indice =
+                    estoque.findIndex(
+                        produto =>
+                            String(produto.id) ===
+                            String(idEditado)
+                    );
+
+                if (indice !== -1) {
+
+                    estoque[indice] = {
+                         ...estoque[indice],
+                        modelo: modelo,
+                        marca: marca,
+                        capacidade: capacidade,
+                        quantidade: quantidade,
+                        custo: custo,
+                        observacao: observacao
+                    };
+
+                }
+
+            } else {
+
+                estoque.push({
+
+                    id: resultado.id,
+                    modelo: modelo,
+                    marca: marca,
+                    capacidade: capacidade,
+                    quantidade: quantidade,
+                    custo: custo,
+                    observacao: observacao
+
+                });
+
+            }
+
+            fecharModal();
+
+            mostrarEstoque();
+
+        }
+
+        catch (erro) {
+
+            console.error(
+                "Erro ao salvar:",
+                erro
+            );
+
+
+            alert(
+                erro.message ||
+                "Erro ao salvar bateria."
             );
 
         }
 
+        finally {
 
-        fecharModal();
+            botaoSalvar.disabled = false;
 
+            botaoSalvar.textContent =
+                "Salvar bateria";
 
-        await carregarEstoque();
-
-
-    }
-
-    catch (erro) {
-
-        console.error(
-            "Erro ao salvar:",
-            erro
-        );
-
-
-        alert(
-            erro.message ||
-            "Erro ao salvar bateria."
-        );
+        }
 
     }
-
-    finally {
-
-        botaoSalvar.disabled = false;
-
-        botaoSalvar.textContent =
-            "Salvar bateria";
-
-    }
-
-}
 
 
 /* =========================================================
@@ -635,68 +707,59 @@ function mostrarEstoque() {
 
 
         linha.innerHTML = `
+    <td>
+        <strong>
+            ${escaparHTML(produto.modelo)}
+        </strong>
+    </td>
 
-            <td>
+    <td>
+        ${escaparHTML(produto.marca || "-")}
+    </td>
 
-                <strong>
-                    ${escaparHTML(produto.modelo)}
-                </strong>
+    <td>
+        ${escaparHTML(produto.capacidade)}
+    </td>
 
-            </td>
+    <td>
+        ${produto.quantidade}
+    </td>
 
+    <td>
+        ${formatarMoeda(produto.custo)}
+    </td>
 
-            <td>
+    <td>
+        ${formatarMoeda(valorEstoque)}
+    </td>
 
-                ${escaparHTML(produto.capacidade)}
+    <td>
+        <div class="acoes">
 
-            </td>
+            <button
+                class="btn-editar"
+                title="Editar"
+            >
+                ✎
+            </button>
 
+            <button
+                class="btn-repor"
+                title="Repor estoque"
+            >
+                +
+            </button>
 
-            <td>
+            <button
+                class="btn-excluir"
+                title="Excluir"
+            >
+                ×
+            </button>
 
-                ${produto.quantidade}
-
-            </td>
-
-
-            <td>
-
-                ${formatarMoeda(produto.custo)}
-
-            </td>
-
-
-            <td>
-
-                ${formatarMoeda(valorEstoque)}
-
-            </td>
-
-
-            <td>
-
-                <div class="acoes">
-
-                    <button
-                        class="btn-editar"
-                        title="Editar"
-                    >
-                        ✎
-                    </button>
-
-
-                    <button
-                        class="btn-excluir"
-                        title="Excluir"
-                    >
-                        ×
-                    </button>
-
-                </div>
-
-            </td>
-
-        `;
+        </div>
+    </td>
+`;
 
 
         /* -----------------------------------------
@@ -708,6 +771,16 @@ function mostrarEstoque() {
             .addEventListener(
                 "click",
                 () => editarBateria(produto.id)
+            );
+
+        /* -----------------------------------------
+           EVENTO REPOSIÇÃO
+        ------------------------------------------ */
+        linha
+            .querySelector(".btn-repor")
+            .addEventListener(
+                "click",
+                () => abrirModalReposicao(produto.id)
             );
 
 
@@ -812,11 +885,53 @@ function editarBateria(id) {
         .value =
         produto.modelo;
 
-
     document
-        .getElementById("capacidade")
+        .getElementById("marca")
         .value =
-        produto.capacidade;
+        produto.marca || "";
+
+    const campoCapacidade =
+    document.getElementById("capacidade");
+
+        campoCapacidade.value =
+            produto.capacidade || "";
+
+        /* 
+        Garante que a opção correta seja selecionada
+        mesmo se houver alguma diferença de maiúsculas,
+        minúsculas ou espaços.
+        */
+        if (
+            campoCapacidade.value !==
+            String(produto.capacidade || "")
+        ) {
+
+    const capacidadeSalva =
+        String(produto.capacidade || "")
+            .trim()
+            .toLowerCase();
+
+    const opcao =
+        Array.from(
+            campoCapacidade.options
+        ).find(option => {
+
+            return option.value
+                .trim()
+                .toLowerCase()
+                ===
+                capacidadeSalva;
+
+        });
+
+    if (opcao) {
+
+        campoCapacidade.value =
+            opcao.value;
+
+    }
+
+}
 
 
     document
@@ -841,6 +956,242 @@ function editarBateria(id) {
 
 }
 
+/* =========================================================
+   REPOR ESTOQUE
+========================================================= */
+
+function abrirModalReposicao(id) {
+
+    const produto =
+        estoque.find(
+            item =>
+                String(item.id) ===
+                String(id)
+        );
+
+
+    if (!produto) {
+
+        alert(
+            "Bateria não encontrada."
+        );
+
+        return;
+
+    }
+
+
+    idReposicao =
+        produto.id;
+
+
+    document
+        .getElementById("reposicaoDescricao")
+        .value =
+        `${produto.modelo} - ${produto.marca || "Sem marca"} - ${produto.capacidade}`;
+
+
+    document
+        .getElementById("reposicaoQuantidade")
+        .value = "";
+
+
+    document
+        .getElementById("reposicaoCusto")
+        .value = "";
+
+
+    document
+        .getElementById("reposicaoObservacao")
+        .value = "";
+
+
+    modalReposicao.classList.add(
+        "aberto"
+    );
+
+}
+
+function fecharModalReposicao() {
+
+    modalReposicao.classList.remove(
+        "aberto"
+    );
+
+    idReposicao = null;
+
+}
+
+btnFecharReposicao.addEventListener(
+    "click",
+    fecharModalReposicao
+);
+
+
+btnCancelarReposicao.addEventListener(
+    "click",
+    fecharModalReposicao
+);
+
+formReposicao.addEventListener(
+    "submit",
+    async function (evento) {
+
+        evento.preventDefault();
+
+
+        const quantidade =
+            Number(
+                document
+                    .getElementById(
+                        "reposicaoQuantidade"
+                    )
+                    .value
+            );
+
+
+        const custo =
+            Number(
+                document
+                    .getElementById(
+                        "reposicaoCusto"
+                    )
+                    .value
+            );
+
+
+        const observacao =
+            document
+                .getElementById(
+                    "reposicaoObservacao"
+                )
+                .value
+                .trim();
+
+
+        if (
+            !Number.isInteger(quantidade)
+            ||
+            quantidade <= 0
+        ) {
+
+            alert(
+                "Informe uma quantidade válida."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            isNaN(custo)
+            ||
+            custo < 0
+        ) {
+
+            alert(
+                "Informe um custo válido."
+            );
+
+            return;
+
+        }
+
+
+        const botao =
+            formReposicao.querySelector(
+                'button[type="submit"]'
+            );
+
+
+        botao.disabled = true;
+
+        botao.textContent =
+            "Salvando...";
+
+
+        try {
+
+            const resultado =
+                await enviarDados({
+
+                    acao:
+                        "reporEstoque",
+
+                    id:
+                        idReposicao,
+
+                    quantidade:
+                        quantidade,
+
+                    custo:
+                        custo,
+
+                    observacao:
+                        observacao
+
+                });
+
+
+            if (!resultado.sucesso) {
+
+                throw new Error(
+                    resultado.mensagem ||
+                    "Não foi possível repor o estoque."
+                );
+
+            }
+
+
+            fecharModalReposicao();
+
+
+            /*
+             * Adiciona o novo lote
+             * imediatamente na tela.
+             */
+
+            if (resultado.bateria) {
+
+                estoque.push(
+                    resultado.bateria
+                );
+
+            }
+
+
+            mostrarEstoque();
+
+
+        }
+
+        catch (erro) {
+
+            console.error(
+                "Erro ao repor estoque:",
+                erro
+            );
+
+
+            alert(
+                erro.message ||
+                "Erro ao repor estoque."
+            );
+
+        }
+
+        finally {
+
+            botao.disabled = false;
+
+            botao.textContent =
+                "Repor estoque";
+
+        }
+
+    }
+);
 
 /* =========================================================
    EXCLUIR
@@ -901,7 +1252,13 @@ async function excluirBateria(id) {
         }
 
 
-        await carregarEstoque();
+        estoque = estoque.filter(
+                produto =>
+                    String(produto.id) !==
+                    String(id)
+            );
+
+            mostrarEstoque();
 
 
     }

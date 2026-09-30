@@ -146,35 +146,15 @@
                 <table>
 
                     <thead>
-
                         <tr>
-
-                            <th>
-                                Modelo
-                            </th>
-
-                            <th>
-                                Capacidade
-                            </th>
-
-                            <th>
-                                Quantidade
-                            </th>
-
-                            <th>
-                                Custo unitário
-                            </th>
-
-                            <th>
-                                Valor em estoque
-                            </th>
-
-                            <th>
-                                Ações
-                            </th>
-
+                            <th>Modelo</th>
+                            <th>Marca</th>
+                            <th>Capacidade</th>
+                            <th>Quantidade</th>
+                            <th>Custo unitário</th>
+                            <th>Valor em estoque</th>
+                            <th>Ações</th>
                         </tr>
-
                     </thead>
 
 
@@ -443,6 +423,22 @@
                 </div>
 
 
+                <!-- MARCA -->
+
+                    <div class="campo">
+
+                        <label for="marca">
+                            Marca
+                        </label>
+
+                        <input
+                            type="text"
+                            id="marca"
+                            placeholder="Ex: Vizer"
+                            required
+                        >
+
+                    </div>
 
                 <!-- CAPACIDADE -->
 
@@ -579,7 +575,148 @@
 
     </div>
 
+ <!-- ==========================================
+     MODAL — REPOR ESTOQUE
+=========================================== -->
 
+<div
+    class="modal-overlay"
+    id="modalReposicao"
+>
+
+    <div class="modal">
+
+        <div class="modal-header">
+
+            <div>
+
+                <h2>
+                    Repor estoque
+                </h2>
+
+                <p>
+                    Registre uma nova compra desta bateria.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="btn-fechar"
+                id="btnFecharReposicao"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <form id="formReposicao">
+
+            <div class="campo">
+
+                <label>
+                    Bateria
+                </label>
+
+                <input
+                    type="text"
+                    id="reposicaoDescricao"
+                    readonly
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="reposicaoQuantidade">
+                    Quantidade comprada
+                </label>
+
+                <input
+                    type="number"
+                    id="reposicaoQuantidade"
+                    min="1"
+                    step="1"
+                    placeholder="Ex: 10"
+                    required
+                >
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="reposicaoCusto">
+                    Custo por bateria
+                </label>
+
+                <div class="input-prefix">
+
+                    <span>
+                        R$
+                    </span>
+
+                    <input
+                        type="number"
+                        id="reposicaoCusto"
+                        min="0"
+                        step="0.01"
+                        placeholder="0,00"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="campo">
+
+                <label for="reposicaoObservacao">
+
+                    Observação
+
+                    <small>
+                        opcional
+                    </small>
+
+                </label>
+
+                <textarea
+                    id="reposicaoObservacao"
+                    rows="3"
+                    placeholder="Ex: Compra realizada em setembro..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="btn-secondary"
+                    id="btnCancelarReposicao"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-primary"
+                >
+                    Repor estoque
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
     <!-- JAVASCRIPT -->
 
