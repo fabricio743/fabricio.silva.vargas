@@ -937,3 +937,137 @@ td:nth-child(5){
     transform:none;
     box-shadow:none;
 }
+
+/* ================================
+   TABELA DE ORDENS
+================================ */
+
+.tabela-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.tabela-ordens {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+/* Células */
+.tabela-ordens th,
+.tabela-ordens td {
+    padding: 8px 6px;
+    font-size: 12px;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+/* Permite quebrar textos maiores */
+.tabela-ordens td:nth-child(3),
+.tabela-ordens td:nth-child(5) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* Restante das células */
+.tabela-ordens td {
+    white-space: nowrap;
+}
+
+/* Largura das colunas */
+
+.tabela-ordens th:nth-child(1),
+.tabela-ordens td:nth-child(1) {
+    width: 4%;
+}
+
+.tabela-ordens th:nth-child(2),
+.tabela-ordens td:nth-child(2) {
+    width: 7%;
+}
+
+.tabela-ordens th:nth-child(3),
+.tabela-ordens td:nth-child(3) {
+    width: 10%;
+}
+
+.tabela-ordens th:nth-child(4),
+.tabela-ordens td:nth-child(4) {
+    width: 9%;
+}
+
+.tabela-ordens th:nth-child(5),
+.tabela-ordens td:nth-child(5) {
+    width: 9%;
+}
+
+.tabela-ordens th:nth-child(6),
+.tabela-ordens td:nth-child(6) {
+    width: 7%;
+}
+
+.tabela-ordens th:nth-child(7),
+.tabela-ordens td:nth-child(7) {
+    width: 6%;
+}
+
+.tabela-ordens th:nth-child(8),
+.tabela-ordens td:nth-child(8) {
+    width: 6%;
+}
+
+.tabela-ordens th:nth-child(9),
+.tabela-ordens td:nth-child(9) {
+    width: 13%;
+}
+
+.tabela-ordens th:nth-child(10),
+.tabela-ordens td:nth-child(10) {
+    width: 8%;
+}
+
+.tabela-ordens th:nth-child(11),
+.tabela-ordens td:nth-child(11) {
+    width: 5%;
+}
+
+.tabela-ordens th:nth-child(12),
+.tabela-ordens td:nth-child(12) {
+    width: 6%;
+}
+
+.tabela-ordens th:nth-child(13),
+.tabela-ordens td:nth-child(13) {
+    width: 5%;
+}
+
+.tabela-ordens th:nth-child(14),
+.tabela-ordens td:nth-child(14) {
+    width: 5%;
+}
+
+
+/* Select de status */
+
+.tabela-ordens .status-select {
+    width: 100%;
+    min-width: 0;
+    padding: 7px 5px;
+    font-size: 11px;
+}
+
+
+/* Botões da tabela */
+
+.tabela-ordens .btn-tabela,
+.tabela-ordens .btn-salvar-status,
+.tabela-ordens .btn-whatsapp {
+    width: 100%;
+    min-width: 0;
+    padding: 7px 4px;
+    margin: 0;
+    font-size: 11px;
+    border-radius: 7px;
+    white-space: nowrap;
+}
