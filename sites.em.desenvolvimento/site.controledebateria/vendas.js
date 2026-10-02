@@ -4,6 +4,8 @@
 
 CONFIG.URL_SCRIPT
 
+const CHAVE_CACHE_VENDAS = "vendas_cache";
+
 // ==========================================
 // VARIÁVEIS
 // ==========================================
@@ -204,9 +206,21 @@ function configurarEventos() {
 // CARREGAR VENDAS
 // ==========================================
 
+
 async function carregarVendas() {
 
     try {
+
+        const cache = localStorage.getItem(CHAVE_CACHE_VENDAS);
+
+        if (cache) {
+            try {
+                vendas = JSON.parse(cache);
+                renderizarVendas();
+            } catch (erro) {
+                console.warn("Cache de vendas inválido:", erro);
+            }
+        }
 
         const resposta = await fetch(
             `${CONFIG.URL_SCRIPT}?acao=listarVendas`
@@ -224,6 +238,15 @@ async function carregarVendas() {
         }
 
         vendas = resultado.vendas || [];
+
+        try {
+            localStorage.setItem(
+                CHAVE_CACHE_VENDAS,
+                JSON.stringify(vendas)
+            );
+        } catch (erro) {
+            console.warn("Não foi possível salvar o cache das vendas:", erro);
+        }
 
         renderizarVendas();
 
@@ -1410,8 +1433,8 @@ async function salvarVenda(event) {
 
         fecharModalVenda();
 
-
         await carregarVendas();
+
         await carregarEstoque();
 
 

@@ -10,6 +10,8 @@
 
 const URL_SCRIPT = CONFIG.URL_SCRIPT
 
+const CHAVE_CACHE_ESTOQUE = "estoque_baterias_cache";
+
 /* =========================================================
    VARIÁVEIS
 ========================================================= */
@@ -68,19 +70,72 @@ const btnAtualizar = document.getElementById("btnAtualizar");
 
 document.addEventListener(
     "DOMContentLoaded",
-    carregarEstoque
+    inicializarEstoque
 );
 
 
 /* =========================================================
    CARREGAR ESTOQUE
 ========================================================= */
-
-async function carregarEstoque() {
+function inicializarEstoque() {
 
     try {
 
-        mostrarCarregando();
+        const cache =
+            localStorage.getItem(
+                CHAVE_CACHE_ESTOQUE
+            );
+
+
+        if (cache) {
+
+            const dadosCache =
+                JSON.parse(cache);
+
+
+            if (
+                Array.isArray(dadosCache)
+            ) {
+
+                estoque =
+                    dadosCache;
+
+                mostrarEstoque();
+
+            }
+
+        }
+
+    } catch (erro) {
+
+        console.warn(
+            "Não foi possível carregar o cache:",
+            erro
+        );
+
+    }
+
+
+    /*
+     * Busca os dados atuais
+     * sem bloquear a interface.
+     */
+
+    carregarEstoque(
+        !estoque.length
+    );
+
+}
+
+async function carregarEstoque(
+    mostrarLoading = true
+) {
+
+    try {
+
+        if (mostrarLoading && estoque.length === 0) {
+            mostrarCarregando();
+        }
 
 
         const resposta =
@@ -115,10 +170,27 @@ async function carregarEstoque() {
         estoque =
             dados.estoque || [];
 
+                /*
+                * Guarda uma cópia local
+                * para a próxima abertura.
+                */
 
+                try {
+
+                    localStorage.setItem(
+                        CHAVE_CACHE_ESTOQUE,
+                        JSON.stringify(estoque)
+                    );
+
+                } catch (erro) {
+
+                    console.warn(
+                        "Não foi possível salvar o cache:",
+                        erro
+                    );
+
+                }
         mostrarEstoque();
-
-
     }
 
     catch (erro) {
