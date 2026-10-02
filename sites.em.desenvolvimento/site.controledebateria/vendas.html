@@ -672,6 +672,198 @@
     </div>
 
 
+    <!-- =====================================================
+         MODAL - DETALHES DA VENDA
+    ====================================================== -->
+
+    <div
+        id="modalDetalhesVenda"
+        class="modal"
+    >
+
+        <div class="modal-conteudo modal-detalhes-venda">
+
+            <div class="modal-cabecalho">
+
+                <h2>Detalhes da venda</h2>
+
+                <button
+                    type="button"
+                    id="btnFecharDetalhesVenda"
+                    class="btn-fechar"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="detalhes-venda">
+
+                <div class="detalhes-grupo">
+
+                    <h3>Produto</h3>
+
+                    <div class="detalhes-grid">
+
+                        <div>
+                            <span>Produto</span>
+                            <strong id="detalheProduto">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Marca</span>
+                            <strong id="detalheMarca">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Capacidade</span>
+                            <strong id="detalheCapacidade">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Quantidade</span>
+                            <strong id="detalheQuantidade">-</strong>
+                        </div>
+
+                        <div>
+                            <span>ID do lote</span>
+                            <strong id="detalheLote">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Status</span>
+                            <strong id="detalheStatus">-</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detalhes-grupo">
+
+                    <h3>Valores</h3>
+
+                    <div class="detalhes-grid">
+
+                        <div>
+                            <span>Custo unitário</span>
+                            <strong id="detalheCustoUnitario">R$ 0,00</strong>
+                        </div>
+
+                        <div>
+                            <span>Valor de venda</span>
+                            <strong id="detalheValorVenda">R$ 0,00</strong>
+                        </div>
+
+                        <div>
+                            <span>Total da venda</span>
+                            <strong id="detalheVendaTotal">R$ 0,00</strong>
+                        </div>
+
+                        <div>
+                            <span>Custo do produto</span>
+                            <strong id="detalheCustoProduto">R$ 0,00</strong>
+                        </div>
+
+                        <div>
+                            <span>Taxa</span>
+                            <strong id="detalheTaxa">R$ 0,00</strong>
+                        </div>
+
+                        <div>
+                            <span>Frete</span>
+                            <strong id="detalheFrete">R$ 0,00</strong>
+                        </div>
+
+                        <div>
+                            <span>Outros custos</span>
+                            <strong id="detalheOutrosCustos">R$ 0,00</strong>
+                        </div>
+
+                        <div>
+                            <span>Custo total</span>
+                            <strong id="detalheCustoTotal">R$ 0,00</strong>
+                        </div>
+
+                        <div>
+                            <span>Lucro</span>
+                            <strong id="detalheLucro">R$ 0,00</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detalhes-grupo">
+
+                    <h3>Venda</h3>
+
+                    <div class="detalhes-grid">
+
+                        <div>
+                            <span>Data</span>
+                            <strong id="detalheData">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Canal</span>
+                            <strong id="detalheCanal">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Taxa (%)</span>
+                            <strong id="detalheTaxaPercentual">0%</strong>
+                        </div>
+
+                        <div>
+                            <span>Frete pago por</span>
+                            <strong id="detalheFretePagoPor">-</strong>
+                        </div>
+
+                        <div>
+                            <span>Cliente</span>
+                            <strong id="detalheCliente">-</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detalhes-grupo">
+
+                    <h3>Observação</h3>
+
+                    <p
+                        id="detalheObservacao"
+                        class="detalhe-observacao"
+                    >
+                        -
+                    </p>
+
+                </div>
+
+
+                <div class="detalhes-acoes">
+
+                    <button
+                        type="button"
+                        id="btnReverterDetalhe"
+                        class="btn-reverter"
+                    >
+                        Reverter venda
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
     <!-- JAVASCRIPT -->
     <script src="config.js"></script>

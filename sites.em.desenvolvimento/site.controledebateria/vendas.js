@@ -70,6 +70,15 @@ const calculoTaxa =
 const calculoOutrosCustos =
     document.getElementById("calculoOutrosCustos");
 
+const modalDetalhesVenda =
+    document.getElementById("modalDetalhesVenda");
+
+const btnFecharDetalhesVenda =
+    document.getElementById("btnFecharDetalhesVenda");
+
+const btnReverterDetalhe =
+    document.getElementById("btnReverterDetalhe");
+
 // ==========================================
 // INICIALIZAÇÃO
 // ==========================================
@@ -176,6 +185,16 @@ function configurarEventos() {
     outrosCustos.addEventListener(
         "input",
         atualizarCalculoVenda
+    );
+
+    btnFecharDetalhesVenda.addEventListener(
+    "click",
+    fecharDetalhesVenda
+    );
+
+    btnReverterDetalhe.addEventListener(
+        "click",
+        reverterVendaDetalhe
     );
 
 }
@@ -319,9 +338,7 @@ function renderizarVendas(lista = null) {
 
 
     atualizarResumo(
-        pesquisando
-            ? vendasExibidas
-            : obterVendasDoMes()
+        obterVendasDoMes()
     );
 
 
@@ -349,54 +366,71 @@ function renderizarVendas(lista = null) {
 
         tr.innerHTML = `
 
-            <td>
-                ${dataFormatada}
-            </td>
+    <td>
+        ${dataFormatada}
+    </td>
 
-            <td>
-                <strong>
-                    ${escapeHTML(venda.produto)}
-                </strong>
+    <td>
+        <strong>
+            ${escapeHTML(venda.produto)}
+        </strong>
 
-                <small>
-                    ${escapeHTML(venda.capacidade)}
-                </small>
-            </td>
+        <small>
+            ${
+                venda.capacidade === "1"
+                    ? "100%"
+                    : escapeHTML(venda.capacidade)
+            }
+        </small>
+    </td>
 
-            <td>
-                ${escapeHTML(venda.marca)}
-            </td>
+    <td>
+        ${escapeHTML(venda.marca)}
+    </td>
 
-            <td>
-                ${venda.quantidade}
-            </td>
+    <td>
+        ${venda.quantidade}
+    </td>
 
-            <td>
-                ${formatarMoeda(venda.vendaTotal)}
-            </td>
+    <td>
+        ${formatarMoeda(venda.vendaTotal)}
+    </td>
 
-            <td>
-                ${formatarMoeda(venda.lucro)}
-            </td>
+    <td>
+        ${formatarMoeda(venda.lucro)}
+    </td>
 
-            <td>
+    <td class="acoes-venda">
 
-                ${
-                    venda.status === "Revertida"
+        <button
+            type="button"
+            class="btn-detalhes"
+            onclick="abrirDetalhesVenda('${escapeHTML(venda.id)}')"
+        >
+            Detalhes
+        </button>
 
-                    ? `<span class="status-revertida">
-                            Revertida
-                    </span>`
+        ${
+            venda.status === "Revertida"
 
-                    : `<button
-                            class="btn-reverter"
-                            onclick="reverterVenda('${escapeHTML(venda.id)}')"
-                    >
-                            Reverter
-                    </button>`
-                }
+            ? `
+                <span class="status-revertida">
+                    Revertida
+                </span>
+            `
 
-            </td>
+            : `
+                <button
+                    type="button"
+                    class="btn-reverter"
+                    onclick="reverterVenda('${escapeHTML(venda.id)}')"
+                >
+                    Reverter
+                </button>
+            `
+        }
+
+    </td>
 
 `;
 
@@ -473,21 +507,25 @@ function atualizarResumo(lista) {
     let lucro = 0;
 
 
-    lista.forEach(venda => {
+    lista
+        .filter(venda =>
+            venda.status !== "Revertida"
+        )
+        .forEach(venda => {
 
-        vendido += Number(
-            venda.vendaTotal || 0
-        );
+            vendido += Number(
+                venda.vendaTotal || 0
+            );
 
-        custo += Number(
-            venda.custoTotal || 0
-        );
+            custo += Number(
+                venda.custoTotal || 0
+            );
 
-        lucro += Number(
-            venda.lucro || 0
-        );
+            lucro += Number(
+                venda.lucro || 0
+            );
 
-    });
+        });
 
 
     totalVendido.textContent =
@@ -839,6 +877,254 @@ function fecharModalVenda() {
     document
         .getElementById("modalVenda")
         .classList.remove("aberto");
+
+}
+
+function abrirDetalhesVenda(idVenda) {
+
+    const venda =
+        vendas.find(item =>
+            String(item.id) ===
+            String(idVenda)
+        );
+
+
+    if (!venda) {
+
+        alert(
+            "Venda não encontrada."
+        );
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "detalheProduto"
+    ).textContent =
+        venda.produto || "-";
+
+
+    document.getElementById(
+        "detalheMarca"
+    ).textContent =
+        venda.marca || "-";
+
+
+    document.getElementById(
+        "detalheCapacidade"
+    ).textContent =
+        venda.capacidade === "1"
+            ? "100%"
+            : venda.capacidade || "-";
+
+
+    document.getElementById(
+        "detalheQuantidade"
+    ).textContent =
+        venda.quantidade;
+
+
+    document.getElementById(
+        "detalheLote"
+    ).textContent =
+        venda.idLote || "-";
+
+
+    document.getElementById(
+        "detalheStatus"
+    ).textContent =
+        venda.status || "Ativa";
+
+
+    document.getElementById(
+        "detalheCustoUnitario"
+    ).textContent =
+        formatarMoeda(
+            venda.custoUnitario
+        );
+
+
+    document.getElementById(
+        "detalheValorVenda"
+    ).textContent =
+        formatarMoeda(
+            venda.valorVendaUnitario
+        );
+
+
+    document.getElementById(
+        "detalheVendaTotal"
+    ).textContent =
+        formatarMoeda(
+            venda.vendaTotal
+        );
+
+
+    const custoProduto =
+        Number(venda.quantidade || 0) *
+        Number(venda.custoUnitario || 0);
+
+
+    document.getElementById(
+        "detalheCustoProduto"
+    ).textContent =
+        formatarMoeda(
+            custoProduto
+        );
+
+
+    document.getElementById(
+        "detalheTaxa"
+    ).textContent =
+        formatarMoeda(
+            venda.valorTaxa
+        );
+
+
+    const freteCusto =
+        venda.fretePagoPor === "nos"
+            ? Number(venda.frete || 0)
+            : 0;
+
+
+    document.getElementById(
+        "detalheFrete"
+    ).textContent =
+        formatarMoeda(
+            freteCusto
+        );
+
+
+    document.getElementById(
+        "detalheOutrosCustos"
+    ).textContent =
+        formatarMoeda(
+            venda.outrosCustos
+        );
+
+
+    document.getElementById(
+        "detalheCustoTotal"
+    ).textContent =
+        formatarMoeda(
+            venda.custoTotal
+        );
+
+
+    document.getElementById(
+        "detalheLucro"
+    ).textContent =
+        formatarMoeda(
+            venda.lucro
+        );
+
+
+    document.getElementById(
+        "detalheData"
+    ).textContent =
+        formatarData(
+            venda.data
+        );
+
+
+    document.getElementById(
+        "detalheCanal"
+    ).textContent =
+        venda.canal || "-";
+
+
+    document.getElementById(
+        "detalheTaxaPercentual"
+    ).textContent =
+        `${Number(venda.taxa || 0)}%`;
+
+
+    document.getElementById(
+        "detalheFretePagoPor"
+    ).textContent =
+        venda.fretePagoPor === "nos"
+            ? "Nós"
+            : "Cliente";
+
+
+    document.getElementById(
+        "detalheCliente"
+    ).textContent =
+        venda.cliente || "-";
+
+
+    document.getElementById(
+        "detalheObservacao"
+    ).textContent =
+        venda.observacao || "-";
+
+
+    /*
+     * Guarda a venda atualmente aberta.
+     */
+
+    btnReverterDetalhe.dataset.idVenda =
+        venda.id;
+
+
+    /*
+     * Se já estiver revertida,
+     * desabilita o botão.
+     */
+
+    if (
+        venda.status === "Revertida"
+    ) {
+
+        btnReverterDetalhe.disabled =
+            true;
+
+        btnReverterDetalhe.textContent =
+            "Venda revertida";
+
+    } else {
+
+        btnReverterDetalhe.disabled =
+            false;
+
+        btnReverterDetalhe.textContent =
+            "Reverter venda";
+
+    }
+
+
+    modalDetalhesVenda.classList.add(
+        "aberto"
+    );
+
+}
+
+function fecharDetalhesVenda() {
+
+    modalDetalhesVenda.classList.remove(
+        "aberto"
+    );
+
+}
+
+function reverterVendaDetalhe() {
+
+    const idVenda =
+        btnReverterDetalhe.dataset.idVenda;
+
+
+    if (!idVenda) {
+
+        return;
+
+    }
+
+
+    fecharDetalhesVenda();
+
+    reverterVenda(idVenda);
 
 }
 
