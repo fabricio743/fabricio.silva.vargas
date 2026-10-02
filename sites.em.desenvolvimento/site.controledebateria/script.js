@@ -8,9 +8,7 @@
    CONFIGURAÇÃO
 ========================================================= */
 
-const URL_SCRIPT =
-    "https://script.google.com/macros/s/AKfycbwYtirtEpFjtr9FFd7IGontgsc1HlRs6es0VEFQjefYK5c5lPsjLaPdi3SI90gRR6qz/exec";
-
+const URL_SCRIPT = CONFIG.URL_SCRIPT
 
 /* =========================================================
    VARIÁVEIS
@@ -20,6 +18,7 @@ let estoque = [];
 
 let indiceEditando = null;
 
+let modoReposicao = false;
 
 /* =========================================================
    ELEMENTOS
@@ -149,7 +148,7 @@ function mostrarCarregando() {
 
         <tr>
 
-            <td colspan="6"
+            <td colspan="7"
                 style="text-align:center;padding:30px;">
 
                 Carregando estoque...
@@ -173,7 +172,7 @@ function mostrarErro(mensagem) {
 
         <tr>
 
-            <td colspan="6"
+            <td colspan="7"
                 style="text-align:center;padding:30px;">
 
                 ${escaparHTML(mensagem)}
@@ -204,10 +203,21 @@ function abrirModal() {
 
     indiceEditando = null;
 
+    modoReposicao = false;
+
     modalTitulo.textContent =
         "Adicionar bateria";
 
+    formBateria
+        .querySelector('button[type="submit"]')
+        .textContent =
+        "Salvar bateria";
+
     formBateria.reset();
+
+    document.getElementById("modelo").disabled = false;
+    document.getElementById("marca").disabled = false;
+    document.getElementById("capacidade").disabled = false;
 
     modal.classList.add("aberto");
 
@@ -234,6 +244,12 @@ function fecharModal() {
     formBateria.reset();
 
     indiceEditando = null;
+
+    modoReposicao = false;
+
+    document.getElementById("modelo").disabled = false;
+    document.getElementById("marca").disabled = false;
+    document.getElementById("capacidade").disabled = false;
 
 }
 
@@ -335,6 +351,11 @@ async function salvarBateria(evento) {
             .value
             .trim();
 
+    const marca =
+        document
+            .getElementById("marca")
+            .value
+            .trim();
 
     const capacidade =
         document
@@ -349,7 +370,6 @@ async function salvarBateria(evento) {
                 .getElementById("quantidade")
                 .value
         );
-
 
     const custo =
         Number(
@@ -366,6 +386,126 @@ async function salvarBateria(evento) {
             .trim();
 
 
+/* -----------------------------------------
+   REPOSIÇÃO DE ESTOQUE
+------------------------------------------ */
+
+if (modoReposicao) {
+
+    if (
+        !Number.isInteger(quantidade)
+        ||
+        quantidade <= 0
+    ) {
+
+        alert(
+            "Informe uma quantidade válida para reposição."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        isNaN(custo)
+        ||
+        custo < 0
+    ) {
+
+        alert(
+            "Informe um custo válido."
+        );
+
+        return;
+
+    }
+
+
+    const dados = {
+
+        acao:
+            "reporEstoque",
+
+        id:
+            estoque[indiceEditando].id,
+
+        quantidade:
+            quantidade,
+
+        custo:
+            custo,
+
+        observacao:
+            observacao
+
+    };
+
+
+    const botaoSalvar =
+        formBateria.querySelector(
+            'button[type="submit"]'
+        );
+
+
+    botaoSalvar.disabled = true;
+
+    botaoSalvar.textContent =
+        "Salvando...";
+
+
+    try {
+
+        // Envia para o Google Sheets
+        enviarDados(dados)
+            .then(resultado => {
+
+                if (!resultado.sucesso) {
+
+                    console.error(
+                        "Erro ao salvar:",
+                        resultado.mensagem
+                    );
+
+                    return;
+
+                }
+
+                // Atualiza o estoque quando o servidor responder
+                carregarEstoque();
+
+            })
+            .catch(erro => {
+
+                console.error(
+                    "Erro ao salvar:",
+                    erro
+                );
+
+                // Mesmo se a resposta falhar,
+                // o Google pode já ter gravado.
+                carregarEstoque();
+
+            });
+
+
+        // Fecha imediatamente a janela
+        fecharModal();
+
+
+    }
+    finally {
+
+        botaoSalvar.disabled = false;
+
+        botaoSalvar.textContent =
+            "Salvar bateria";
+
+    }
+
+    return;
+
+}
     /* -----------------------------------------
        VALIDAÇÕES
     ------------------------------------------ */
@@ -374,6 +514,16 @@ async function salvarBateria(evento) {
 
         alert(
             "Selecione o modelo do iPhone."
+        );
+
+        return;
+
+    }
+
+    if (!marca) {
+
+        alert(
+            "Informe a marca da bateria."
         );
 
         return;
@@ -435,6 +585,9 @@ async function salvarBateria(evento) {
 
         modelo:
             modelo,
+
+        marca:
+            marca,    
 
         capacidade:
             capacidade,
@@ -501,18 +654,60 @@ async function salvarBateria(evento) {
 
     catch (erro) {
 
+    console.error(
+        "Erro ao salvar:",
+        erro
+    );
+
+
+    // Verifica se o estoque foi atualizado mesmo
+    try {
+
+        await carregarEstoque();
+
+
+        const foiSalvo =
+            estoque.some(produto => {
+
+                return (
+                    produto.modelo === modelo &&
+                    produto.marca === marca &&
+                    produto.capacidade === capacidade &&
+                    Number(produto.quantidade) === quantidade &&
+                    Number(produto.custo) === custo
+                );
+
+            });
+
+
+        if (foiSalvo) {
+
+            fecharModal();
+
+            alert(
+                "Bateria adicionada com sucesso."
+            );
+
+            return;
+
+        }
+
+    } catch (erroVerificacao) {
+
         console.error(
-            "Erro ao salvar:",
-            erro
-        );
-
-
-        alert(
-            erro.message ||
-            "Erro ao salvar bateria."
+            "Erro ao verificar estoque:",
+            erroVerificacao
         );
 
     }
+
+
+    alert(
+        erro.message ||
+        "Erro ao salvar bateria."
+    );
+
+}
 
     finally {
 
@@ -524,8 +719,6 @@ async function salvarBateria(evento) {
     }
 
 }
-
-
 /* =========================================================
    ENVIAR DADOS PARA O APPS SCRIPT
 ========================================================= */
@@ -550,11 +743,8 @@ async function enviarDados(dados) {
         await fetch(
             URL_SCRIPT,
             {
-
                 method: "POST",
-
                 body: formulario
-
             }
         );
 
@@ -644,6 +834,11 @@ function mostrarEstoque() {
 
             </td>
 
+            <td>
+
+                ${escaparHTML(produto.marca || "-")}
+
+            </td>
 
             <td>
 
@@ -686,6 +881,14 @@ function mostrarEstoque() {
 
 
                     <button
+                        class="btn-repor"
+                        title="Adicionar novo estoque"
+                    >
+                        +
+                    </button>
+
+
+                    <button
                         class="btn-excluir"
                         title="Excluir"
                     >
@@ -710,7 +913,13 @@ function mostrarEstoque() {
                 () => editarBateria(produto.id)
             );
 
-
+        
+        linha
+            .querySelector(".btn-repor")
+            .addEventListener(
+                "click",
+                () => abrirModalReposicao(produto.id)
+            );
         /* -----------------------------------------
            EVENTO EXCLUIR
         ------------------------------------------ */
@@ -768,6 +977,105 @@ function atualizarResumo() {
 
 }
 
+/* =========================================================
+   ADICIONAR NOVO ESTOQUE
+========================================================= */
+
+function abrirModalReposicao(id) {
+
+    const produto =
+        estoque.find(
+            item =>
+                String(item.id)
+                ===
+                String(id)
+        );
+
+
+    if (!produto) {
+
+        alert(
+            "Bateria não encontrada."
+        );
+
+        return;
+
+    }
+
+
+    indiceEditando =
+        estoque.findIndex(
+            item =>
+                String(item.id)
+                ===
+                String(id)
+        );
+
+
+    modoReposicao = true;
+
+
+    modalTitulo.textContent =
+        "Adicionar novo estoque";
+
+    formBateria
+        .querySelector('button[type="submit"]')
+        .textContent =
+        "Adicionar estoque";    
+
+    document
+        .getElementById("modelo")
+        .value =
+        produto.modelo;
+
+
+    document
+        .getElementById("marca")
+        .value =
+        produto.marca || "";
+
+
+    document
+        .getElementById("capacidade")
+        .value =
+        produto.capacidade;
+
+
+    document
+        .getElementById("quantidade")
+        .value =
+        "";
+
+
+    document
+        .getElementById("custo")
+        .value =
+        "";
+
+
+    document
+        .getElementById("observacao")
+        .value =
+        "";
+
+
+    document.getElementById("modelo").disabled = true;
+    document.getElementById("marca").disabled = true;
+    document.getElementById("capacidade").disabled = true;
+
+
+    modal.classList.add("aberto");
+
+
+    setTimeout(() => {
+
+        document
+            .getElementById("quantidade")
+            .focus();
+
+    }, 100);
+
+}
 
 /* =========================================================
    EDITAR
@@ -806,12 +1114,20 @@ function editarBateria(id) {
     modalTitulo.textContent =
         "Editar bateria";
 
+    formBateria
+        .querySelector('button[type="submit"]')
+        .textContent =
+        "Salvar alterações";
 
     document
         .getElementById("modelo")
         .value =
         produto.modelo;
 
+    document
+        .getElementById("marca")
+        .value =
+        produto.marca || "";   
 
     document
         .getElementById("capacidade")
