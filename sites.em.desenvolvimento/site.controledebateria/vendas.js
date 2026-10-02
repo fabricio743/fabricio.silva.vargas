@@ -1655,6 +1655,31 @@ async function reverterVenda(idVenda) {
 
 }
 
+const btnAtualizarVendas =
+        document.getElementById("btnAtualizarVendas");
+
+    if (btnAtualizarVendas) {
+
+        btnAtualizarVendas.addEventListener("click", async () => {
+
+            btnAtualizarVendas.disabled = true;
+            btnAtualizarVendas.textContent = "🔄 Atualizando...";
+
+            try {
+
+                await carregarVendas();
+
+            } finally {
+
+                btnAtualizarVendas.disabled = false;
+                btnAtualizarVendas.textContent = "🔄 Atualizar";
+
+            }
+
+    });
+
+}
+
 // ==========================================
 // ESCAPAR HTML
 // ==========================================
