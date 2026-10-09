@@ -1,689 +1,1153 @@
 const URL_SCRIPT = CONFIG.URL_SCRIPT;
 
-let pecasCarregadas = [];
-let marcasCarregadas = [];
-let modoCadastro = "individual";
+let ordensCarregadas = [];
+let ordemSelecionadaPDF = null;
 
-const $ = (id) => document.getElementById(id);
+window.addEventListener("load", function(){
+    definirMesAtual();
+    carregarOrdens();
+});
 
-function escapar(valor) {
-    return String(valor ?? "").replace(/[&<>"']/g, caractere => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-    })[caractere]);
+// =============================
+// CARREGAR ORDENS
+// =============================
+
+function esconderLoadingSite(){
+
+    const loadingSite = document.getElementById("loadingSite");
+
+    if(loadingSite){
+        loadingSite.classList.add("oculto");
+    }
+
 }
 
-function dinheiro(valor) {
+async function carregarOrdens(){
+
+    const lista = document.getElementById("listaOrdens");
+    const loading = document.getElementById("loadingOrdens");
+
+    if(loading){
+        loading.style.display = "block";
+    }
+
+    if(lista){
+        lista.innerHTML = `
+            <tr>
+                <td colspan="14" class="mensagem-tabela">
+                    <div class="loading-tabela">
+                        <span class="spinner-tabela"></span>
+                        <span>Carregando ordens...</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+
+    try {
+
+        console.log("URL_SCRIPT:", URL_SCRIPT);
+        console.log("URL FINAL:", URL_SCRIPT + "?action=listarOS");
+
+        const resposta = await fetch(URL_SCRIPT + "?action=listarOS");
+
+        const texto = await resposta.text();
+
+        console.log("STATUS DA RESPOSTA:", resposta.status);
+        console.log("RESPOSTA RECEBIDA:", texto);
+
+        if(!resposta.ok){
+            throw new Error("Erro HTTP " + resposta.status);
+        }
+
+        let ordens;
+
+        try {
+            ordens = JSON.parse(texto);
+        } catch(erroJson) {
+            throw new Error("A resposta não é JSON. Verifique a URL do Apps Script.");
+        }
+
+        ordensCarregadas = Array.isArray(ordens)
+            ? [...ordens].reverse()
+            : [];
+
+        aplicarFiltrosOrdens();
+
+    } catch(erro){
+
+        if(lista){
+            lista.innerHTML = `
+                <tr>
+                    <td colspan="14" class="mensagem-tabela">
+                        Erro ao carregar ordens. Verifique a URL do Apps Script.
+                    </td>
+                </tr>
+            `;
+        }
+
+        console.error("ERRO AO CARREGAR ORDENS:", erro);
+
+    } finally {
+
+        if(loading){
+            loading.style.display = "none";
+        }
+
+        esconderLoadingSite();
+
+    }
+
+}
+
+
+// =============================
+// MOSTRAR ORDENS NA TABELA
+// =============================
+
+function mostrarOrdens(ordens){
+
+    const lista = document.getElementById("listaOrdens");
+
+    if(!ordens || ordens.length === 0){
+
+        lista.innerHTML = `
+            <tr>
+                <td colspan="14" class="mensagem-tabela">
+                    Nenhuma ordem encontrada.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    lista.innerHTML = "";
+
+    ordens.forEach(function(item){
+
+        const linha = document.createElement("tr");
+
+        const classe = classeStatus(item.status);
+
+        if(classe){
+            linha.classList.add(classe);
+        }
+
+        linha.innerHTML = `
+            <td>${item.os || ""}</td>
+            <td>${formatarData(item.data)}</td>
+            <td>${item.cliente || ""}</td>
+            <td>${item.telefone || ""}</td>
+            <td>${item.modelo || ""}</td>
+            <td>R$ ${Number(item.orcamento || 0).toFixed(2)}</td>
+            <td>R$ ${Number(item.custoPeca || 0).toFixed(2)}</td>
+            <td>R$ ${Number(item.lucro || 0).toFixed(2)}</td>
+
+            <td>
+                <select 
+                    class="status-select"
+                    id="status-${item.linha}"
+                    onchange="salvarStatus(${item.linha})"
+                >
+                    <option ${normalizarStatus(item.status) === "em analise" ? "selected" : ""}>
+                        Em análise
+                    </option>
+
+                    <option ${normalizarStatus(item.status) === "aguardando aprovacao do cliente" ? "selected" : ""}>
+                        Aguardando aprovação do cliente
+                    </option>
+
+                    <option ${normalizarStatus(item.status) === "aguardando peca" ? "selected" : ""}>
+                        Aguardando peça
+                    </option>
+
+                    <option ${normalizarStatus(item.status) === "finalizado" ? "selected" : ""}>
+                        Finalizado
+                    </option>
+
+                    <option ${normalizarStatus(item.status) === "retirado" ? "selected" : ""}>
+                        Retirado
+                    </option>
+
+                    <option ${
+                        normalizarStatus(item.status) === "sem conserto" ||
+                        normalizarStatus(item.status) === "sem concerto"
+                        ? "selected"
+                        : ""
+                    }>
+                        Sem conserto
+                    </option>
+                </select>
+            </td>
+
+            <td>${formatarData(item.garantia)}</td>
+
+            <td>
+                <button 
+                    type="button" 
+                    class="btn-tabela"
+                    onclick="abrirDetalhesOS(${item.linha})"
+                >
+                    Ver
+                </button>
+            </td>
+
+            <td>
+                <button 
+                    type="button" 
+                    class="btn-tabela"
+                    onclick="abrirEditarOS(${item.linha})"
+                >
+                    Editar
+                </button>
+            </td>
+
+            <td>
+                <button 
+                    type="button" 
+                    class="btn-whatsapp"
+                    onclick="enviarWhatsAppPorLinha(${item.linha})"
+                >
+                    Avisar
+                </button>
+            </td>
+
+            <td>
+                <button 
+                    type="button" 
+                    class="btn-salvar-status"
+                    onclick="salvarStatus(${item.linha})"
+                >
+                    Salvar
+                </button>
+            </td>
+        `;
+
+        lista.appendChild(linha);
+
+    });
+
+}
+
+function atualizarResumoOrdens(ordens){
+
+    const totalAbertas = document.getElementById("totalAbertas");
+    const totalAguardando = document.getElementById("totalAguardando");
+    const totalFinalizadas = document.getElementById("totalFinalizadas");
+    const totalRetiradas = document.getElementById("totalRetiradas");
+    const totalOrdensMes = document.getElementById("totalOrdensMes");
+
+    if(!Array.isArray(ordens)){
+        ordens = [];
+    }
+
+    const abertas = ordens.filter(function(item){
+        const status = normalizarStatus(item.status);
+
+        return (
+            status === "em analise" ||
+            status === "aguardando aprovacao do cliente"
+        );
+    }).length;
+
+    const aguardando = ordens.filter(function(item){
+        return normalizarStatus(item.status) === "aguardando peca";
+    }).length;
+
+    const finalizadas = ordens.filter(function(item){
+        return normalizarStatus(item.status) === "finalizado";
+    }).length;
+
+    const retiradas = ordens.filter(function(item){
+        return normalizarStatus(item.status) === "retirado";
+    }).length;
+
+    if(totalAbertas){
+        totalAbertas.textContent = abertas;
+    }
+
+    if(totalAguardando){
+        totalAguardando.textContent = aguardando;
+    }
+
+    if(totalFinalizadas){
+        totalFinalizadas.textContent = finalizadas;
+    }
+
+    if(totalRetiradas){
+        totalRetiradas.textContent = retiradas;
+    }
+
+    if(totalOrdensMes){
+        totalOrdensMes.textContent = ordens.length;
+    }
+
+}
+
+function normalizarStatus(status){
+
+    return String(status || "")
+        .toLowerCase()
+        .trim()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+}
+
+// =============================
+// FILTROS
+// =============================
+
+function aplicarFiltrosOrdens(){
+
+    const campoBusca =
+        document.getElementById("campoBusca") ||
+        document.getElementById("pesquisaOS");
+
+    const campoStatus = document.getElementById("filtroStatus");
+    const campoMes = document.getElementById("filtroMesDashboard");
+
+    const texto = campoBusca
+        ? campoBusca.value.toLowerCase().trim()
+        : "";
+
+    const statusSelecionado = campoStatus
+        ? campoStatus.value
+        : "";
+
+    const mesSelecionado = campoMes
+        ? campoMes.value
+        : "";
+
+    const statusFiltroNormalizado = normalizarStatus(statusSelecionado);
+
+    const filtradas = ordensCarregadas.filter(function(item){
+
+        const bateTexto =
+            String(item.os || "").toLowerCase().includes(texto) ||
+            String(item.cliente || "").toLowerCase().includes(texto) ||
+            String(item.telefone || "").toLowerCase().includes(texto) ||
+            String(item.modelo || "").toLowerCase().includes(texto);
+
+        const statusItemNormalizado = normalizarStatus(item.status);
+
+        const bateStatus =
+            statusSelecionado === "" ||
+            statusItemNormalizado === statusFiltroNormalizado ||
+            (
+                statusFiltroNormalizado === "sem conserto" &&
+                statusItemNormalizado === "sem concerto"
+            );
+
+        const bateMes =
+            texto !== "" ||
+            mesSelecionado === "" ||
+            obterAnoMes(item.data) === mesSelecionado;
+
+        return bateTexto && bateStatus && bateMes;
+
+    });
+
+    atualizarResumoOrdens(filtradas);
+    mostrarOrdens(filtradas);
+
+}
+function filtrarOrdens(){
+    aplicarFiltrosOrdens();
+}
+
+// =============================
+// SALVAR STATUS
+// =============================
+
+async function salvarStatus(linha){
+
+    const selectStatus = document.getElementById("status-" + linha);
+    const novoStatus = selectStatus.value;
+
+    const dados = {
+        action: "atualizarStatusOS",
+        linha: linha,
+        status: novoStatus
+    };
+
+    selectStatus.disabled = true;
+
+    try {
+
+        const resposta = await fetch(URL_SCRIPT,{
+            method:"POST",
+            body:JSON.stringify(dados)
+        });
+
+        const resultado = await resposta.json();
+
+        selectStatus.disabled = false;
+
+        if(resultado.sucesso){
+
+            const linhaTabela = selectStatus.closest("tr");
+
+            linhaTabela.classList.remove(
+                "linha-retirado",
+                "linha-aguardando",
+                "linha-sem-conserto",
+                "linha-finalizado",
+                "linha-analise"
+            );
+
+            const novaClasse = classeStatus(novoStatus);
+
+            if(novaClasse){
+                linhaTabela.classList.add(novaClasse);
+            }
+
+            const ordem = ordensCarregadas.find(function(item){
+                return Number(item.linha) === Number(linha);
+            });
+
+            if(ordem){
+                ordem.status = novoStatus;
+            }
+
+            if(novoStatus === "Finalizado"){
+                perguntarEnvioWhatsApp(linha);
+            }
+
+        } else {
+            alert("Erro ao atualizar status.");
+        }
+
+    } catch(erro){
+
+        selectStatus.disabled = false;
+        alert("Erro ao atualizar status.");
+        console.error(erro);
+
+    }
+
+}
+
+
+// =============================
+// FORMATAÇÃO
+// =============================
+
+function formatarData(data){
+
+    if(!data){
+        return "";
+    }
+
+    if(typeof data === "string" && data.includes("T")){
+
+        const apenasData = data.split("T")[0];
+        const partes = apenasData.split("-");
+
+        if(partes.length === 3){
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+
+    }
+
+    if(typeof data === "string" && data.includes("-")){
+
+        const partes = data.split("-");
+
+        if(partes.length === 3){
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+
+    }
+
+    return data;
+
+}
+
+
+function converterDataParaInput(data){
+
+    if(!data){
+        return "";
+    }
+
+    if(typeof data === "string" && data.includes("T")){
+        return data.split("T")[0];
+    }
+
+    if(typeof data === "string" && data.includes("-")){
+        return data;
+    }
+
+    return "";
+
+}
+
+
+function formatarMoedaPDF(valor){
+
     return Number(valor || 0).toLocaleString("pt-BR", {
         style: "currency",
         currency: "BRL"
     });
+
 }
 
-function dataHora(valor) {
-    if (!valor) return "Data não informada";
 
-    const data = new Date(valor);
-    if (Number.isNaN(data.getTime())) return String(valor);
+// =============================
+// CLASSE POR STATUS
+// =============================
 
-    return data.toLocaleString("pt-BR");
-}
+function classeStatus(status){
 
-async function getAPI(action, parametros = {}) {
-    const query = new URLSearchParams({
-        action,
-        ...parametros
-    });
+    const statusNormalizado = normalizarStatus(status);
 
-    const resposta = await fetch(`${URL_SCRIPT}?${query.toString()}`);
-    if (!resposta.ok) throw new Error("Falha na comunicação com o servidor.");
-
-    return resposta.json();
-}
-
-async function postAPI(dados) {
-    const resposta = await fetch(URL_SCRIPT, {
-        method: "POST",
-        body: JSON.stringify(dados)
-    });
-
-    if (!resposta.ok) throw new Error("Falha ao enviar os dados.");
-
-    return resposta.json();
-}
-
-function mostrarMensagem(mensagem, erro = false) {
-    let aviso = $("avisoEstoque");
-
-    if (!aviso) {
-        aviso = document.createElement("div");
-        aviso.id = "avisoEstoque";
-        aviso.setAttribute("role", "status");
-
-        const container = document.querySelector(".estoque-container");
-        if (container) container.prepend(aviso);
-        else document.body.prepend(aviso);
+    if(statusNormalizado === "retirado"){
+        return "linha-retirado";
     }
 
-    aviso.textContent = mensagem;
-    aviso.style.cssText = `
-        padding: 12px;
-        margin: 12px 0;
-        border-radius: 6px;
-        background: ${erro ? "#ffe5e5" : "#e5f5e8"};
-        color: ${erro ? "#a00000" : "#176b2c"};
-    `;
+    if(statusNormalizado === "aguardando peca"){
+        return "linha-aguardando";
+    }
 
-    aviso.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    if(
+        statusNormalizado === "sem conserto" ||
+        statusNormalizado === "sem concerto"
+    ){
+        return "linha-sem-conserto";
+    }
+
+    if(statusNormalizado === "finalizado"){
+        return "linha-finalizado";
+    }
+
+    if(statusNormalizado === "em analise"){
+        return "linha-analise";
+    }
+
+    if(statusNormalizado === "aguardando aprovacao do cliente"){
+    return "linha-analise";
 }
 
-function campo(label, id, tipo = "text", obrigatorio = true) {
-    return `
-        <label class="estoque-campo">
-            ${escapar(label)}
-            <input
-                id="${escapar(id)}"
-                name="${escapar(id)}"
-                type="${escapar(tipo)}"
-                ${obrigatorio ? "required" : ""}
-                ${tipo === "number" ? 'min="0" step="any"' : ""}
-            >
-        </label>
-    `;
+    return "";
+
 }
 
+// =============================
+// MODAL DETALHES
+// =============================
 
-function montarCadastro() {
-    const area = $("areaCadastroPeca");
-    if (!area) {
-        console.error('Elemento "areaCadastroPeca" não encontrado no HTML.');
+function abrirDetalhesOS(linha){
+
+    const ordem = ordensCarregadas.find(function(item){
+        return Number(item.linha) === Number(linha);
+    });
+
+    if(!ordem){
+        alert("Ordem de serviço não encontrada.");
         return;
     }
 
-    // Preserva os botões que já existem no HTML.
-    let formulario = $("formularioCadastro");
+    ordemSelecionadaPDF = ordem;
 
-    if (!formulario) {
-        formulario = document.createElement("div");
-        formulario.id = "formularioCadastro";
-        area.appendChild(formulario);
-    }
+    document.getElementById("detalheOS").textContent = ordem.os || "";
+    document.getElementById("detalheData").textContent = formatarData(ordem.data);
+    document.getElementById("detalheCliente").textContent = ordem.cliente || "";
+    document.getElementById("detalheTelefone").textContent = ordem.telefone || "";
+    document.getElementById("detalheModelo").textContent = ordem.modelo || "";
+    document.getElementById("detalheStatus").textContent = ordem.status || "";
 
-    const btnIndividual = $("btnCadastroIndividual");
-    const btnLote = $("btnCadastroLote");
+    document.getElementById("detalheOrcamento").textContent =
+        "R$ " + Number(ordem.orcamento || 0).toFixed(2);
 
-    if (btnIndividual) {
-        btnIndividual.addEventListener("click", () => {
-            modoCadastro = "individual";
-            mostrarFormularioIndividual();
-        });
-    } else {
-        console.error('Botão "btnCadastroIndividual" não encontrado.');
-    }
+    document.getElementById("detalheCusto").textContent =
+        "R$ " + Number(ordem.custoPeca || 0).toFixed(2);
 
-    if (btnLote) {
-        btnLote.addEventListener("click", () => {
-            modoCadastro = "lote";
-            mostrarFormularioLote();
-        });
-    } else {
-        console.error('Botão "btnCadastroLote" não encontrado.');
-    }
+    document.getElementById("detalheLucro").textContent =
+        "R$ " + Number(ordem.lucro || 0).toFixed(2);
 
-    // Cria o botão de marcas apenas se ainda não existir.
-    let btnMarcas = $("btnGerenciarMarcas");
+    document.getElementById("detalheFornecedor").textContent = ordem.fornecedor || "";
+    document.getElementById("detalheGarantia").textContent = formatarData(ordem.garantia);
 
-    if (!btnMarcas) {
-        btnMarcas = document.createElement("button");
-        btnMarcas.id = "btnGerenciarMarcas";
-        btnMarcas.type = "button";
-        btnMarcas.textContent = "Gerenciar marcas";
-        area.appendChild(btnMarcas);
-    }
+    document.getElementById("detalheDefeito").textContent =
+        ordem.defeito || "Nenhum defeito informado.";
 
-    btnMarcas.addEventListener("click", gerenciarMarcasUI);
+    document.getElementById("detalheLaudo").textContent =
+        ordem.laudo || "Nenhum laudo informado.";
 
-    mostrarFormularioIndividual();
+    document.getElementById("detalheSubtitulo").textContent =
+        "OS " + (ordem.os || "") + " - " + (ordem.cliente || "");
+
+    document.getElementById("modalDetalhesOS").classList.add("ativo");
+
 }
 
-function opcoesMarcas() {
-    return marcasCarregadas.map(marca => `
-        <option value="${escapar(marca)}">${escapar(marca)}</option>
-    `).join("");
+
+function fecharDetalhesOS(){
+
+    document
+        .getElementById("modalDetalhesOS")
+        .classList
+        .remove("ativo");
+
 }
 
-function mostrarFormularioIndividual() {
-    const area = $("formularioCadastro");
-    if (!area) return;
 
-    area.innerHTML = `
-        <h3 class="estoque-secao-titulo">Cadastrar peça ou repor estoque</h3>
+// =============================
+// MODAL EDITAR
+// =============================
 
-        <form id="formPecaIndividual" class="formulario-estoque">
-            <label class="estoque-campo">
-                Marca
-                <select id="marcaPeca" required>
-                    <option value="">Selecione uma marca</option>
-                    ${opcoesMarcas()}
-                </select>
-            </label>
+function abrirEditarOS(linha){
 
-            ${campo("Modelo compatível", "modeloPeca")}
-            ${campo("Nome da peça", "nomePeca")}
-            ${campo("Quantidade", "quantidadePeca", "number")}
-            ${campo("Custo unitário (R$)", "custoUnitarioPeca", "number")}
-            ${campo("Fornecedor", "fornecedorPeca", "text", false)}
-            ${campo("Observações", "observacaoPeca", "text", false)}
-
-            <button type="submit">Salvar entrada</button>
-        </form>
-        <p>Se marca, modelo e peça já estiverem cadastrados, a quantidade será somada ao estoque.</p>
-    `;
-
-    $("formPecaIndividual").addEventListener("submit", salvarPecaIndividual);
-}
-
-async function salvarPecaIndividual(evento) {
-    evento.preventDefault();
-
-    const botao = evento.submitter;
-    if (botao) botao.disabled = true;
-
-    const dados = {
-        action: "cadastrarItemEstoque",
-        marca: $("marcaPeca").value,
-        modelo: $("modeloPeca").value.trim(),
-        peca: $("nomePeca").value.trim(),
-        quantidade: $("quantidadePeca").value,
-        custoUnitario: $("custoUnitarioPeca").value,
-        fornecedor: $("fornecedorPeca").value.trim(),
-        observacao: $("observacaoPeca").value.trim()
-    };
-
-    try {
-        const resultado = await postAPI(dados);
-
-        if (!resultado.sucesso) {
-            throw new Error(resultado.mensagem || "Não foi possível salvar.");
-        }
-
-        mostrarMensagem(resultado.mensagem || "Entrada registrada.");
-        evento.target.reset();
-
-        await atualizarTudo();
-    } catch (erro) {
-        mostrarMensagem(erro.message || "Erro ao salvar a peça.", true);
-    } finally {
-        if (botao) botao.disabled = false;
-    }
-}
-
-function mostrarFormularioLote() {
-    const area = $("formularioCadastro");
-    if (!area) return;
-
-    area.innerHTML = `
-        <h3 class="estoque-secao-titulo">Cadastro em lote</h3>
-        <p>Adicione quantas linhas precisar. Cada linha representa uma entrada de estoque.</p>
-
-        <form id="formPecaLote">
-            <div id="linhasLote"></div>
-
-            <div class="estoque-acoes-cadastro">
-                <button type="button" id="btnAdicionarLinha">
-                    + Adicionar linha
-                </button>
-                <button type="submit" id="btnSalvarLote">
-                    Salvar lote
-                </button>
-            </div>
-        </form>
-    `;
-
-    adicionarLinhaLote();
-    adicionarLinhaLote();
-
-    $("btnAdicionarLinha").addEventListener("click", adicionarLinhaLote);
-    $("formPecaLote").addEventListener("submit", salvarLote);
-}
-
-function adicionarLinhaLote() {
-    const area = $("linhasLote");
-    if (!area) return;
-
-    const linha = document.createElement("fieldset");
-    linha.className = "linha-lote";
-    linha.style.cssText = `
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        padding: 12px;
-        margin: 12px 0;
-    `;
-
-    linha.innerHTML = `
-        <legend>Peça</legend>
-
-        <label class="estoque-campo">
-            Marca
-            <select class="lote-marca" required>
-                <option value="">Selecione</option>
-                ${opcoesMarcas()}
-            </select>
-        </label>
-
-        <label class="estoque-campo">
-            Modelo compatível
-            <input class="lote-modelo" required>
-        </label>
-
-        <label class="estoque-campo">
-            Nome da peça
-            <input class="lote-peca" required>
-        </label>
-
-        <label class="estoque-campo">
-            Quantidade
-            <input class="lote-quantidade" type="number" min="1" step="1" required>
-        </label>
-
-        <label class="estoque-campo">
-            Custo unitário (R$)
-            <input class="lote-custo" type="number" min="0" step="0.01" required>
-        </label>
-
-        <label class="estoque-campo">
-            Fornecedor
-            <input class="lote-fornecedor">
-        </label>
-
-        <label class="estoque-campo">
-            Observações
-            <input class="lote-observacao">
-        </label>
-
-        <button type="button" class="btn-remover-linha">Remover linha</button>
-    `;
-
-    linha.querySelector(".btn-remover-linha").addEventListener("click", () => {
-        if (area.children.length <= 1) {
-            mostrarMensagem("Mantenha pelo menos uma linha no cadastro.", true);
-            return;
-        }
-
-        linha.remove();
+    const ordem = ordensCarregadas.find(function(item){
+        return Number(item.linha) === Number(linha);
     });
 
-    area.appendChild(linha);
-}
-
-async function salvarLote(evento) {
-    evento.preventDefault();
-
-    const botao = $("btnSalvarLote");
-    botao.disabled = true;
-
-    const itens = Array.from(document.querySelectorAll(".linha-lote"))
-        .map(linha => ({
-            marca: linha.querySelector(".lote-marca").value,
-            modelo: linha.querySelector(".lote-modelo").value.trim(),
-            peca: linha.querySelector(".lote-peca").value.trim(),
-            quantidade: linha.querySelector(".lote-quantidade").value,
-            custoUnitario: linha.querySelector(".lote-custo").value,
-            fornecedor: linha.querySelector(".lote-fornecedor").value.trim(),
-            observacao: linha.querySelector(".lote-observacao").value.trim()
-        }));
-
-    try {
-        const resultado = await postAPI({
-            action: "cadastrarLoteEstoque",
-            itens
-        });
-
-        if (resultado.cadastrados > 0) {
-            await atualizarTudo();
-        }
-
-        if (resultado.erros?.length) {
-            const detalhes = resultado.erros.map(item =>
-                `Linha ${item.indice + 1}: ${item.mensagem}`
-            ).join(" | ");
-
-            mostrarMensagem(
-                `${resultado.mensagem} ${detalhes}`,
-                true
-            );
-        } else if (!resultado.sucesso) {
-            mostrarMensagem(resultado.mensagem || "Erro no lote.", true);
-        } else {
-            mostrarMensagem(resultado.mensagem || "Lote salvo.");
-            mostrarFormularioLote();
-        }
-    } catch (erro) {
-        mostrarMensagem(erro.message || "Erro ao salvar o lote.", true);
-    } finally {
-        botao.disabled = false;
+    if(!ordem){
+        alert("Ordem de serviço não encontrada.");
+        return;
     }
+
+    document.getElementById("editarLinhaOS").value = ordem.linha || "";
+    document.getElementById("editarNumeroOS").value = ordem.os || "";
+    document.getElementById("editarDataOS").value = converterDataParaInput(ordem.data);
+    document.getElementById("editarClienteOS").value = ordem.cliente || "";
+    document.getElementById("editarTelefoneOS").value = ordem.telefone || "";
+    document.getElementById("editarModeloOS").value = ordem.modelo || "";
+    document.getElementById("editarDefeitoOS").value = ordem.defeito || "";
+    document.getElementById("editarLaudoOS").value = ordem.laudo || "";
+    document.getElementById("editarOrcamentoOS").value = ordem.orcamento || "";
+    document.getElementById("editarCustoPecaOS").value = ordem.custoPeca || "";
+    document.getElementById("editarFornecedorOS").value = ordem.fornecedor || "";
+
+        if(normalizarStatus(ordem.status) === "sem concerto"){
+        document.getElementById("editarStatusOS").value = "Sem conserto";
+    } else {
+        document.getElementById("editarStatusOS").value =
+            ordem.status || "Em análise";
+    }
+
+    document.getElementById("editarSubtitulo").textContent =
+        "OS " + (ordem.os || "") + " - " + (ordem.cliente || "");
+
+    document.getElementById("modalEditarOS").classList.add("ativo");
+
 }
 
 
-/* ---------- MARCAS ---------- */
+function fecharEditarOS(){
 
-async function gerenciarMarcasUI() {
-    const nome = prompt(
-        "Digite o nome da marca que deseja adicionar ou reativar:"
+    document
+        .getElementById("modalEditarOS")
+        .classList
+        .remove("ativo");
+
+}
+
+
+// =============================
+// SALVAR EDIÇÃO DA OS
+// =============================
+
+const editarOSForm = document.getElementById("editarOSForm");
+
+if(editarOSForm){
+
+    editarOSForm.addEventListener("submit", async function(e){
+
+        e.preventDefault();
+
+        const dados = {
+            action: "editarOS",
+
+            linha: document.getElementById("editarLinhaOS").value,
+            os: document.getElementById("editarNumeroOS").value,
+            data: document.getElementById("editarDataOS").value,
+            cliente: document.getElementById("editarClienteOS").value,
+            telefone: document.getElementById("editarTelefoneOS").value,
+            modelo: document.getElementById("editarModeloOS").value,
+            defeito: document.getElementById("editarDefeitoOS").value,
+            laudo: document.getElementById("editarLaudoOS").value,
+            orcamento: document.getElementById("editarOrcamentoOS").value,
+            custoPeca: document.getElementById("editarCustoPecaOS").value,
+            fornecedor: document.getElementById("editarFornecedorOS").value,
+            status: document.getElementById("editarStatusOS").value
+        };
+
+        try {
+
+            const resposta = await fetch(URL_SCRIPT,{
+                method:"POST",
+                body:JSON.stringify(dados)
+            });
+
+            const resultado = await resposta.json();
+
+            if(resultado.sucesso){
+                alert("OS atualizada com sucesso!");
+                fecharEditarOS();
+                carregarOrdens();
+            } else {
+                alert(resultado.mensagem || "Erro ao atualizar OS.");
+            }
+
+        } catch(erro){
+
+            alert("Erro ao atualizar OS.");
+            console.error(erro);
+
+        }
+
+    });
+
+}
+
+
+// =============================
+// WHATSAPP
+// =============================
+
+function perguntarEnvioWhatsApp(linha){
+
+    const ordem = ordensCarregadas.find(function(item){
+        return Number(item.linha) === Number(linha);
+    });
+
+    if(!ordem){
+        alert("Ordem de serviço não encontrada para envio da mensagem.");
+        return;
+    }
+
+    const confirmar = confirm(
+        "OS finalizada. Deseja avisar o cliente pelo WhatsApp?"
     );
 
-    if (nome === null) return;
-
-    if (!nome.trim()) {
-        mostrarMensagem("Digite um nome de marca válido.", true);
+    if(!confirmar){
         return;
     }
 
-    try {
-        const resultado = await postAPI({
-            action: "gerenciarMarca",
-            operacao: "adicionar",
-            marca: nome.trim()
-        });
+    enviarWhatsAppFinalizado(ordem);
 
-        if (!resultado.sucesso) {
-            throw new Error(resultado.mensagem || "Erro ao cadastrar marca.");
-        }
-
-        await carregarMarcas();
-
-        if (modoCadastro === "lote") mostrarFormularioLote();
-        else mostrarFormularioIndividual();
-
-        mostrarMensagem(resultado.mensagem || "Marca salva.");
-    } catch (erro) {
-        mostrarMensagem(erro.message || "Erro ao cadastrar marca.", true);
-    }
-}
-
-async function carregarMarcas() {
-    const resultado = await getAPI("listarMarcas");
-
-    if (resultado.sucesso === false) {
-        throw new Error(resultado.mensagem || "Erro ao listar marcas.");
-    }
-
-    marcasCarregadas = resultado.marcas || [];
 }
 
 
-/* ---------- ESTOQUE ---------- */
+function enviarWhatsAppPorLinha(linha){
 
-async function carregarEstoque() {
-    const lista = $("listaEstoque");
-    if (!lista) return;
+    const ordem = ordensCarregadas.find(function(item){
+        return Number(item.linha) === Number(linha);
+    });
 
-    lista.innerHTML = "<p>Carregando estoque...</p>";
-
-    const resultado = await getAPI("listarEstoque");
-
-    if (resultado.sucesso === false) {
-        throw new Error(resultado.mensagem || "Erro ao carregar estoque.");
-    }
-
-    pecasCarregadas = resultado.itens || [];
-
-    if ( $("totalPecas") ) {
-        $("totalPecas").textContent = pecasCarregadas.length;
-    }
-
-    if ($("totalUnidades")) {
-        $("totalUnidades").textContent = pecasCarregadas.reduce(
-            (total, item) => total + Number(item.quantidade || 0), 0
-        );
-    }
-
-    renderizarPecas(lista, pecasCarregadas, false);
-}
-
-function renderizarPecas(container, itens, pesquisa) {
-    if (!container) return;
-
-    if (!itens.length) {
-        container.innerHTML = pesquisa
-            ? "<p>Nenhuma peça disponível corresponde à pesquisa.</p>"
-            : "<p>Nenhuma peça disponível no estoque.</p>";
+    if(!ordem){
+        alert("Ordem de serviço não encontrada.");
         return;
     }
 
-    container.innerHTML = itens.map(item => `
-        <article class="estoque-item" style="
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 14px;
-            margin: 10px 0;
-        ">
-            <h3>${escapar(item.peca)}</h3>
-            <p><strong>Marca:</strong> ${escapar(item.marca)}</p>
-            <p><strong>Modelo compatível:</strong> ${escapar(item.modelo)}</p>
-            <p><strong>Quantidade disponível:</strong> ${Number(item.quantidade)}</p>
-            <p><strong>Custo médio unitário:</strong> ${dinheiro(item.custoMedio)}</p>
-            ${item.observacao
-                ? `<p><strong>Observações:</strong> ${escapar(item.observacao)}</p>`
-                : ""}
-            <div class="estoque-acoes-cadastro">
-                <button type="button" data-entrada="${escapar(item.id)}">
-                    Repor estoque
-                </button>
-                <button type="button" data-saida="${escapar(item.id)}">
-                    Registrar saída
-                </button>
+    enviarWhatsAppFinalizado(ordem);
+
+}
+
+
+function enviarWhatsAppFinalizado(ordem){
+
+    const telefoneLimpo = String(ordem.telefone || "")
+        .replace(/\D/g, "");
+
+    if(!telefoneLimpo){
+        alert("Telefone do cliente não encontrado.");
+        return;
+    }
+
+    const telefoneBrasil = telefoneLimpo.startsWith("55")
+        ? telefoneLimpo
+        : "55" + telefoneLimpo;
+
+    const valorServico = Number(ordem.orcamento || 0)
+        .toFixed(2)
+        .replace(".", ",");
+
+    const mensagem =
+`Olá, ${ordem.cliente}! Aqui é da Smartiliza Assistência Técnica.
+
+Sua ordem de serviço nº ${ordem.os}, referente ao aparelho ${ordem.modelo}, foi finalizada e já está pronta para retirada.
+
+Valor total do serviço: R$ ${valorServico}
+
+Aguardamos sua retirada. Obrigado!`;
+
+    const link =
+        "https://wa.me/" +
+        telefoneBrasil +
+        "?text=" +
+        encodeURIComponent(mensagem);
+
+    window.open(link, "_blank");
+
+}
+
+
+// =============================
+// PDF CLIENTE
+// =============================
+
+function gerarPDFCliente(){
+
+    if(!ordemSelecionadaPDF){
+        alert("Nenhuma OS selecionada.");
+        return;
+    }
+
+    const ordem = ordemSelecionadaPDF;
+
+    const htmlPDF = `
+        <!DOCTYPE html>
+        <html lang="pt-BR">
+        <head>
+            <meta charset="UTF-8">
+            <title>OS ${ordem.os} - Smartiliza</title>
+
+            <style>
+                *{
+                    box-sizing:border-box;
+                    font-family:Arial, sans-serif;
+                }
+
+                @page{
+                    size:A4;
+                    margin:10mm;
+                }
+
+                body{
+                    margin:0;
+                    padding:0;
+                    background:#fff;
+                    color:#222;
+                    font-size:12px;
+                }
+
+                .documento{
+                    width:100%;
+                    max-width:760px;
+                    margin:auto;
+                    padding:0;
+                }
+
+                .topo{
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:flex-start;
+                    border-bottom:2px solid #003B73;
+                    padding-bottom:8px;
+                    margin-bottom:10px;
+                }
+
+                .marca h1{
+                    margin:0;
+                    color:#003B73;
+                    font-size:24px;
+                    line-height:1;
+                }
+
+                .marca span{
+                    color:#FF7A00;
+                    font-weight:bold;
+                    font-size:12px;
+                }
+
+                .numero-os{
+                    text-align:right;
+                    font-size:12px;
+                }
+
+                .numero-os strong{
+                    display:block;
+                    color:#003B73;
+                    font-size:18px;
+                    margin:2px 0;
+                }
+
+                .secao{
+                    margin-bottom:9px;
+                    page-break-inside:avoid;
+                }
+
+                .secao h2{
+                    color:#003B73;
+                    font-size:14px;
+                    border-bottom:1px solid #ddd;
+                    padding-bottom:4px;
+                    margin:0 0 6px 0;
+                }
+
+                .grid{
+                    display:grid;
+                    grid-template-columns:1fr 1fr;
+                    gap:6px 14px;
+                }
+
+                .campo{
+                    margin-bottom:4px;
+                }
+
+                .campo span{
+                    display:block;
+                    font-size:10px;
+                    color:#666;
+                    font-weight:bold;
+                    text-transform:uppercase;
+                    margin-bottom:2px;
+                }
+
+                .campo strong{
+                    margin:0;
+                    font-size:12px;
+                    color:#222;
+                    line-height:1.35;
+                }
+
+                .texto-longo{
+                    background:#f7f9fc;
+                    border:1px solid #ddd;
+                    padding:7px;
+                    border-radius:6px;
+                    min-height:35px;
+                    max-height:90px;
+                    overflow:hidden;
+                    white-space:pre-wrap;
+                    font-size:12px;
+                    line-height:1.35;
+                }
+
+                .garantia{
+                    background:#fff7ed;
+                    border:1px solid #fdba74;
+                    border-radius:8px;
+                    padding:9px;
+                    margin-top:8px;
+                    page-break-inside:avoid;
+                }
+
+                .garantia h2{
+                    color:#9a3412;
+                    border:none;
+                    margin:0 0 5px 0;
+                    padding:0;
+                    font-size:14px;
+                }
+
+                .garantia p{
+                    margin:0 0 4px 0;
+                    line-height:1.35;
+                    font-size:11px;
+                }
+
+                .assinaturas{
+                    display:grid;
+                    grid-template-columns:1fr 1fr;
+                    gap:35px;
+                    margin-top:28px;
+                    page-break-inside:avoid;
+                }
+
+                .assinatura{
+                    text-align:center;
+                    border-top:1px solid #222;
+                    padding-top:5px;
+                    font-size:11px;
+                }
+
+                .rodape{
+                    margin-top:12px;
+                    padding-top:7px;
+                    border-top:1px solid #ddd;
+                    font-size:10px;
+                    color:#666;
+                    text-align:center;
+                    line-height:1.3;
+                }
+
+                @media print{
+                    body{
+                        padding:0;
+                    }
+
+                    .documento{
+                        border:none;
+                    }
+                }
+            </style>
+        </head>
+
+        <body>
+
+            <div class="documento">
+
+                <div class="topo">
+                    <div class="marca">
+                        <h1>Smartiliza</h1>
+                        <span>Assistência Técnica</span>
+                    </div>
+
+                    <div class="numero-os">
+                        <span>Ordem de Serviço</span>
+                        <strong>${ordem.os || ""}</strong>
+                        <small>Data: ${formatarData(ordem.data)}</small>
+                    </div>
+                </div>
+
+                <div class="secao">
+                    <h2>Dados do Cliente</h2>
+
+                    <div class="grid">
+                        <div class="campo">
+                            <span>Cliente</span>
+                            <strong>${ordem.cliente || ""}</strong>
+                        </div>
+
+                        <div class="campo">
+                            <span>Telefone</span>
+                            <strong>${ordem.telefone || ""}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="secao">
+                    <h2>Dados do Aparelho</h2>
+
+                    <div class="grid">
+                        <div class="campo">
+                            <span>Modelo</span>
+                            <strong>${ordem.modelo || ""}</strong>
+                        </div>
+
+                        <div class="campo">
+                            <span>Status</span>
+                            <strong>${ordem.status || ""}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="secao">
+                    <h2>Defeito Relatado</h2>
+                    <div class="texto-longo">
+                        ${ordem.defeito || "Nenhum defeito informado."}
+                    </div>
+                </div>
+
+                <div class="secao">
+                    <h2>Laudo Técnico / Serviço Realizado</h2>
+                    <div class="texto-longo">
+                        ${ordem.laudo || "Nenhum laudo informado."}
+                    </div>
+                </div>
+
+                <div class="secao">
+                    <h2>Valores e Garantia</h2>
+
+                    <div class="grid">
+                        <div class="campo">
+                            <span>Valor do Serviço</span>
+                            <strong>${formatarMoedaPDF(ordem.orcamento)}</strong>
+                        </div>
+
+                        <div class="campo">
+                            <span>Garantia até</span>
+                            <strong>${formatarData(ordem.garantia)}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="garantia">
+                    <h2>Termo de Garantia</h2>
+
+                    <p>
+                        A garantia cobre apenas o serviço realizado e/ou a peça substituída, dentro do prazo informado nesta OS.
+                    </p>
+
+                    <p>
+                        Não cobre queda, mau uso, pressão, trinca, contato com líquido, umidade, oxidação/molhado, violação do aparelho, tentativa de reparo por terceiros ou dano físico após a retirada.
+                    </p>
+                </div>
+
+                <div class="assinaturas">
+                    <div class="assinatura">
+                        Assinatura do Cliente
+                    </div>
+
+                    <div class="assinatura">
+                        Responsável Técnico
+                    </div>
+                </div>
+
+                <div class="rodape">
+                    Smartiliza - Assistência Técnica<br>
+                    Documento gerado automaticamente pela Central de Serviços.
+                </div>
+
             </div>
-        </article>
-    `).join("");
 
-    container.querySelectorAll("[data-entrada]").forEach(botao => {
-        botao.addEventListener("click", () => {
-            registrarEntradaUI(botao.dataset.entrada);
-        });
-    });
+            <script>
+                window.onload = function(){
+                    window.print();
+                }
+            <\/script>
 
-    container.querySelectorAll("[data-saida]").forEach(botao => {
-        botao.addEventListener("click", () => {
-            registrarSaidaUI(botao.dataset.saida);
-        });
-    });
+        </body>
+        </html>
+    `;
+
+    const janela = window.open("", "_blank");
+
+    janela.document.open();
+    janela.document.write(htmlPDF);
+    janela.document.close();
+
 }
 
-async function registrarEntradaUI(id) {
-    const item = pecasCarregadas.find(p => String(p.id) === String(id));
-    if (!item) return;
+function definirMesAtual(){
 
-    const quantidade = prompt(`Quantidade de ${item.peca} que entrou:`);
-    if (quantidade === null) return;
+    const filtroMes = document.getElementById("filtroMesDashboard");
 
-    const custoUnitario = prompt("Custo unitário pago nesta compra (R$):");
-    if (custoUnitario === null) return;
-
-    const fornecedor = prompt("Fornecedor (opcional):") || "";
-    const observacao = prompt("Observações (opcional):") || "";
-
-    try {
-        const resultado = await postAPI({
-            action: "registrarEntrada",
-            pecaId: id,
-            quantidade,
-            custoUnitario,
-            fornecedor,
-            observacao
-        });
-
-        if (!resultado.sucesso) {
-            throw new Error(resultado.mensagem || "Erro ao registrar entrada.");
-        }
-
-        mostrarMensagem(resultado.mensagem || "Entrada registrada.");
-        await atualizarTudo();
-    } catch (erro) {
-        mostrarMensagem(erro.message || "Erro ao registrar entrada.", true);
-    }
-}
-
-async function registrarSaidaUI(id) {
-    const item = pecasCarregadas.find(p => String(p.id) === String(id));
-    if (!item) return;
-
-    const quantidade = prompt(
-        `Quantidade de ${item.peca} que saiu. Disponível: ${item.quantidade}`
-    );
-
-    if (quantidade === null) return;
-
-    const motivo = prompt(
-        "Motivo da saída (ex.: venda, uso em assistência, perda):"
-    ) || "";
-
-    const observacao = prompt("Observações (opcional):") || "";
-
-    try {
-        const resultado = await postAPI({
-            action: "registrarSaida",
-            pecaId: id,
-            quantidade,
-            motivo,
-            observacao
-        });
-
-        if (!resultado.sucesso) {
-            throw new Error(resultado.mensagem || "Erro ao registrar saída.");
-        }
-
-        mostrarMensagem(resultado.mensagem || "Saída registrada.");
-        await atualizarTudo();
-    } catch (erro) {
-        mostrarMensagem(erro.message || "Erro ao registrar saída.", true);
-    }
-}
-
-
-/* ---------- PESQUISA ---------- */
-
-function configurarPesquisa() {
-    const campoPesquisa = $("pesquisaPeca");
-    const resultado = $("resultadoPesquisa");
-
-    if (!campoPesquisa || !resultado) return;
-
-    campoPesquisa.addEventListener("input", () => {
-        const termo = campoPesquisa.value.trim().toLocaleLowerCase("pt-BR");
-
-        const filtradas = pecasCarregadas.filter(item => {
-            const texto = [
-                item.marca,
-                item.modelo,
-                item.peca
-            ].join(" ").toLocaleLowerCase("pt-BR");
-
-            return texto.includes(termo) && Number(item.quantidade) > 0;
-        });
-
-        renderizarPecas(resultado, filtradas, true);
-    });
-}
-
-
-/* ---------- HISTÓRICO ---------- */
-
-async function carregarHistorico() {
-    const lista = $("listaHistorico");
-    if (!lista) return;
-
-    lista.innerHTML = "<p>Carregando histórico...</p>";
-
-    const busca = $("filtroHistorico")?.value?.trim() || "";
-    const resultado = await getAPI("listarHistorico", { busca });
-
-    if (resultado.sucesso === false) {
-        throw new Error(resultado.mensagem || "Erro ao carregar histórico.");
-    }
-
-    const movimentacoes = resultado.movimentacoes || [];
-
-    if (!movimentacoes.length) {
-        lista.innerHTML = "<p>Nenhuma movimentação encontrada.</p>";
+    if(!filtroMes){
         return;
     }
 
-    lista.innerHTML = movimentacoes.map(item => `
-        <article class="estoque-item" style="
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 14px;
-            margin: 10px 0;
-        ">
-            <h3>${escapar(item.tipo)} — ${escapar(item.peca)}</h3>
-            <p><strong>Data:</strong> ${escapar(dataHora(item.data))}</p>
-            <p><strong>Marca:</strong> ${escapar(item.marca)}</p>
-            <p><strong>Modelo:</strong> ${escapar(item.modelo)}</p>
-            <p><strong>Quantidade:</strong> ${Number(item.quantidade)}</p>
-            ${item.tipo === "Entrada"
-                ? `<p><strong>Custo unitário da compra:</strong> ${dinheiro(item.custoUnitario)}</p>`
-                : ""}
-            ${item.fornecedor
-                ? `<p><strong>Fornecedor:</strong> ${escapar(item.fornecedor)}</p>`
-                : ""}
-            ${item.motivo
-                ? `<p><strong>Motivo:</strong> ${escapar(item.motivo)}</p>`
-                : ""}
-            ${item.observacao
-                ? `<p><strong>Observações:</strong> ${escapar(item.observacao)}</p>`
-                : ""}
-        </article>
-    `).join("");
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+
+    filtroMes.value = `${ano}-${mes}`;
+
 }
+function obterAnoMes(data){
 
+    if(!data){
+        return "";
+    }
 
-/* ---------- ATUALIZAÇÃO GERAL ---------- */
+    // Caso venha como: 2026-07-08T03:00:00.000Z
+    if(typeof data === "string" && data.includes("T")){
+        return data.split("T")[0].slice(0, 7);
+    }
 
-async function atualizarTudo() {
-    try {
-        await Promise.all([
-            carregarEstoque(),
-            carregarHistorico()
-        ]);
+    // Caso venha como: 2026-07-08
+    if(typeof data === "string" && data.includes("-")){
+        return data.slice(0, 7);
+    }
 
-        const termo = $("pesquisaPeca")?.value?.trim() || "";
-        if (termo) {
-            $("pesquisaPeca").dispatchEvent(new Event("input"));
+    // Caso venha como: 08/07/2026
+    if(typeof data === "string" && data.includes("/")){
+        const partes = data.split("/");
+
+        if(partes.length === 3){
+            const dia = partes[0];
+            const mes = partes[1];
+            const ano = partes[2];
+
+            return `${ano}-${mes}`;
         }
-    } catch (erro) {
-        mostrarMensagem(erro.message || "Erro ao atualizar o estoque.", true);
     }
+
+    return "";
+
 }
-
-async function iniciarEstoque() {
-    montarCadastro();
-    configurarPesquisa();
-
-    $("btnAtualizarEstoque")?.addEventListener("click", atualizarTudo);
-
-    $("filtroHistorico")?.addEventListener("input", () => {
-        carregarHistorico().catch(erro => {
-            mostrarMensagem(erro.message || "Erro ao carregar histórico.", true);
-        });
-    });
-
-    try {
-        await carregarMarcas();
-        mostrarFormularioIndividual();
-
-        await atualizarTudo();
-    } catch (erro) {
-        mostrarMensagem(
-            erro.message ||
-            "Não foi possível conectar ao estoque. Confira a URL e a implantação do Apps Script.",
-            true
-        );
-    }
-}
-
-document.addEventListener("DOMContentLoaded", iniciarEstoque);
