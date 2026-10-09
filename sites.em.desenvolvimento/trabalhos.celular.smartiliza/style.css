@@ -1815,3 +1815,260 @@ body.pagina-estoque {
         width: 100%;
     }
 }
+
+
+/* =========================================
+   MODAL DE CADASTRO DO ESTOQUE
+========================================= */
+
+body.modal-estoque-aberto {
+    overflow: hidden;
+}
+
+#modalCadastroEstoque.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(2px);
+}
+
+#modalCadastroEstoque.modal.ativo {
+    display: flex;
+}
+
+#modalCadastroEstoque .modal-estoque-conteudo,
+#modalCadastroEstoque .modal-conteudo {
+    position: relative;
+    width: 100%;
+    max-width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    animation: entradaModalEstoque 0.18s ease-out;
+}
+
+#modalCadastroEstoque .modal-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--borda);
+}
+
+#modalCadastroEstoque .modal-topo h2 {
+    margin: 0 0 6px;
+    color: var(--azul);
+    font-size: 23px;
+}
+
+#modalCadastroEstoque .modal-topo p {
+    margin: 0;
+    color: #667;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#modalCadastroEstoque .btn-fechar-modal {
+    flex: 0 0 38px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: var(--azul);
+    font-size: 26px;
+    line-height: 1;
+    box-shadow: none;
+}
+
+#modalCadastroEstoque .btn-fechar-modal:hover {
+    background: #e2e8f0;
+    transform: none;
+    box-shadow: none;
+}
+
+#modalCadastroEstoque .estoque-formulario {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+#modalCadastroEstoque .campo {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+#modalCadastroEstoque .campo.completo {
+    grid-column: 1 / -1;
+}
+
+#modalCadastroEstoque .campo label {
+    margin-bottom: 7px;
+    color: var(--azul);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+#modalCadastroEstoque .campo input,
+#modalCadastroEstoque .campo select,
+#modalCadastroEstoque .campo textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    background: #fff;
+    color: #243247;
+    font-size: 15px;
+}
+
+#modalCadastroEstoque .campo textarea {
+    min-height: 85px;
+    resize: vertical;
+}
+
+#modalCadastroEstoque .campo input:focus,
+#modalCadastroEstoque .campo select:focus,
+#modalCadastroEstoque .campo textarea:focus {
+    outline: none;
+    border-color: var(--azul-sec);
+    box-shadow: 0 0 0 3px rgba(0, 90, 167, 0.12);
+}
+
+#modalCadastroEstoque .modal-acoes {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+#modalCadastroEstoque .modal-acoes button {
+    margin: 0;
+}
+
+#modalCadastroEstoque .modal-acoes .btn-secundario {
+    background: #fff;
+    color: var(--azul);
+    border: 1px solid var(--borda);
+    box-shadow: none;
+}
+
+#modalCadastroEstoque .modal-acoes .btn-secundario:hover {
+    background: var(--fundo);
+    transform: none;
+    box-shadow: none;
+}
+
+#modalCadastroEstoque .linha-lote {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0 0 16px;
+    padding: 16px;
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+}
+
+#modalCadastroEstoque .linha-lote legend {
+    padding: 0 6px;
+    color: var(--azul);
+    font-weight: 700;
+}
+
+#modalCadastroEstoque .linha-lote .estoque-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+#modalCadastroEstoque .linha-lote .estoque-campo input,
+#modalCadastroEstoque .linha-lote .estoque-campo select {
+    width: 100%;
+    min-width: 0;
+    padding: 11px;
+    border: 1px solid var(--borda);
+    border-radius: 9px;
+}
+
+#modalCadastroEstoque .linha-lote .btn-remover-linha {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin: 0;
+    background: #fff;
+    color: #b42318;
+    border: 1px solid #f0b8b5;
+    box-shadow: none;
+}
+
+#modalCadastroEstoque .estoque-acoes-cadastro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 12px 0 18px;
+}
+
+#modalCadastroEstoque .estoque-acoes-cadastro button {
+    margin: 0;
+}
+
+@keyframes entradaModalEstoque {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.99);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    #modalCadastroEstoque.modal {
+        padding: 10px;
+    }
+
+    #modalCadastroEstoque .modal-conteudo {
+        max-height: 94vh;
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+
+    #modalCadastroEstoque .modal-topo h2 {
+        font-size: 20px;
+    }
+
+    #modalCadastroEstoque .estoque-formulario,
+    #modalCadastroEstoque .linha-lote {
+        grid-template-columns: 1fr;
+    }
+
+    #modalCadastroEstoque .campo.completo,
+    #modalCadastroEstoque .linha-lote .btn-remover-linha {
+        grid-column: auto;
+    }
+
+    #modalCadastroEstoque .modal-acoes {
+        flex-direction: column-reverse;
+    }
+
+    #modalCadastroEstoque .modal-acoes button {
+        width: 100%;
+    }
+}

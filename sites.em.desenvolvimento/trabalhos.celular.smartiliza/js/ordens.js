@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", iniciarEstoque);
+const URL_SCRIPT = CONFIG.URL_SCRIPT;
 
 let pecasCarregadas = [];
 let marcasCarregadas = [];
