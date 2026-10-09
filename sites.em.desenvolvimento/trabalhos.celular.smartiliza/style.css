@@ -1071,3 +1071,747 @@ td:nth-child(5){
     border-radius: 7px;
     white-space: nowrap;
 }
+
+
+/* =========================================
+   ESTOQUE SMARTILIZA
+   Estilos exclusivos da página de estoque
+========================================= */
+
+body.pagina-estoque {
+    background: var(--fundo);
+    padding: 24px;
+    overflow-x: hidden;
+}
+
+.pagina-estoque .cabecalho {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px 26px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.pagina-estoque .cabecalho-conteudo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.pagina-estoque .identidade {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.pagina-estoque .logo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.pagina-estoque .identidade h1 {
+    color: var(--azul);
+    font-size: 27px;
+    margin: 0;
+}
+
+.pagina-estoque .identidade p {
+    color: var(--laranja);
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.pagina-estoque .navegacao {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.pagina-estoque .navegacao a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-radius: 10px;
+    color: var(--azul);
+    text-decoration: none;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+}
+
+.pagina-estoque .navegacao a:hover,
+.pagina-estoque .navegacao a.ativo {
+    background: var(--laranja);
+    color: #fff;
+}
+
+.pagina-estoque .estoque-container {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.pagina-estoque .estoque-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.pagina-estoque .estoque-topo h2 {
+    color: var(--azul);
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+
+.pagina-estoque .estoque-topo p {
+    color: #667;
+    line-height: 1.5;
+}
+
+.pagina-estoque button {
+    width: auto;
+    margin-top: 0;
+    padding: 12px 18px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    background: linear-gradient(135deg, var(--laranja), #ff9b3d);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.pagina-estoque button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(255, 122, 0, 0.2);
+}
+
+.pagina-estoque button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.pagina-estoque .estoque-resumo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.pagina-estoque .estoque-resumo > div {
+    min-width: 0;
+    padding: 22px;
+    background: #fff;
+    border: 1px solid var(--borda);
+    border-left: 5px solid var(--laranja);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.pagina-estoque .estoque-resumo span {
+    display: block;
+    color: #667;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.pagina-estoque .estoque-resumo strong {
+    display: block;
+    color: var(--azul);
+    font-size: 32px;
+    overflow-wrap: anywhere;
+}
+
+.pagina-estoque .estoque-secao {
+    margin-bottom: 22px;
+    padding: 24px;
+    background: #fff;
+    border: 1px solid rgba(217, 226, 236, 0.8);
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+    scroll-margin-top: 18px;
+}
+
+.pagina-estoque .estoque-secao h2 {
+    color: var(--azul);
+    font-size: 21px;
+    margin-bottom: 8px;
+}
+
+.pagina-estoque .estoque-secao > p {
+    color: #667;
+    line-height: 1.5;
+    margin-bottom: 18px;
+}
+
+.pagina-estoque .estoque-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.pagina-estoque .estoque-acoes button {
+    margin: 0;
+}
+
+.pagina-estoque .estoque-acoes button.secundario,
+.pagina-estoque button.btn-secundario {
+    color: var(--azul);
+    background: #fff;
+    border-color: var(--borda);
+    box-shadow: none;
+}
+
+.pagina-estoque .estoque-acoes button.secundario:hover,
+.pagina-estoque button.btn-secundario:hover {
+    background: var(--fundo);
+    box-shadow: none;
+}
+
+.pagina-estoque .estoque-formulario {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.pagina-estoque .campo {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.pagina-estoque .campo.completo {
+    grid-column: 1 / -1;
+}
+
+.pagina-estoque .campo label {
+    color: var(--azul);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.pagina-estoque .campo input,
+.pagina-estoque .campo select,
+.pagina-estoque .campo textarea,
+.pagina-estoque input[type="search"],
+.pagina-estoque input[type="text"],
+.pagina-estoque input[type="number"],
+.pagina-estoque input[type="date"],
+.pagina-estoque select,
+.pagina-estoque textarea {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 13px;
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    background: #fff;
+    color: #243247;
+    font-size: 15px;
+}
+
+.pagina-estoque .campo textarea,
+.pagina-estoque textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.pagina-estoque .campo input:focus,
+.pagina-estoque .campo select:focus,
+.pagina-estoque .campo textarea:focus,
+.pagina-estoque input:focus,
+.pagina-estoque select:focus,
+.pagina-estoque textarea:focus {
+    outline: none;
+    border-color: var(--azul-sec);
+    box-shadow: 0 0 0 3px rgba(0, 90, 167, 0.12);
+}
+
+.pagina-estoque .campo-ajuda {
+    color: #667;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.pagina-estoque .estoque-lista {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.pagina-estoque .peca-card {
+    min-width: 0;
+    padding: 18px;
+    border: 1px solid var(--borda);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.pagina-estoque .peca-card h3 {
+    color: var(--azul);
+    font-size: 17px;
+    margin-bottom: 8px;
+    overflow-wrap: anywhere;
+}
+
+.pagina-estoque .peca-card p {
+    color: #556;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.pagina-estoque .peca-card .peca-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.pagina-estoque .peca-card .peca-acoes button {
+    padding: 9px 12px;
+    font-size: 13px;
+}
+
+.pagina-estoque .resultado-pesquisa,
+.pagina-estoque .lista-historico {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.pagina-estoque .mensagem-vazia {
+    padding: 22px;
+    text-align: center;
+    color: #667;
+    background: var(--fundo);
+    border: 1px dashed var(--borda);
+    border-radius: 12px;
+}
+
+.pagina-estoque .historico-item {
+    padding: 14px 16px;
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.pagina-estoque .historico-item strong {
+    color: var(--azul);
+}
+
+.pagina-estoque .historico-item p {
+    margin-top: 5px;
+    color: #556;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.pagina-estoque .estoque-carregando {
+    padding: 24px;
+    text-align: center;
+    color: #667;
+}
+
+@media (max-width: 768px) {
+    body.pagina-estoque {
+        padding: 12px;
+    }
+
+    .pagina-estoque .cabecalho {
+        padding: 17px;
+        border-radius: 15px;
+    }
+
+    .pagina-estoque .cabecalho-conteudo {
+        align-items: flex-start;
+    }
+
+    .pagina-estoque .logo {
+        width: 48px;
+        height: 48px;
+    }
+
+    .pagina-estoque .identidade h1 {
+        font-size: 22px;
+    }
+
+    .pagina-estoque .navegacao {
+        gap: 5px;
+        padding: 7px;
+        border-radius: 12px;
+    }
+
+    .pagina-estoque .navegacao a {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .pagina-estoque .estoque-topo {
+        align-items: stretch;
+    }
+
+    .pagina-estoque .estoque-topo h2 {
+        font-size: 22px;
+    }
+
+    .pagina-estoque .estoque-topo button {
+        width: 100%;
+    }
+
+    .pagina-estoque .estoque-resumo {
+        gap: 10px;
+    }
+
+    .pagina-estoque .estoque-resumo > div {
+        padding: 15px;
+    }
+
+    .pagina-estoque .estoque-resumo strong {
+        font-size: 26px;
+    }
+
+    .pagina-estoque .estoque-secao {
+        padding: 17px;
+        border-radius: 14px;
+    }
+
+    .pagina-estoque .estoque-formulario,
+    .pagina-estoque .estoque-lista {
+        grid-template-columns: 1fr;
+    }
+
+    .pagina-estoque .campo.completo {
+        grid-column: auto;
+    }
+
+    .pagina-estoque .estoque-acoes {
+        flex-direction: column;
+    }
+
+    .pagina-estoque .estoque-acoes button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 360px) {
+    .pagina-estoque .estoque-resumo {
+        grid-template-columns: 1fr;
+    }
+
+    .pagina-estoque .navegacao a {
+        font-size: 12px;
+        padding: 9px 8px;
+    }
+}
+
+
+/* =========================================
+   AJUSTES FINAIS DOS BOTÕES DO ESTOQUE
+========================================= */
+
+/* Menu interno do estoque */
+.pagina-estoque .estoque-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 20px;
+    padding: 10px;
+    background: #fff;
+    border: 1px solid var(--borda);
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+.pagina-estoque .estoque-menu a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px 15px;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--azul);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition: background 0.2s, color 0.2s;
+}
+
+.pagina-estoque .estoque-menu a:hover,
+.pagina-estoque .estoque-menu a.ativo {
+    background: var(--laranja);
+    color: #fff;
+}
+
+/* Botões de cadastro individual e em lote */
+.pagina-estoque .estoque-acoes {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 12px 0 18px;
+}
+
+.pagina-estoque .estoque-acoes button,
+.pagina-estoque .estoque-acoes .btn-secundario {
+    width: auto;
+    min-height: 42px;
+    margin: 0;
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Botões secundários */
+.pagina-estoque button.secundario,
+.pagina-estoque button.btn-secundario {
+    background: #fff;
+    color: var(--azul);
+    border: 1px solid var(--borda);
+    box-shadow: none;
+}
+
+.pagina-estoque button.secundario:hover,
+.pagina-estoque button.btn-secundario:hover {
+    background: var(--fundo);
+    border-color: var(--azul-sec);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Botão atualizar */
+.pagina-estoque #btnAtualizarEstoque {
+    width: auto;
+    min-height: 42px;
+    padding: 12px 18px;
+    margin: 0;
+    border-radius: 10px;
+}
+
+/* Evita que regras globais deixem os botões desalinhados */
+.pagina-estoque button {
+    line-height: 1.3;
+}
+
+/* Ajustes para celular */
+@media (max-width: 600px) {
+    .pagina-estoque .estoque-menu {
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .pagina-estoque .estoque-menu a {
+        flex: 1 1 auto;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .pagina-estoque .estoque-acoes {
+        align-items: stretch;
+    }
+
+    .pagina-estoque .estoque-acoes button,
+    .pagina-estoque .estoque-acoes .btn-secundario {
+        flex: 1 1 100%;
+        width: 100%;
+    }
+}
+
+
+/* =========================================
+   CORREÇÃO DOS BOTÕES E MENU DO ESTOQUE
+========================================= */
+
+/* Menu interno */
+.pagina-estoque .estoque-menu {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    margin: 0 0 20px;
+    background: #fff;
+    border: 1px solid var(--borda);
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+.pagina-estoque .estoque-menu .estoque-menu-item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    margin: 0;
+    padding: 11px 16px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--azul);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: none;
+    transition: background 0.2s, color 0.2s;
+}
+
+.pagina-estoque .estoque-menu .estoque-menu-item:hover {
+    background: rgba(0, 59, 115, 0.08);
+    color: var(--azul);
+    transform: none;
+    box-shadow: none;
+}
+
+.pagina-estoque .estoque-menu .estoque-menu-item.ativo {
+    background: var(--laranja);
+    color: #fff;
+}
+
+.pagina-estoque .estoque-menu .estoque-menu-item.ativo:hover {
+    background: #e96e00;
+    color: #fff;
+}
+
+/* Área dos botões de cadastro */
+.pagina-estoque .estoque-acoes-cadastro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0 18px;
+}
+
+.pagina-estoque .estoque-acoes-cadastro button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-height: 42px;
+    margin: 0;
+    padding: 11px 16px;
+    border: 1px solid var(--laranja);
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--laranja), #ff9b3d);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.3;
+    box-shadow: none;
+}
+
+.pagina-estoque .estoque-acoes-cadastro button:hover {
+    background: #e96e00;
+    border-color: #e96e00;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(255, 122, 0, 0.2);
+}
+
+/* Campos de pesquisa */
+.pagina-estoque .estoque-campo {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 18px;
+}
+
+.pagina-estoque .estoque-campo label {
+    color: var(--azul);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.pagina-estoque .estoque-campo input {
+    width: 100%;
+    min-height: 44px;
+    padding: 12px 14px;
+    border: 1px solid var(--borda);
+    border-radius: 10px;
+    background: #fff;
+    color: #243247;
+    font-size: 14px;
+}
+
+.pagina-estoque .estoque-campo input:focus {
+    outline: none;
+    border-color: var(--azul-sec);
+    box-shadow: 0 0 0 3px rgba(0, 90, 167, 0.12);
+}
+
+/* Títulos das seções */
+.pagina-estoque .estoque-secao-titulo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 16px;
+}
+
+.pagina-estoque .estoque-secao-titulo h2 {
+    margin-bottom: 6px;
+    color: var(--azul);
+}
+
+.pagina-estoque .estoque-secao-titulo p {
+    margin: 0;
+    color: #667;
+    line-height: 1.5;
+}
+
+/* Botão atualizar */
+.pagina-estoque #btnAtualizarEstoque {
+    width: auto;
+    min-height: 42px;
+    margin: 0;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+}
+
+/* Celular */
+@media (max-width: 600px) {
+    .pagina-estoque .estoque-menu {
+        gap: 6px;
+        padding: 8px;
+    }
+
+    .pagina-estoque .estoque-menu .estoque-menu-item {
+        flex: 1 1 calc(50% - 6px);
+        padding: 11px 8px;
+        font-size: 12px;
+        white-space: normal;
+        text-align: center;
+    }
+
+    .pagina-estoque .estoque-acoes-cadastro {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pagina-estoque .estoque-acoes-cadastro button {
+        width: 100%;
+    }
+
+    .pagina-estoque #btnAtualizarEstoque {
+        width: 100%;
+    }
+}
