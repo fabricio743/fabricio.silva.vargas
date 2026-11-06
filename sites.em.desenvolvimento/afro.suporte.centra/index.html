@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestão de Trabalhos</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- MENU LATERAL -->
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">G</div>
+                <div>
+                    <h2>GESTÃO</h2>
+                    <span>CONTROLE DE TRABALHOS</span>
+                </div>
+            </div>
+
+            <nav class="menu">
+
+                <span class="menu-label">MENU PRINCIPAL</span>
+
+                <a href="#inicio" class="menu-item active">
+                    <span>▦</span>
+                    Visão geral
+                </a>
+
+                <a href="trabalho.html" class="menu-item">
+                    <span>▤</span>
+                    Trabalhos
+                </a>
+
+                <a href="#financeiro" class="menu-item">
+                    <span>＄</span>
+                    Financeiro
+                </a>
+
+                <a href="#categorias" class="menu-item">
+                    <span>▧</span>
+                    Categorias
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator"></div>
+                Sistema de gestão
+                <span>Versão 1.0</span>
+            </div>
+
+        </aside>
+
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+
+            <!-- CABEÇALHO -->
+            <header class="topbar">
+
+                <div>
+                    <h1>Visão geral</h1>
+                    <p>Acompanhe seus trabalhos e resultados financeiros.</p>
+                </div>
+
+                <div class="topbar-actions">
+                    <span class="today">Painel de controle</span>
+
+                    <button class="btn-primary">
+                        + Novo trabalho
+                    </button>
+                </div>
+
+            </header>
+
+
+            <!-- CONTEÚDO -->
+            <section class="content" id="inicio">
+
+                <!-- INDICADORES -->
+                <div class="section-heading">
+                    <div>
+                        <h2>Resumo financeiro</h2>
+                        <p>Indicadores do período selecionado.</p>
+                    </div>
+
+                    <select class="period-select">
+                        <option>Novembro de 2026</option>
+                        <option>Outubro de 2026</option>
+                        <option>Setembro de 2026</option>
+                    </select>
+                </div>
+
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Faturamento</span>
+                            <div class="stat-icon blue">R$</div>
+                        </div>
+
+                        <h3>R$ 0,00</h3>
+                        <p>Valor total dos trabalhos</p>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Total recebido</span>
+                            <div class="stat-icon green">↓</div>
+                        </div>
+
+                        <h3>R$ 0,00</h3>
+                        <p>Pagamentos recebidos</p>
+                    </div>
+
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Custos</span>
+                            <div class="stat-icon red">−</div>
+                        </div>
+
+                        <h3>R$ 0,00</h3>
+                        <p>Custos dos trabalhos</p>
+                    </div>
+
+
+                    <div class="stat-card highlight">
+                        <div class="stat-top">
+                            <span>Lucro</span>
+                            <div class="stat-icon gold">★</div>
+                        </div>
+
+                        <h3>R$ 0,00</h3>
+                        <p>Faturamento menos custos</p>
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMAÇÕES -->
+                <div class="info-grid">
+
+                    <!-- COMPARATIVO -->
+                    <div class="panel comparison-panel" id="financeiro">
+
+                        <div class="panel-header">
+                            <div>
+                                <h2>Comparativo mensal</h2>
+                                <p>Compare seus resultados entre períodos.</p>
+                            </div>
+
+                            <select class="small-select">
+                                <option>2026</option>
+                                <option>2025</option>
+                            </select>
+                        </div>
+
+                        <div class="table-wrapper">
+
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Indicador</th>
+                                        <th>Outubro</th>
+                                        <th>Novembro</th>
+                                        <th>Variação</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr>
+                                        <td>Faturamento</td>
+                                        <td>R$ 0,00</td>
+                                        <td>R$ 0,00</td>
+                                        <td class="neutral">—</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Recebimentos</td>
+                                        <td>R$ 0,00</td>
+                                        <td>R$ 0,00</td>
+                                        <td class="neutral">—</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Custos</td>
+                                        <td>R$ 0,00</td>
+                                        <td>R$ 0,00</td>
+                                        <td class="neutral">—</td>
+                                    </tr>
+
+                                    <tr class="profit-row">
+                                        <td>Lucro</td>
+                                        <td>R$ 0,00</td>
+                                        <td>R$ 0,00</td>
+                                        <td class="neutral">—</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Trabalhos</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td class="neutral">—</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- RESUMO DE TRABALHOS -->
+                    <div class="panel quick-panel">
+
+                        <div class="panel-header">
+                            <div>
+                                <h2>Trabalhos</h2>
+                                <p>Situação atual dos serviços.</p>
+                            </div>
+                        </div>
+
+                        <div class="quick-stat">
+                            <span>Em andamento</span>
+                            <strong>0</strong>
+                        </div>
+
+                        <div class="quick-stat">
+                            <span>Aguardando aprovação</span>
+                            <strong>0</strong>
+                        </div>
+
+                        <div class="quick-stat">
+                            <span>Aguardando peça</span>
+                            <strong>0</strong>
+                        </div>
+
+                        <div class="quick-stat">
+                            <span>Concluídos</span>
+                            <strong>0</strong>
+                        </div>
+
+                        <div class="quick-stat">
+                            <span>Valores pendentes</span>
+                            <strong class="gold-text">R$ 0,00</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TRABALHOS RECENTES -->
+                <div class="panel recent-panel" id="trabalhos">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Trabalhos recentes</h2>
+                            <p>Últimos serviços cadastrados no sistema.</p>
+                        </div>
+
+                        <button class="btn-secondary">
+                            Ver todos
+                        </button>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table class="jobs-table">
+
+                            <thead>
+                                <tr>
+                                    <th>Cliente</th>
+                                    <th>Serviço</th>
+                                    <th>Data</th>
+                                    <th>Valor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+                                    <td colspan="5" class="empty-state">
+                                        <span>▤</span>
+                                        <strong>Nenhum trabalho cadastrado</strong>
+                                        <p>Seus trabalhos aparecerão aqui.</p>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <footer class="footer">
+                    Sistema de Gestão de Trabalhos
+                    <span>•</span>
+                    Versão 1.0
+                </footer>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

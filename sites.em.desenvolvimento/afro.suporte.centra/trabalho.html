@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Novo Trabalho | Gestão</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">G</div>
+            <div>
+                <h2>GESTÃO</h2>
+                <span>CONTROLE DE TRABALHOS</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+
+            <span class="menu-label">MENU PRINCIPAL</span>
+
+            <a href="index.html" class="menu-item">
+                <span>▦</span>
+                Visão geral
+            </a>
+
+            <a href="trabalho.html" class="menu-item active">
+                <span>▤</span>
+                Trabalhos
+            </a>
+
+            <a href="index.html#financeiro" class="menu-item">
+                <span>＄</span>
+                Financeiro
+            </a>
+
+            <a href="index.html#categorias" class="menu-item">
+                <span>▧</span>
+                Categorias
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="status-indicator"></div>
+            Sistema de gestão
+            <span>Versão 1.0</span>
+        </div>
+
+    </aside>
+
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <h1>Novo trabalho</h1>
+                <p>Cadastre um serviço e controle seus resultados.</p>
+            </div>
+
+            <div class="topbar-actions">
+                <a href="index.html" class="btn-secondary">
+                    Voltar
+                </a>
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+            <form id="formTrabalho">
+
+                <!-- INFORMAÇÕES DO SERVIÇO -->
+                <div class="form-panel">
+
+                    <div class="form-section-title">
+                        <div class="form-number">01</div>
+
+                        <div>
+                            <h2>Informações do trabalho</h2>
+                            <p>Dados principais do serviço realizado.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="cliente">Nome do cliente</label>
+                            <input
+                                type="text"
+                                id="cliente"
+                                placeholder="Digite o nome do cliente"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefone">Telefone / WhatsApp</label>
+                            <input
+                                type="tel"
+                                id="telefone"
+                                placeholder="(00) 00000-0000"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="categoria">Categoria</label>
+
+                            <select id="categoria" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option>Manutenção de computadores</option>
+                                <option>Manutenção de celulares</option>
+                                <option>Formatação e instalação</option>
+                                <option>Desenvolvimento de sites</option>
+                                <option>Consultoria</option>
+                                <option>Outros serviços</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="servico">Descrição do serviço</label>
+                            <input
+                                type="text"
+                                id="servico"
+                                placeholder="Ex: Troca de tela de notebook"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="data">Data do trabalho</label>
+                            <input type="date" id="data" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="status">Status</label>
+
+                            <select id="status" required>
+                                <option value="Em andamento">Em andamento</option>
+                                <option value="Aguardando aprovação">
+                                    Aguardando aprovação
+                                </option>
+                                <option value="Aguardando peça">
+                                    Aguardando peça
+                                </option>
+                                <option value="Concluído">Concluído</option>
+                                <option value="Entregue">Entregue</option>
+                                <option value="Cancelado">Cancelado</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- VALOR DO SERVIÇO -->
+                <div class="form-panel">
+
+                    <div class="form-section-title">
+                        <div class="form-number">02</div>
+
+                        <div>
+                            <h2>Valor do serviço</h2>
+                            <p>Informe quanto será cobrado pelo trabalho.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="valorServico">Valor cobrado (R$)</label>
+
+                            <input
+                                type="number"
+                                id="valorServico"
+                                min="0"
+                                step="0.01"
+                                placeholder="0,00"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CUSTOS -->
+                <div class="form-panel">
+
+                    <div class="form-section-title">
+                        <div class="form-number">03</div>
+
+                        <div>
+                            <h2>Custos do trabalho</h2>
+                            <p>Registre peças, materiais e outros gastos.</p>
+                        </div>
+                    </div>
+
+                    <div id="listaCustos">
+
+                        <div class="cost-row">
+
+                            <div class="form-group">
+                                <label>Descrição do custo</label>
+                                <input
+                                    type="text"
+                                    name="descricaoCusto"
+                                    placeholder="Ex: Tela, bateria, material..."
+                                >
+                            </div>
+
+                            <div class="form-group cost-value">
+                                <label>Valor (R$)</label>
+                                <input
+                                    type="number"
+                                    name="valorCusto"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0,00"
+                                >
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-add"
+                        id="adicionarCusto"
+                    >
+                        + Adicionar outro custo
+                    </button>
+
+                </div>
+
+
+                <!-- PAGAMENTOS -->
+                <div class="form-panel">
+
+                    <div class="form-section-title">
+                        <div class="form-number">04</div>
+
+                        <div>
+                            <h2>Pagamentos recebidos</h2>
+                            <p>Registre entradas e pagamentos do cliente.</p>
+                        </div>
+                    </div>
+
+                    <div id="listaPagamentos">
+
+                        <div class="payment-row">
+
+                            <div class="form-group">
+                                <label>Data do recebimento</label>
+                                <input
+                                    type="date"
+                                    name="dataPagamento"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Valor recebido (R$)</label>
+                                <input
+                                    type="number"
+                                    name="valorPagamento"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0,00"
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label>Forma de pagamento</label>
+
+                                <select name="formaPagamento">
+                                    <option value="">Selecione</option>
+                                    <option>Dinheiro</option>
+                                    <option>Pix</option>
+                                    <option>Cartão de débito</option>
+                                    <option>Cartão de crédito</option>
+                                    <option>Transferência bancária</option>
+                                    <option>Outros</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-add"
+                        id="adicionarPagamento"
+                    >
+                        + Adicionar pagamento
+                    </button>
+
+                </div>
+
+
+                <!-- RESUMO FINANCEIRO -->
+                <div class="form-panel financial-summary">
+
+                    <div class="form-section-title">
+                        <div class="form-number">05</div>
+
+                        <div>
+                            <h2>Resumo financeiro</h2>
+                            <p>Conferência dos valores deste trabalho.</p>
+                        </div>
+                    </div>
+
+                    <div class="summary-grid">
+
+                        <div class="summary-item">
+                            <span>Valor do serviço</span>
+                            <strong id="resumoValor">R$ 0,00</strong>
+                        </div>
+
+                        <div class="summary-item">
+                            <span>Total de custos</span>
+                            <strong id="resumoCustos">R$ 0,00</strong>
+                        </div>
+
+                        <div class="summary-item">
+                            <span>Total recebido</span>
+                            <strong id="resumoRecebido">R$ 0,00</strong>
+                        </div>
+
+                        <div class="summary-item">
+                            <span>Valor pendente</span>
+                            <strong id="resumoPendente">R$ 0,00</strong>
+                        </div>
+
+                        <div class="summary-item summary-profit">
+                            <span>Lucro previsto</span>
+                            <strong id="resumoLucro">R$ 0,00</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OBSERVAÇÕES -->
+                <div class="form-panel">
+
+                    <div class="form-section-title">
+                        <div class="form-number">06</div>
+
+                        <div>
+                            <h2>Observações</h2>
+                            <p>Informações adicionais sobre o trabalho.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="observacoes">Observações (opcional)</label>
+
+                        <textarea
+                            id="observacoes"
+                            rows="4"
+                            placeholder="Digite alguma informação importante..."
+                        ></textarea>
+                    </div>
+
+                </div>
+
+
+                <!-- AÇÕES -->
+                <div class="form-actions">
+
+                    <a href="index.html" class="btn-secondary">
+                        Cancelar
+                    </a>
+
+                    <button type="submit" class="btn-primary">
+                        Salvar trabalho
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
