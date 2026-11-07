@@ -1030,3 +1030,20 @@ tbody tr:hover {
     }
 
 }
+
+.btn-remove {
+    background: transparent;
+    color: #e45d66;
+    border: 1px solid #e45d66;
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    font-size: 22px;
+    cursor: pointer;
+    align-self: end;
+    flex-shrink: 0;
+}
+
+.btn-remove:hover {
+    background: #482027;
+}

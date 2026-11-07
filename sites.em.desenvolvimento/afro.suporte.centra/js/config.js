@@ -1,0 +1,3 @@
+const CONFIG = {
+    URL_SCRIPT: "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT"
+};
