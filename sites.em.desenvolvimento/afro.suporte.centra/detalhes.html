@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Trabalho</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <aside class="sidebar">
+
+            <div class="logo">
+                <h2>GESTÃO</h2>
+                <span>CONTROLE DE TRABALHOS</span>
+            </div>
+
+            <nav class="menu">
+                <a href="index.html">Visão geral</a>
+                <a href="trabalhos.html" class="active">Trabalhos</a>
+                <a href="index.html#financeiro">Financeiro</a>
+                <a href="index.html#categorias">Categorias</a>
+            </nav>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <h1>Detalhes do trabalho</h1>
+                    <p>Visualização completa do serviço registrado.</p>
+                </div>
+
+                <div class="topbar-actions">
+                    <a href="trabalhos.html" class="btn-secondary">
+                        Voltar
+                    </a>
+                </div>
+
+            </header>
+
+            <div id="mensagemDetalhes"></div>
+
+            <section id="conteudoDetalhes">
+
+                <div class="panel">
+                    <p class="empty-state">
+                        Carregando informações do trabalho...
+                    </p>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/detalhes.js"></script>
+
+</body>
+</html>

@@ -87,3 +87,25 @@ async function apiPost(action, dados = {}) {
     }
 
 }
+async function testarConexao() {
+
+    try {
+
+        const resultado = await apiGet("testarConexao");
+
+        console.log("Resultado da conexão:", resultado);
+
+        if (resultado.sucesso) {
+            alert("Conexão com Google Sheets funcionando!");
+        } else {
+            alert("Erro: " + resultado.mensagem);
+        }
+
+    } catch (erro) {
+
+        console.error(erro);
+        alert("Não foi possível conectar ao Google Sheets.");
+
+    }
+
+}

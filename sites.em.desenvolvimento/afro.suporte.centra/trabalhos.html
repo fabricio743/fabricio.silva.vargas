@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Trabalhos | Gestão</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">G</div>
+            <div>
+                <h2>GESTÃO</h2>
+                <span>CONTROLE DE TRABALHOS</span>
+            </div>
+        </div>
+
+        <nav class="menu">
+
+            <span class="menu-label">MENU PRINCIPAL</span>
+
+            <a href="index.html" class="menu-item">
+                <span>▦</span>
+                Visão geral
+            </a>
+
+            <a href="trabalhos.html" class="menu-item active">
+                <span>▤</span>
+                Trabalhos
+            </a>
+
+            <a href="index.html#financeiro" class="menu-item">
+                <span>＄</span>
+                Financeiro
+            </a>
+
+            <a href="index.html#categorias" class="menu-item">
+                <span>▧</span>
+                Categorias
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="status-indicator"></div>
+            Sistema de gestão
+            <span>Versão 1.0</span>
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <h1>Trabalhos</h1>
+                <p>Consulte e acompanhe todos os serviços cadastrados.</p>
+            </div>
+
+            <div class="topbar-actions">
+
+                <button
+                    class="btn-secondary"
+                    id="btnAtualizar"
+                    type="button"
+                >
+                    ↻ Atualizar
+                </button>
+
+                <a href="trabalho.html" class="btn-primary">
+                    + Novo trabalho
+                </a>
+
+            </div>
+
+        </header>
+
+
+        <section class="content">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Histórico de trabalhos</h2>
+                    <p id="contadorTrabalhos">
+                        Carregando trabalhos...
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="panel filtros-panel">
+
+                <div class="filtros-grid">
+
+                    <div class="form-group">
+                        <label for="pesquisaTrabalho">
+                            Pesquisar
+                        </label>
+
+                        <input
+                            type="search"
+                            id="pesquisaTrabalho"
+                            placeholder="Cliente ou serviço..."
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="filtroStatus">
+                            Status
+                        </label>
+
+                        <select id="filtroStatus">
+                            <option value="">Todos os status</option>
+                            <option>Em andamento</option>
+                            <option>Aguardando aprovação</option>
+                            <option>Aguardando peça</option>
+                            <option>Concluído</option>
+                            <option>Entregue</option>
+                            <option>Cancelado</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="filtroCategoria">
+                            Categoria
+                        </label>
+
+                        <select id="filtroCategoria">
+                            <option value="">Todas as categorias</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="dataInicial">
+                            De
+                        </label>
+
+                        <input type="date" id="dataInicial">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="dataFinal">
+                            Até
+                        </label>
+
+                        <input type="date" id="dataFinal">
+                    </div>
+
+                </div>
+
+                <div class="filtros-actions">
+
+                    <button
+                        type="button"
+                        class="btn-secondary"
+                        id="limparFiltros"
+                    >
+                        Limpar filtros
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="panel recent-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h2>Todos os trabalhos</h2>
+                        <p>Os trabalhos mais recentes aparecem primeiro.</p>
+                    </div>
+
+                </div>
+
+
+                <div class="table-wrapper">
+
+                    <table class="jobs-table">
+
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Serviço</th>
+                                <th>Data</th>
+                                <th>Valor</th>
+                                <th>Recebido</th>
+                                <th>Pendente</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="listaTrabalhos">
+
+                            <tr>
+                                <td colspan="7" class="empty-state">
+                                    Carregando trabalhos...
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <footer class="footer">
+                Sistema de Gestão de Trabalhos
+                <span>•</span>
+                Versão 1.0
+            </footer>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/trabalhos.js"></script>
+
+</body>
+</html>

@@ -1047,3 +1047,269 @@ tbody tr:hover {
 .btn-remove:hover {
     background: #482027;
 }
+
+
+/* =====================================================
+   PÁGINA DE TRABALHOS
+===================================================== */
+
+.filtros-panel {
+    padding: 22px;
+    margin-bottom: 24px;
+}
+
+.filtros-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.3fr 1.3fr 1fr 1fr;
+    gap: 15px;
+}
+
+.filtros-grid .form-group {
+    min-width: 0;
+}
+
+.filtros-grid input,
+.filtros-grid select {
+    width: 100%;
+    min-width: 0;
+}
+
+.filtros-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+.topbar-actions .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-badge.andamento {
+    color: #65b8f5;
+    background: #17344e;
+}
+
+.status-badge.aprovacao {
+    color: #d5a5ff;
+    background: #38254c;
+}
+
+.status-badge.peca {
+    color: #f0ce63;
+    background: #44391c;
+}
+
+.status-badge.concluido {
+    color: #75d7ad;
+    background: #173b30;
+}
+
+.status-badge.entregue {
+    color: #75d7ad;
+    background: #173b30;
+}
+
+.status-badge.cancelado {
+    color: #ff9da5;
+    background: #482027;
+}
+
+.valor-recebido {
+    color: #29b77a;
+    font-weight: 600;
+}
+
+.valor-pendente {
+    color: #d4af37;
+    font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+
+    .filtros-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .filtros-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filtros-panel {
+        padding: 16px;
+    }
+
+    .topbar-actions {
+        flex-wrap: wrap;
+    }
+
+}
+
+.linha-clicavel {
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.linha-clicavel:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+
+/* =====================================================
+   DETALHES DO TRABALHO
+===================================================== */
+
+.detalhe-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding: 24px;
+}
+
+.detalhe-legenda,
+.detalhe-card span,
+.detalhe-informacoes span,
+.detalhe-observacoes span {
+    display: block;
+    font-size: 11px;
+    color: #9ba8ba;
+    margin-bottom: 8px;
+}
+
+.detalhe-cabecalho h2 {
+    margin: 5px 0;
+}
+
+.detalhe-cabecalho p {
+    margin: 0;
+    color: #aab5c5;
+}
+
+.detalhe-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.detalhe-card {
+    padding: 20px;
+}
+
+.detalhe-card strong {
+    display: block;
+    font-size: 20px;
+}
+
+.detalhe-secao {
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.detalhe-secao h3 {
+    margin: 0 0 22px;
+}
+
+.detalhe-informacoes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.detalhe-informacoes strong {
+    display: block;
+    overflow-wrap: anywhere;
+}
+
+.detalhe-observacoes {
+    border-top: 1px solid #293548;
+    margin-top: 22px;
+    padding-top: 18px;
+}
+
+.detalhe-observacoes p {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.tabela-responsiva {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabela-detalhes {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+}
+
+.tabela-detalhes th,
+.tabela-detalhes td {
+    padding: 13px;
+    text-align: left;
+    border-bottom: 1px solid #293548;
+}
+
+.tabela-detalhes tfoot th {
+    border-bottom: none;
+    padding-top: 18px;
+}
+
+@media (max-width: 1000px) {
+
+    .detalhe-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .detalhe-informacoes {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .detalhe-cabecalho {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .detalhe-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .detalhe-card {
+        padding: 15px;
+    }
+
+    .detalhe-card strong {
+        font-size: 16px;
+    }
+
+    .detalhe-informacoes {
+        grid-template-columns: 1fr;
+    }
+
+    .detalhe-secao {
+        padding: 17px;
+    }
+
+}

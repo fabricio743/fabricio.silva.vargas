@@ -371,10 +371,19 @@ function validarLancamentos() {
    SALVAR TRABALHO TEMPORARIAMENTE
 ========================================================= */
 
-function salvarTrabalho(evento) {
+
+/* =====================================================
+   SALVAR TRABALHO NO GOOGLE SHEETS
+===================================================== */
+
+async function salvarTrabalho(evento) {
+
     evento.preventDefault();
 
     const formulario = $("formTrabalho");
+    const botaoSalvar = formulario.querySelector(
+        '[type="submit"]'
+    );
 
     if (!formulario.reportValidity()) {
         return;
@@ -390,7 +399,6 @@ function salvarTrabalho(evento) {
     const resumo = atualizarResumo();
 
     const trabalho = {
-        id: Date.now(),
 
         cliente: $("cliente").value.trim(),
         telefone: $("telefone").value.trim(),
@@ -405,30 +413,62 @@ function salvarTrabalho(evento) {
 
         pagamentos: coletarPagamentos(),
 
-        observacoes: $("observacoes").value.trim(),
+        observacoes: $("observacoes").value.trim()
 
-        criadoEm: new Date().toISOString()
     };
 
-    const trabalhos = obterTrabalhos();
+    const textoOriginal = botaoSalvar.textContent;
 
-    trabalhos.push(trabalho);
+    try {
 
-    localStorage.setItem(
-        CHAVE_TRABALHOS,
-        JSON.stringify(trabalhos)
-    );
+        botaoSalvar.disabled = true;
+        botaoSalvar.textContent = "Salvando...";
 
-    mostrarMensagem(
-        "Trabalho salvo temporariamente neste navegador!"
-    );
+        mostrarMensagem("Enviando trabalho para o servidor...");
 
-    formulario.reset();
+        const resposta = await apiPost(
+            "salvarTrabalho",
+            trabalho
+        );
 
-    restaurarCamposIniciais();
+        if (!resposta || !resposta.sucesso) {
 
-    atualizarResumo();
+            throw new Error(
+                resposta?.mensagem ||
+                "Não foi possível salvar o trabalho."
+            );
+
+        }
+
+        mostrarMensagem(
+            "Trabalho salvo com sucesso no Google Sheets!"
+        );
+
+        formulario.reset();
+
+        restaurarCamposIniciais();
+
+        atualizarResumo();
+
+    } catch (erro) {
+
+        console.error("Erro ao salvar trabalho:", erro);
+
+        mostrarMensagem(
+            erro.message ||
+            "Erro ao salvar. Tente novamente.",
+            true
+        );
+
+    } finally {
+
+        botaoSalvar.disabled = false;
+        botaoSalvar.textContent = textoOriginal;
+
+    }
+
 }
+
 
 
 /* =========================================================
