@@ -8,6 +8,12 @@ const CHAVE_TRABALHOS = "gestaoTrabalhos";
 
 const $ = id => document.getElementById(id);
 
+const parametrosURL = new URLSearchParams(window.location.search);
+const ID_TRABALHO_EDICAO = parametrosURL.get("id");
+
+let trabalhoEmEdicao = null;
+let totalPagamentosAnteriores = 0;
+
 
 /* =========================================================
    FUNÇÕES AUXILIARES
@@ -33,6 +39,40 @@ function dataAtual() {
     const dia = String(hoje.getDate()).padStart(2, "0");
 
     return `${ano}-${mes}-${dia}`;
+}
+
+function dataParaCampo(valor) {
+    if (!valor) return "";
+
+    const texto = String(valor);
+
+    if (/^\d{4}-\d{2}-\d{2}/.test(texto)) {
+        return texto.substring(0, 10);
+    }
+
+    return "";
+}
+
+
+function escaparHTML(valor) {
+    return String(valor ?? "").replace(/[&<>"']/g, caractere => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[caractere]);
+}
+
+
+function formatarDataHistorico(valor) {
+    const data = dataParaCampo(valor);
+
+    if (!data) return "—";
+
+    const [ano, mes, dia] = data.split("-");
+
+    return `${dia}/${mes}/${ano}`;
 }
 
 
@@ -276,6 +316,59 @@ function coletarPagamentos() {
     );
 }
 
+function renderizarHistoricoPagamentos(pagamentos = []) {
+    const container = $("historicoPagamentos");
+
+    if (!container) return;
+
+    totalPagamentosAnteriores = pagamentos.reduce(
+        (total, pagamento) => total + valorNumerico(pagamento.valor),
+        0
+    );
+
+    if (!pagamentos.length) {
+        container.hidden = true;
+        container.innerHTML = "";
+        return;
+    }
+
+    container.hidden = false;
+
+    container.innerHTML = `
+        <div class="historico-pagamentos">
+            <h3>Histórico de recebimentos</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Valor</th>
+                            <th>Forma</th>
+                            <th>Observação</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        ${pagamentos.map(pagamento => `
+                            <tr>
+                                <td>${formatarDataHistorico(pagamento.data)}</td>
+                                <td>${dinheiro(pagamento.valor)}</td>
+                                <td>${escaparHTML(pagamento.forma || "—")}</td>
+                                <td>${escaparHTML(pagamento.observacao || "—")}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            </div>
+
+            <p>
+                Total recebido anteriormente:
+                <strong>${dinheiro(totalPagamentosAnteriores)}</strong>
+            </p>
+        </div>
+    `;
+}
 
 /* =========================================================
    CÁLCULOS FINANCEIROS
@@ -295,7 +388,8 @@ function atualizarResumo() {
         0
     );
 
-    const totalRecebido = pagamentos.reduce(
+    const totalRecebido = totalPagamentosAnteriores +
+    pagamentos.reduce(
         (total, item) => total + item.valor,
         0
     );
@@ -371,16 +465,107 @@ function validarLancamentos() {
    SALVAR TRABALHO TEMPORARIAMENTE
 ========================================================= */
 
+async function carregarTrabalhoParaEdicao() {
+    if (!ID_TRABALHO_EDICAO) return;
+
+    try {
+        mostrarMensagem("Carregando os dados do trabalho...");
+
+        const resposta = await apiGet("obterTrabalho", {
+            id: ID_TRABALHO_EDICAO
+        });
+
+        if (!resposta || !resposta.sucesso || !resposta.trabalho) {
+            throw new Error(
+                resposta?.mensagem || "Não foi possível carregar o trabalho."
+            );
+        }
+
+        const trabalho = resposta.trabalho;
+
+        trabalhoEmEdicao = trabalho;
+
+        $("cliente").value = trabalho.cliente || "";
+        $("telefone").value = trabalho.telefone || "";
+        $("categoria").value = trabalho.categoria || "";
+        $("servico").value = trabalho.servico || "";
+        $("data").value = dataParaCampo(trabalho.data);
+        $("status").value = trabalho.status || "";
+        $("valorServico").value = valorNumerico(trabalho.valorServico);
+        $("observacoes").value = trabalho.observacoes || "";
+
+        // Preencher os custos existentes
+        $("listaCustos").innerHTML = "";
+
+        if (trabalho.custos && trabalho.custos.length) {
+            trabalho.custos.forEach(custo => {
+                criarCampoCusto();
+
+                const linha = $("listaCustos").lastElementChild;
+
+                linha.querySelector('[name="descricaoCusto"]').value =
+                    custo.descricao || "";
+
+                linha.querySelector('[name="valorCusto"]').value =
+                    valorNumerico(custo.valor);
+            });
+        } else {
+            criarCampoCusto();
+        }
+
+        // Mostrar pagamentos anteriores sem colocá-los
+        // nos campos de novos pagamentos
+        renderizarHistoricoPagamentos(trabalho.pagamentos || []);
+
+        // Atualizar títulos e botão
+        if ($("tituloPagina")) {
+            $("tituloPagina").textContent = "Editar trabalho";
+        }
+
+        if ($("descricaoPagina")) {
+            $("descricaoPagina").textContent =
+                "Atualize os dados e acompanhe os recebimentos.";
+        }
+
+        const botaoSalvar = $("formTrabalho").querySelector(
+            '[type="submit"]'
+        );
+
+        botaoSalvar.textContent = "Salvar alterações";
+
+        if ($("tituloPagamentos")) {
+            $("tituloPagamentos").textContent = "Adicionar recebimento";
+        }
+
+        if ($("descricaoPagamentos")) {
+            $("descricaoPagamentos").textContent =
+                "Os recebimentos anteriores ficam preservados no histórico.";
+        }
+
+        atualizarResumo();
+
+        const aviso = $("mensagemFormulario");
+        if (aviso) aviso.remove();
+
+    } catch (erro) {
+        console.error("Erro ao carregar trabalho:", erro);
+
+        mostrarMensagem(
+            erro.message || "Erro ao carregar os dados do trabalho.",
+            true
+        );
+    }
+}
 
 /* =====================================================
    SALVAR TRABALHO NO GOOGLE SHEETS
 ===================================================== */
 
 async function salvarTrabalho(evento) {
-
     evento.preventDefault();
 
     const formulario = $("formTrabalho");
+
     const botaoSalvar = formulario.querySelector(
         '[type="submit"]'
     );
@@ -398,8 +583,9 @@ async function salvarTrabalho(evento) {
 
     const resumo = atualizarResumo();
 
-    const trabalho = {
+    const editando = Boolean(ID_TRABALHO_EDICAO);
 
+    const trabalho = {
         cliente: $("cliente").value.trim(),
         telefone: $("telefone").value.trim(),
         categoria: $("categoria").value,
@@ -411,62 +597,82 @@ async function salvarTrabalho(evento) {
 
         custos: coletarCustos(),
 
-        pagamentos: coletarPagamentos(),
-
         observacoes: $("observacoes").value.trim()
-
     };
+
+    if (editando) {
+        trabalho.id = ID_TRABALHO_EDICAO;
+
+        // Envia somente os novos recebimentos.
+        // Os pagamentos antigos permanecem no histórico.
+        trabalho.novosPagamentos = coletarPagamentos();
+
+    } else {
+        trabalho.pagamentos = coletarPagamentos();
+    }
 
     const textoOriginal = botaoSalvar.textContent;
 
     try {
-
         botaoSalvar.disabled = true;
-        botaoSalvar.textContent = "Salvando...";
+        botaoSalvar.textContent = editando
+            ? "Salvando alterações..."
+            : "Salvando...";
 
-        mostrarMensagem("Enviando trabalho para o servidor...");
+        mostrarMensagem(
+            editando
+                ? "Atualizando trabalho no servidor..."
+                : "Enviando trabalho para o servidor..."
+        );
 
         const resposta = await apiPost(
-            "salvarTrabalho",
+            editando ? "editarTrabalho" : "salvarTrabalho",
             trabalho
         );
 
         if (!resposta || !resposta.sucesso) {
-
             throw new Error(
                 resposta?.mensagem ||
                 "Não foi possível salvar o trabalho."
             );
-
         }
 
-        mostrarMensagem(
-            "Trabalho salvo com sucesso no Google Sheets!"
-        );
+        if (editando) {
+            mostrarMensagem(
+                "Trabalho atualizado com sucesso! Redirecionando..."
+            );
 
-        formulario.reset();
+            setTimeout(() => {
+                window.location.href =
+                    `detalhes.html?id=${encodeURIComponent(ID_TRABALHO_EDICAO)}`;
+            }, 1200);
 
-        restaurarCamposIniciais();
+        } else {
+            mostrarMensagem(
+                "Trabalho salvo com sucesso no Google Sheets!"
+            );
 
-        atualizarResumo();
+            formulario.reset();
+
+            totalPagamentosAnteriores = 0;
+
+            restaurarCamposIniciais();
+
+            atualizarResumo();
+        }
 
     } catch (erro) {
-
         console.error("Erro ao salvar trabalho:", erro);
 
         mostrarMensagem(
-            erro.message ||
-            "Erro ao salvar. Tente novamente.",
+            erro.message || "Erro ao salvar. Tente novamente.",
             true
         );
 
     } finally {
-
         botaoSalvar.disabled = false;
         botaoSalvar.textContent = textoOriginal;
-
     }
-
 }
 
 
@@ -552,7 +758,7 @@ function configurarCalculos() {
    INICIALIZAÇÃO
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     configurarCustos();
     configurarPagamentos();
     configurarCalculos();
@@ -565,4 +771,8 @@ document.addEventListener("DOMContentLoaded", () => {
     $("data").value = dataAtual();
 
     atualizarResumo();
+
+    if (ID_TRABALHO_EDICAO) {
+        await carregarTrabalhoParaEdicao();
+    }
 });

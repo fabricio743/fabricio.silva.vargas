@@ -353,6 +353,9 @@ async function carregarDetalhes() {
 
         }
 
+        $("btnEditarTrabalho").href =
+            `trabalho.html?id=${encodeURIComponent(resposta.trabalho.id)}`;
+
         renderizarDetalhes(resposta.trabalho);
 
     } catch (erro) {

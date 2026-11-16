@@ -92,7 +92,7 @@
                         <p>Indicadores do período selecionado.</p>
                     </div>
 
-                    <select class="period-select">
+                    <select class="period-select" id="periodoDashboard">
                         <option>Novembro de 2026</option>
                         <option>Outubro de 2026</option>
                         <option>Setembro de 2026</option>
@@ -108,7 +108,7 @@
                             <div class="stat-icon blue">R$</div>
                         </div>
 
-                        <h3>R$ 0,00</h3>
+                        <h3 id="totalFaturamento">R$ 0,00</h3>
                         <p>Valor total dos trabalhos</p>
                     </div>
 
@@ -119,7 +119,7 @@
                             <div class="stat-icon green">↓</div>
                         </div>
 
-                        <h3>R$ 0,00</h3>
+                        <h3 id="totalRecebido">R$ 0,00</h3>
                         <p>Pagamentos recebidos</p>
                     </div>
 
@@ -130,7 +130,7 @@
                             <div class="stat-icon red">−</div>
                         </div>
 
-                        <h3>R$ 0,00</h3>
+                        <h3 id="totalCustos">R$ 0,00</h3>
                         <p>Custos dos trabalhos</p>
                     </div>
 
@@ -141,7 +141,7 @@
                             <div class="stat-icon gold">★</div>
                         </div>
 
-                        <h3>R$ 0,00</h3>
+                        <h3 id="totalLucro">R$ 0,00</h3>
                         <p>Faturamento menos custos</p>
                     </div>
 
@@ -160,7 +160,7 @@
                                 <p>Compare seus resultados entre períodos.</p>
                             </div>
 
-                            <select class="small-select">
+                            <select class="small-select" id="anoComparativo">
                                 <option>2026</option>
                                 <option>2025</option>
                             </select>
@@ -178,7 +178,7 @@
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <tbody id="corpoComparativo">
                                     <tr>
                                         <td>Faturamento</td>
                                         <td>R$ 0,00</td>
@@ -233,27 +233,27 @@
 
                         <div class="quick-stat">
                             <span>Em andamento</span>
-                            <strong>0</strong>
+                            <strong id="qtdEmAndamento">0</strong>
                         </div>
 
                         <div class="quick-stat">
                             <span>Aguardando aprovação</span>
-                            <strong>0</strong>
+                            <strong id="qtdAguardandoAprovacao">0</strong>
                         </div>
 
                         <div class="quick-stat">
                             <span>Aguardando peça</span>
-                            <strong>0</strong>
+                            <strong id="qtdAguardandoPeca">0</strong>
                         </div>
 
                         <div class="quick-stat">
                             <span>Concluídos</span>
-                            <strong>0</strong>
+                            <strong id="qtdConcluidos">0</strong>
                         </div>
 
                         <div class="quick-stat">
                             <span>Valores pendentes</span>
-                            <strong class="gold-text">R$ 0,00</strong>
+                            <strong class="gold-text" id="totalPendente">R$ 0,00</strong>
                         </div>
 
                     </div>
@@ -291,7 +291,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody id="corpoTrabalhosRecentes">
 
                                 <tr>
                                     <td colspan="5" class="empty-state">
@@ -323,7 +323,7 @@
 
 <script src="js/config.js"></script>
 <script src="js/api.js"></script>
-<script src="js/script.js"></script>
+<script src="js/dashboard.js"></script>
 
 </body>
 </html>

@@ -66,8 +66,8 @@
         <header class="topbar">
 
             <div>
-                <h1>Novo trabalho</h1>
-                <p>Cadastre um serviço e controle seus resultados.</p>
+                <h1 id="tituloPagina">Novo trabalho</h1>
+                <p id="descricaoPagina">Cadastre um serviço e controle seus resultados.</p>
             </div>
 
             <div class="topbar-actions">
@@ -257,10 +257,14 @@
                         <div class="form-number">04</div>
 
                         <div>
-                            <h2>Pagamentos recebidos</h2>
-                            <p>Registre entradas e pagamentos do cliente.</p>
+                            <h2 id="tituloPagamentos">Pagamentos recebidos</h2>
+                            <p id="descricaoPagamentos">
+                                Registre entradas e pagamentos do cliente.
+                            </p>
                         </div>
                     </div>
+
+                    <div id="historicoPagamentos" hidden></div>
 
                     <div id="listaPagamentos">
 
