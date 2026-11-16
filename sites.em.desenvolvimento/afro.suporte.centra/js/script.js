@@ -115,6 +115,106 @@ function mostrarMensagem(mensagem, erro = false) {
 
 
 /* =========================================================
+   CARREGAR CATEGORIAS DO GOOGLE SHEETS
+========================================================= */
+
+async function carregarCategorias(categoriaAtual = "") {
+
+    const seletor = $("categoria");
+
+    try {
+
+        seletor.innerHTML = `
+            <option value="">Carregando categorias...</option>
+        `;
+
+        const resposta = await apiGet("listarCategorias");
+
+        if (!resposta || !resposta.sucesso) {
+            throw new Error(
+                resposta?.mensagem || "Não foi possível carregar as categorias."
+            );
+        }
+
+        const categorias = resposta.categorias || [];
+
+        // Somente categorias ativas
+        const categoriasAtivas = categorias.filter(
+            categoria => categoria.ativa
+        );
+
+        // Verificar se a categoria atual está inativa
+        const categoriaExiste = categoriasAtivas.some(
+            categoria => categoria.nome === categoriaAtual
+        );
+
+        seletor.innerHTML = `
+            <option value="">Selecione uma categoria</option>
+        `;
+
+        categoriasAtivas.forEach(categoria => {
+
+            const opcao = document.createElement("option");
+
+            opcao.value = categoria.nome;
+            opcao.textContent = categoria.nome;
+
+            seletor.appendChild(opcao);
+
+        });
+
+        // Preservar categoria de trabalhos antigos
+        // mesmo quando ela estiver inativa
+        if (categoriaAtual && !categoriaExiste) {
+
+            const opcao = document.createElement("option");
+
+            opcao.value = categoriaAtual;
+            opcao.textContent = `${categoriaAtual} (inativa)`;
+
+            seletor.appendChild(opcao);
+
+        }
+
+        if (categoriaAtual) {
+            seletor.value = categoriaAtual;
+        }
+
+        return true;
+
+    } catch (erro) {
+
+        console.error("Erro ao carregar categorias:", erro);
+
+        seletor.innerHTML = `
+            <option value="">Erro ao carregar categorias</option>
+        `;
+
+        if (categoriaAtual) {
+
+            const opcao = document.createElement("option");
+
+            opcao.value = categoriaAtual;
+            opcao.textContent = categoriaAtual;
+
+            seletor.appendChild(opcao);
+            seletor.value = categoriaAtual;
+
+        }
+
+        mostrarMensagem(
+            "Não foi possível carregar as categorias. Verifique a conexão com o servidor.",
+            true
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =========================================================
    ADICIONAR E REMOVER CUSTOS
 ========================================================= */
 
@@ -759,6 +859,7 @@ function configurarCalculos() {
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", async () => {
+
     configurarCustos();
     configurarPagamentos();
     configurarCalculos();
@@ -772,7 +873,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     atualizarResumo();
 
+    // Carregar categorias antes de preencher o formulário
+    await carregarCategorias();
+
     if (ID_TRABALHO_EDICAO) {
         await carregarTrabalhoParaEdicao();
     }
+
 });

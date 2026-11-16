@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias | Gestão de Trabalhos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">G</div>
+                <div>
+                    <h2>GESTÃO</h2>
+                    <span>CONTROLE DE TRABALHOS</span>
+                </div>
+            </div>
+
+            <nav class="menu">
+                <span class="menu-label">MENU PRINCIPAL</span>
+
+                <a href="index.html" class="menu-item">
+                    <span>▦</span>Visão geral
+                </a>
+
+                <a href="trabalhos.html" class="menu-item">
+                    <span>▤</span>Trabalhos
+                </a>
+
+                <a href="financeiro.html" class="menu-item">
+                    <span>＄</span>Financeiro
+                </a>
+
+                <a href="categorias.html" class="menu-item active">
+                    <span>▧</span>Categorias
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator"></div>
+                Sistema de gestão
+                <span>Versão 1.0</span>
+            </div>
+
+        </aside>
+
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div>
+                    <h1>Categorias</h1>
+                    <p>Gerencie as categorias utilizadas nos trabalhos.</p>
+                </div>
+
+                <div class="topbar-actions">
+                    <span class="today">Organização</span>
+                </div>
+
+            </header>
+
+            <section class="content">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Gerenciamento de categorias</h2>
+                        <p>Cadastre e organize os tipos de serviços realizados.</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Total de categorias</span>
+                            <div class="stat-icon blue">▧</div>
+                        </div>
+                        <strong id="totalCategorias">0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Categorias ativas</span>
+                            <div class="stat-icon green">✓</div>
+                        </div>
+                        <strong id="categoriasAtivas">0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-top">
+                            <span>Categorias inativas</span>
+                            <div class="stat-icon gold">Ⅱ</div>
+                        </div>
+                        <strong id="categoriasInativas">0</strong>
+                    </div>
+
+                </div>
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h3>Nova categoria</h3>
+                            <p>Adicione uma categoria para organizar seus trabalhos.</p>
+                        </div>
+                    </div>
+
+                    <form id="formularioCategoria">
+
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: end; padding: 20px;">
+
+                            <div style="flex: 1; min-width: 220px;">
+                                <label for="nomeCategoria">Nome da categoria</label>
+                                <input
+                                    type="text"
+                                    id="nomeCategoria"
+                                    placeholder="Ex.: Manutenção de computadores"
+                                    maxlength="60"
+                                    required
+                                    style="width: 100%; padding: 12px; margin-top: 8px; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: var(--text);"
+                                >
+                            </div>
+
+                            <button type="submit" class="btn-primary">
+                                + Adicionar categoria
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="panel recent-panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h3>Categorias cadastradas</h3>
+                            <p>Visualize e gerencie suas categorias.</p>
+                        </div>
+
+                        <span id="quantidadeCategorias">0 categorias</span>
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Categoria</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="corpoCategorias">
+                                <tr>
+                                    <td colspan="3">Carregando categorias...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </div>
+
+                <footer class="footer">
+                    Sistema de Gestão de Trabalhos
+                    <span>•</span>
+                    Versão 1.0
+                </footer>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/categorias.js"></script>
+
+</body>
+</html>

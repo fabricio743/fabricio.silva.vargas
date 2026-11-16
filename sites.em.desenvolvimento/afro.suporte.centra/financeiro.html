@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Financeiro | Gestão de Trabalhos</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- MENU LATERAL -->
+
+        <aside class="sidebar">
+
+            <div class="brand">
+                <div class="brand-icon">G</div>
+
+                <div>
+                    <h2>GESTÃO</h2>
+                    <span>CONTROLE DE TRABALHOS</span>
+                </div>
+            </div>
+
+            <nav class="menu">
+
+                <span class="menu-label">MENU PRINCIPAL</span>
+
+                <a href="index.html" class="menu-item">
+                    <span>▦</span>
+                    Visão geral
+                </a>
+
+                <a href="trabalhos.html" class="menu-item">
+                    <span>▤</span>
+                    Trabalhos
+                </a>
+
+                <a href="financeiro.html" class="menu-item active">
+                    <span>＄</span>
+                    Financeiro
+                </a>
+
+                <a href="categorias.html" class="menu-item">
+                    <span>▧</span>
+                    Categorias
+                </a>
+
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator"></div>
+                Sistema de gestão
+                <span>Versão 1.0</span>
+            </div>
+
+        </aside>
+
+
+        <!-- CONTEÚDO PRINCIPAL -->
+
+        <main class="main-content">
+
+            <!-- CABEÇALHO -->
+
+            <header class="topbar">
+
+                <div>
+                    <h1>Financeiro</h1>
+                    <p>Acompanhe seus recebimentos e resultados financeiros.</p>
+                </div>
+
+                <div class="topbar-actions">
+
+                    <span class="today">Controle financeiro</span>
+
+                    <a href="trabalho.html" class="btn-primary">
+                        + Novo trabalho
+                    </a>
+
+                </div>
+
+            </header>
+
+
+            <!-- CONTEÚDO -->
+
+            <section class="content">
+
+                <!-- RESUMO FINANCEIRO -->
+
+                <div class="section-heading">
+
+                    <div>
+                        <h2>Resumo financeiro</h2>
+                        <p>Movimentações do período selecionado.</p>
+                    </div>
+
+                    <select class="period-select" id="periodoFinanceiro">
+                        <option value="">Carregando períodos...</option>
+                    </select>
+
+                </div>
+
+
+                <!-- INDICADORES -->
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Total recebido</span>
+                            <div class="stat-icon green">↓</div>
+                        </div>
+
+                        <h3 id="financeiroRecebido">R$ 0,00</h3>
+                        <p>Pagamentos recebidos no período</p>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Total de custos</span>
+                            <div class="stat-icon red">−</div>
+                        </div>
+
+                        <h3 id="financeiroCustos">R$ 0,00</h3>
+                        <p>Custos dos trabalhos do período</p>
+
+                    </div>
+
+
+                    <div class="stat-card highlight">
+
+                        <div class="stat-top">
+                            <span>Resultado</span>
+                            <div class="stat-icon gold">★</div>
+                        </div>
+
+                        <h3 id="financeiroResultado">R$ 0,00</h3>
+                        <p>Recebimentos menos custos</p>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <div class="stat-top">
+                            <span>Valores pendentes</span>
+                            <div class="stat-icon blue">R$</div>
+                        </div>
+
+                        <h3 id="financeiroPendente">R$ 0,00</h3>
+                        <p>Valores ainda não recebidos</p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RECEBIMENTOS -->
+
+                <div class="panel recent-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Recebimentos</h2>
+                            <p>Histórico de pagamentos recebidos.</p>
+                        </div>
+
+                        <span class="today">
+                            <strong id="quantidadeRecebimentos">0</strong>
+                            registros
+                        </span>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Cliente</th>
+                                    <th>Trabalho</th>
+                                    <th>Forma de pagamento</th>
+                                    <th>Valor recebido</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="corpoRecebimentos">
+
+                                <tr>
+                                    <td colspan="5" class="empty-state">
+                                        Carregando recebimentos...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CUSTOS -->
+
+                <div class="panel recent-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Custos dos trabalhos</h2>
+                            <p>Despesas vinculadas aos serviços realizados.</p>
+                        </div>
+
+                        <span class="today">
+                            <strong id="quantidadeCustos">0</strong>
+                            registros
+                        </span>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Trabalho</th>
+                                    <th>Cliente</th>
+                                    <th>Descrição</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="corpoCustos">
+
+                                <tr>
+                                    <td colspan="4" class="empty-state">
+                                        Carregando custos...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- COMPARATIVO MENSAL -->
+
+                <div class="panel recent-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Comparativo mensal</h2>
+                            <p>Compare seus resultados financeiros ao longo do ano.</p>
+                        </div>
+
+                        <select class="small-select" id="anoFinanceiro">
+                            <option value="">Carregando...</option>
+                        </select>
+
+                    </div>
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+                                <tr>
+                                    <th>Mês</th>
+                                    <th>Recebimentos</th>
+                                    <th>Custos</th>
+                                    <th>Resultado</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="corpoComparativoFinanceiro">
+
+                                <tr>
+                                    <td colspan="4" class="empty-state">
+                                        Carregando comparativo...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RODAPÉ -->
+
+                <footer class="footer">
+                    Sistema de Gestão de Trabalhos
+                    <span>•</span>
+                    Versão 1.0
+                </footer>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- SCRIPTS -->
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/financeiro.js"></script>
+
+</body>
+</html>
