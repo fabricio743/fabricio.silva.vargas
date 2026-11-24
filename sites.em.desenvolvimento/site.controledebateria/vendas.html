@@ -1,17 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-
     <title>Vendas - Estoque de Baterias</title>
-
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image" href="favicon.ico">
     <link rel="icon" href="./favicon.ico?v=2">
@@ -19,54 +14,44 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Vendas">
-
 </head>
+<body class="layout-sistema pagina-vendas">
+    <input type="checkbox" id="menuNavegacao" class="menu-toggle" aria-label="Abrir ou fechar menu">
+    <label for="menuNavegacao" class="menu-mobile">☰ <span>Gestão de baterias</span></label>
+    <label for="menuNavegacao" class="menu-fundo" aria-label="Fechar menu"></label>
+    <aside class="sidebar">
+        <div class="marca-sistema"><span class="marca-icone">B</span><div><strong>GESTÃO</strong><small>CONTROLE DE BATERIAS</small></div></div>
+        <nav class="menu-sistema" aria-label="Menu principal">
+            <span class="menu-titulo">MENU PRINCIPAL</span>
+            <span class="menu-futuro" aria-disabled="true"><span aria-hidden="true">▦</span>Visão geral<small>Em breve</small></span>
+            <a href="index.html"><span aria-hidden="true">▣</span>Estoque</a>
+            <a href="vendas.html" class="ativo" aria-current="page"><span aria-hidden="true">▤</span>Vendas</a>
+            <span class="menu-futuro" aria-disabled="true"><span aria-hidden="true">▥</span>Financeiro<small>Em breve</small></span>
+        </nav>
+    </aside>
 
-
-<body>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          CONTEÚDO PRINCIPAL
     =========================================== -->
-
     <main class="container">
-
-
-        <!-- CABEÇALHO -->
-
+<!-- CABEÇALHO -->
         <header class="header">
-
             <div>
-
                 <h1>
                     Vendas
                 </h1>
-
                 <p>
                     Controle das baterias vendidas.
                 </p>
-
             </div>
-
-
             <div class="header-acoes">
-
-                <a
-                    href="index.html"
-                    class="btn-secondary"
-                >
-                    ← Estoque
-                </a>
-
-
+                
                 <button
                     class="btn-primary"
                     id="btnNovaVenda"
                 >
                     + Nova venda
                 </button>
-
                 <button
                     type="button"
                     class="btn-atualizar"
@@ -74,120 +59,73 @@
                 >
                     🔄 Atualizar
                 </button>
-
             </div>
-
         </header>
-
-
-
-        <!-- ==========================================
+<!-- ==========================================
              RESUMO
         =========================================== -->
-
         <section class="resumo">
-
-
             <div class="resumo-item">
-
                 <span>
                     Total vendido
                 </span>
-
                 <strong id="totalVendido">
                     R$ 0,00
                 </strong>
-
                 <small>
                     vendas
                 </small>
-
             </div>
-
-
             <div class="resumo-item">
-
                 <span>
                     Custo das vendas
                 </span>
-
                 <strong id="totalCusto">
                     R$ 0,00
                 </strong>
-
                 <small>
                     custo
                 </small>
-
             </div>
-
-
             <div class="resumo-item">
-
                 <span>
                     Lucro
                 </span>
-
                 <strong id="totalLucro">
                     R$ 0,00
                 </strong>
-
                 <small>
                     lucro total
                 </small>
-
             </div>
-
-
         </section>
-
-
-
-        <!-- ==========================================
+<!-- ==========================================
              HISTÓRICO DE VENDAS
         =========================================== -->
-
         <section class="estoque">
-
-
             <div class="section-header">
-
                 <div>
-
                     <h2>
                         Histórico de vendas
                     </h2>
-
                     <p>
-                        Todas as vendas registradas.
+                        Vendas do mês atual. A pesquisa consulta todo o histórico.
                     </p>
-
                 </div>
-
-
                 <input
                     type="search"
                     id="campoPesquisaVenda"
                     class="campo-pesquisa"
                     placeholder="Pesquisar venda..."
                 >
-
             </div>
-
-
-
-            <!-- ==========================================
+<!-- ==========================================
                  TABELA
             =========================================== -->
-
             <div class="tabela-container">
-
                 <table>
-
                     <thead>
-
                         <tr>
-
                             <th>Data</th>
                             <th>Produto</th>
                             <th>Marca</th>
@@ -195,176 +133,115 @@
                             <th>Venda</th>
                             <th>Lucro</th>
                             <th>Ações</th>
-
                         </tr>
-
                     </thead>
-
-
                     <tbody id="listaVendas">
-
-                        <!--
+<!--
                             As vendas serão
                             inseridas pelo JavaScript.
                         -->
-
                     </tbody>
-
                 </table>
-
-
-
-                <!-- ESTADO VAZIO -->
-
+<!-- ESTADO VAZIO -->
                 <div
                     class="estado-vazio"
                     id="estadoVazioVendas"
                 >
-
                     <div class="estado-icon">
                         💰
                     </div>
-
                     <h3>
                         Nenhuma venda registrada
                     </h3>
-
                     <p>
                         Registre sua primeira venda.
                     </p>
-
                     <button
                         class="btn-primary"
                         id="btnNovaVendaVazio"
                     >
                         + Nova venda
                     </button>
-
                 </div>
-
-
             </div>
-
         </section>
-
-
     </main>
-
-
-
-    <!-- ==========================================
+<!-- ==========================================
          MODAL — NOVA VENDA
     =========================================== -->
-
     <div
         class="modal-overlay"
         id="modalVenda"
     >
-
-        <div class="modal">
-
-
-            <!-- CABEÇALHO DO MODAL -->
-
+        <div class="modal-conteudo">
+<!-- CABEÇALHO DO MODAL -->
             <div class="modal-header">
-
                 <div>
-
                     <h2>
                         Nova venda
                     </h2>
-
                     <p>
                         Informe os dados da venda.
                     </p>
-
                 </div>
-
-
                 <button
                     class="btn-fechar"
                     id="btnFecharModalVenda"
                 >
                     ×
                 </button>
-
             </div>
-
-
-
-            <!-- FORMULÁRIO -->
-
+<!-- FORMULÁRIO -->
             <form id="formVenda">
-
-    <!-- ==========================================
+<!-- ==========================================
          LOTE
     =========================================== -->
-
     <div class="campo">
-
         <label for="loteVenda">
             Lote
         </label>
-
         <select id="loteVenda" required>
-
             <option value="">
                 Selecione o lote
             </option>
-
         </select>
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          INFORMAÇÕES DO LOTE
     =========================================== -->
-
     <div
         class="informacoes-lote"
         id="informacoesLote"
         style="display: none;"
     >
-
         <div>
             <span>Produto</span>
             <strong id="vendaProduto">-</strong>
         </div>
-
         <div>
             <span>Marca</span>
             <strong id="vendaMarca">-</strong>
         </div>
-
         <div>
             <span>Capacidade</span>
             <strong id="vendaCapacidade">-</strong>
         </div>
-
         <div>
             <span>Estoque</span>
             <strong id="vendaEstoque">-</strong>
         </div>
-
         <div>
             <span>Custo unitário</span>
             <strong id="vendaCusto">R$ 0,00</strong>
         </div>
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          QUANTIDADE
     =========================================== -->
-
     <div class="campo">
-
         <label for="quantidadeVenda">
             Quantidade
         </label>
-
         <input
             type="number"
             id="quantidadeVenda"
@@ -373,20 +250,14 @@
             value="1"
             required
         >
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          VALOR DA VENDA
     =========================================== -->
-
     <div class="campo">
-
         <label for="valorVenda">
             Valor de venda unitário
         </label>
-
         <input
             type="number"
             id="valorVenda"
@@ -395,57 +266,39 @@
             placeholder="0,00"
             required
         >
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          CANAL DA VENDA
     =========================================== -->
-
     <div class="campo">
-
         <label for="canalVenda">
             Canal da venda
         </label>
-
         <select id="canalVenda" required>
-
             <option value="">
                 Selecione o canal
             </option>
-
             <option value="Mercado Livre">
                 Mercado Livre
             </option>
-
             <option value="Assistência">
                 Assistência
             </option>
-
             <option value="Venda direta">
                 Venda direta
             </option>
-
             <option value="Outro">
                 Outro
             </option>
-
         </select>
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          TAXA DO CANAL
     =========================================== -->
-
     <div class="campo">
-
         <label for="taxaVenda">
             Taxa do canal (%)
         </label>
-
         <input
             type="number"
             id="taxaVenda"
@@ -454,25 +307,18 @@
             value="0"
             placeholder="0"
         >
-
         <small>
             A taxa poderá ser preenchida automaticamente
             de acordo com o canal.
         </small>
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          FRETE
     =========================================== -->
-
     <div class="campo">
-
         <label for="freteVenda">
             Frete
         </label>
-
         <input
             type="number"
             id="freteVenda"
@@ -481,45 +327,30 @@
             value="0"
             placeholder="0,00"
         >
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          PAGADOR DO FRETE
     =========================================== -->
-
     <div class="campo">
-
         <label for="fretePagoPor">
             Frete pago por
         </label>
-
         <select id="fretePagoPor">
-
             <option value="cliente">
                 Cliente
             </option>
-
             <option value="nos">
                 Nós
             </option>
-
         </select>
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          OUTROS CUSTOS
     =========================================== -->
-
     <div class="campo">
-
         <label for="outrosCustos">
             Outros custos
         </label>
-
         <input
             type="number"
             id="outrosCustos"
@@ -528,140 +359,90 @@
             value="0"
             placeholder="0,00"
         >
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          CLIENTE
     =========================================== -->
-
     <div class="campo">
-
         <label for="clienteVenda">
             Cliente
         </label>
-
         <input
             type="text"
             id="clienteVenda"
             placeholder="Opcional"
         >
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          OBSERVAÇÃO
     =========================================== -->
-
     <div class="campo">
-
         <label for="observacaoVenda">
             Observação
         </label>
-
         <textarea
             id="observacaoVenda"
             rows="3"
             placeholder="Opcional"
         ></textarea>
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          RESUMO DA VENDA
     =========================================== -->
-
     <div class="resumo-venda">
-
         <div class="linha-calculo">
-
             <span>
                 Custo dos produtos
             </span>
-
             <strong id="calculoCusto">
                 R$ 0,00
             </strong>
-
         </div>
-
-
         <div class="linha-calculo">
-
             <span>
                 Venda
             </span>
-
             <strong id="calculoVenda">
                 R$ 0,00
             </strong>
-
         </div>
-
-
         <div class="linha-calculo">
-
             <span>
                 Frete
             </span>
-
             <strong id="calculoFrete">
                 R$ 0,00
             </strong>
-
         </div>
-
-
         <div class="linha-calculo">
-
             <span>
                 Taxa do canal
             </span>
-
             <strong id="calculoTaxa">
                 R$ 0,00
             </strong>
-
         </div>
-
-
         <div class="linha-calculo">
-
             <span>
                 Outros custos
             </span>
-
             <strong id="calculoOutrosCustos">
                 R$ 0,00
             </strong>
-
         </div>
-
-
         <div class="linha-calculo linha-lucro">
-
             <span>
                 Lucro
             </span>
-
             <strong id="calculoLucro">
                 R$ 0,00
             </strong>
-
         </div>
-
     </div>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          BOTÕES
     =========================================== -->
-
     <div class="modal-acoes">
-
         <button
             type="button"
             class="btn-secondary"
@@ -669,38 +450,26 @@
         >
             Cancelar
         </button>
-
         <button
             type="submit"
             class="btn-primary"
         >
             Registrar venda
         </button>
-
     </div>
-
 </form>
-
         </div>
-
     </div>
-
-
-    <!-- =====================================================
+<!-- =====================================================
          MODAL - DETALHES DA VENDA
     ====================================================== -->
-
     <div
         id="modalDetalhesVenda"
         class="modal"
     >
-
         <div class="modal-conteudo modal-detalhes-venda">
-
             <div class="modal-cabecalho">
-
                 <h2>Detalhes da venda</h2>
-
                 <button
                     type="button"
                     id="btnFecharDetalhesVenda"
@@ -708,161 +477,113 @@
                 >
                     ×
                 </button>
-
             </div>
-
-
             <div class="detalhes-venda">
-
                 <div class="detalhes-grupo">
-
                     <h3>Produto</h3>
-
                     <div class="detalhes-grid">
-
                         <div>
                             <span>Produto</span>
                             <strong id="detalheProduto">-</strong>
                         </div>
-
                         <div>
                             <span>Marca</span>
                             <strong id="detalheMarca">-</strong>
                         </div>
-
                         <div>
                             <span>Capacidade</span>
                             <strong id="detalheCapacidade">-</strong>
                         </div>
-
                         <div>
                             <span>Quantidade</span>
                             <strong id="detalheQuantidade">-</strong>
                         </div>
-
                         <div>
                             <span>ID do lote</span>
                             <strong id="detalheLote">-</strong>
                         </div>
-
                         <div>
                             <span>Status</span>
                             <strong id="detalheStatus">-</strong>
                         </div>
-
                     </div>
-
                 </div>
-
-
                 <div class="detalhes-grupo">
-
                     <h3>Valores</h3>
-
                     <div class="detalhes-grid">
-
                         <div>
                             <span>Custo unitário</span>
                             <strong id="detalheCustoUnitario">R$ 0,00</strong>
                         </div>
-
                         <div>
                             <span>Valor de venda</span>
                             <strong id="detalheValorVenda">R$ 0,00</strong>
                         </div>
-
                         <div>
                             <span>Total da venda</span>
                             <strong id="detalheVendaTotal">R$ 0,00</strong>
                         </div>
-
                         <div>
                             <span>Custo do produto</span>
                             <strong id="detalheCustoProduto">R$ 0,00</strong>
                         </div>
-
                         <div>
                             <span>Taxa</span>
                             <strong id="detalheTaxa">R$ 0,00</strong>
                         </div>
-
                         <div>
                             <span>Frete</span>
                             <strong id="detalheFrete">R$ 0,00</strong>
                         </div>
-
                         <div>
                             <span>Outros custos</span>
                             <strong id="detalheOutrosCustos">R$ 0,00</strong>
                         </div>
-
                         <div>
                             <span>Custo total</span>
                             <strong id="detalheCustoTotal">R$ 0,00</strong>
                         </div>
-
                         <div>
                             <span>Lucro</span>
                             <strong id="detalheLucro">R$ 0,00</strong>
                         </div>
-
                     </div>
-
                 </div>
-
-
                 <div class="detalhes-grupo">
-
                     <h3>Venda</h3>
-
                     <div class="detalhes-grid">
-
                         <div>
                             <span>Data</span>
                             <strong id="detalheData">-</strong>
                         </div>
-
                         <div>
                             <span>Canal</span>
                             <strong id="detalheCanal">-</strong>
                         </div>
-
                         <div>
                             <span>Taxa (%)</span>
                             <strong id="detalheTaxaPercentual">0%</strong>
                         </div>
-
                         <div>
                             <span>Frete pago por</span>
                             <strong id="detalheFretePagoPor">-</strong>
                         </div>
-
                         <div>
                             <span>Cliente</span>
                             <strong id="detalheCliente">-</strong>
                         </div>
-
                     </div>
-
                 </div>
-
-
                 <div class="detalhes-grupo">
-
                     <h3>Observação</h3>
-
                     <p
                         id="detalheObservacao"
                         class="detalhe-observacao"
                     >
                         -
                     </p>
-
                 </div>
-
-
                 <div class="detalhes-acoes">
-
                     <button
                         type="button"
                         id="btnReverterDetalhe"
@@ -870,19 +591,12 @@
                     >
                         Reverter venda
                     </button>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
-    <!-- JAVASCRIPT -->
+<!-- JAVASCRIPT -->
     <script src="config.js"></script>
     <script src="vendas.js"></script>
-
 </body>
-
 </html>

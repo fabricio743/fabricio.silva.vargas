@@ -1,18 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-
     <title>Estoque de Baterias</title>
-
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image" href="favicon.ico">
     <link rel="icon" href="./favicon.ico?v=2">
@@ -20,513 +14,315 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="Estoque">
-
 </head>
+<body class="layout-sistema pagina-estoque">
+    <input type="checkbox" id="menuNavegacao" class="menu-toggle" aria-label="Abrir ou fechar menu">
+    <label for="menuNavegacao" class="menu-mobile">☰ <span>Gestão de baterias</span></label>
+    <label for="menuNavegacao" class="menu-fundo" aria-label="Fechar menu"></label>
+    <aside class="sidebar">
+        <div class="marca-sistema"><span class="marca-icone">B</span><div><strong>GESTÃO</strong><small>CONTROLE DE BATERIAS</small></div></div>
+        <nav class="menu-sistema" aria-label="Menu principal">
+            <span class="menu-titulo">MENU PRINCIPAL</span>
+            <span class="menu-futuro" aria-disabled="true"><span aria-hidden="true">▦</span>Visão geral<small>Em breve</small></span>
+            <a href="index.html" class="ativo" aria-current="page"><span aria-hidden="true">▣</span>Estoque</a>
+            <a href="vendas.html"><span aria-hidden="true">▤</span>Vendas</a>
+            <span class="menu-futuro" aria-disabled="true"><span aria-hidden="true">▥</span>Financeiro<small>Em breve</small></span>
+        </nav>
+    </aside>
 
-
-<body>
-
-
-    <!-- ==========================================
+<!-- ==========================================
          CONTEÚDO PRINCIPAL
     =========================================== -->
-
     <main class="container">
-
-
-        <!-- CABEÇALHO -->
-
+<!-- CABEÇALHO -->
         <header class="header">
-
             <div>
-
                 <h1>
                     Estoque de Baterias
                 </h1>
-
                 <p>
                     Controle simples das baterias disponíveis.
                 </p>
-
             </div>
-
             <div class="header-acoes">
-
-                <a
-                    href="vendas.html"
-                    class="btn-secondary"
-                >
-                    💰 Vendas
-                </a>
-
-
+                
                 <button
                     class="btn-primary"
                     id="btnAdicionar"
                 >
                     + Adicionar bateria
                 </button>
-
-
                 <button
                     id="btnAtualizar"
                     class="btn-atualizar"
                 >
                     🔄 Atualizar
                 </button>
-
             </div>
-
         </header>
-
-
-
-        <!-- ==========================================
+<!-- ==========================================
              RESUMO
         =========================================== -->
-
         <section class="resumo">
-
             <div class="resumo-item">
-
                 <span>
                     Total em estoque
                 </span>
-
                 <strong id="totalEstoque">
                     0
                 </strong>
-
                 <small>
                     baterias
                 </small>
-
             </div>
-
-
             <div class="resumo-item">
-
                 <span>
-                    Modelos cadastrados
+                    Modelos disponíveis
                 </span>
-
                 <strong id="totalModelos">
                     0
                 </strong>
-
                 <small>
-                    modelos de iPhone
+                    modelos com estoque disponível
                 </small>
-
             </div>
-
         </section>
-
-
-
-        <!-- ==========================================
+<!-- ==========================================
              ÁREA DE ESTOQUE
         =========================================== -->
-
         <section class="estoque">
-
-
             <div class="section-header">
-
                 <div>
-
                     <h2>
                         Baterias cadastradas
                     </h2>
-
                     <p>
                         Lista das baterias disponíveis.
                     </p>
-
                 </div>
-
-
+                <div class="filtros-estoque">
                 <input
                     type="search"
                     id="campoPesquisa"
                     class="campo-pesquisa"
                     placeholder="Pesquisar modelo..."
                 >
-
+                <label class="filtro-zerados">
+                    <input type="checkbox" id="exibirZerados">
+                    Exibir estoque zerado
+                </label>
+                </div>
             </div>
-
-
-
-            <!-- ==========================================
+<!-- ==========================================
                  TABELA
             =========================================== -->
-
             <div class="tabela-container">
-
                 <table>
-
                     <thead>
-
                         <tr>
-
                             <th>
                                 Modelo
                             </th>
-
                             <th>
                                 Marca
                             </th>
-
                             <th>
                                 Capacidade
                             </th>
-
                             <th>
                                 Quantidade
                             </th>
-
                             <th>
                                 Custo unitário
                             </th>
-
                             <th>
                                 Valor em estoque
                             </th>
-
                             <th>
                                 Ações
                             </th>
-
                         </tr>
-
                     </thead>
-
-
                     <tbody id="listaEstoque">
-
-                        <!--
-
+<!--
                         Os produtos serão inseridos
                         automaticamente pelo JavaScript.
-
                         -->
-
                     </tbody>
-
                 </table>
-
-
-                <!-- ESTADO VAZIO -->
-
+<!-- ESTADO VAZIO -->
                 <div
                     class="estado-vazio"
                     id="estadoVazio"
                 >
-
                     <div class="estado-icon">
                         📦
                     </div>
-
                     <h3>
                         Nenhuma bateria cadastrada
                     </h3>
-
                     <p>
                         Adicione sua primeira bateria ao estoque.
                     </p>
-
                     <button
                         class="btn-primary"
                         id="btnAdicionarVazio"
                     >
                         + Adicionar bateria
                     </button>
-
                 </div>
-
             </div>
-
         </section>
-
-
-
     </main>
-
-
-
-    <!-- ==========================================
+<!-- ==========================================
          MODAL — ADICIONAR / EDITAR
     =========================================== -->
-
     <div
         class="modal-overlay"
         id="modal"
     >
-
         <div class="modal">
-
-
             <div class="modal-header">
-
                 <div>
-
                     <h2 id="modalTitulo">
                         Adicionar bateria
                     </h2>
-
                     <p>
                         Informe os dados da bateria.
                     </p>
-
                 </div>
-
-
                 <button
                     class="btn-fechar"
                     id="btnFecharModal"
                 >
                     ×
                 </button>
-
             </div>
-
-
-
-            <!-- FORMULÁRIO -->
-
+<!-- FORMULÁRIO -->
             <form id="formBateria">
-
-
-                <!-- MODELO -->
-
+<!-- MODELO -->
                 <div class="campo">
-
                     <label for="modelo">
                         Modelo do iPhone
                     </label>
-
                     <select
                         id="modelo"
                         required
                     >
-
                         <option value="">
                             Selecione o modelo
                         </option>
-
-                        <option value="iPhone 6">
-                            iPhone 6
-                        </option>
-
-                        <option value="iPhone 6 Plus">
-                            iPhone 6 Plus
-                        </option>
-
-                        <option value="iPhone 6s">
-                            iPhone 6s
-                        </option>
-
-                        <option value="iPhone 6s Plus">
-                            iPhone 6s Plus
-                        </option>
-
-                        <option value="iPhone 7">
-                            iPhone 7
-                        </option>
-
-                        <option value="iPhone 7 Plus">
-                            iPhone 7 Plus
-                        </option>
-
-                        <option value="iPhone 8">
-                            iPhone 8
-                        </option>
-
-                        <option value="iPhone 8 Plus">
-                            iPhone 8 Plus
-                        </option>
-
-                        <option value="iPhone X">
-                            iPhone X
-                        </option>
-
-                        <option value="iPhone XR">
-                            iPhone XR
-                        </option>
-
-                        <option value="iPhone XS">
-                            iPhone XS
-                        </option>
-
-                        <option value="iPhone XS Max">
-                            iPhone XS Max
-                        </option>
-
                         <option value="iPhone 11">
                             iPhone 11
                         </option>
-
                         <option value="iPhone 11 Pro">
                             iPhone 11 Pro
                         </option>
-
                         <option value="iPhone 11 Pro Max">
                             iPhone 11 Pro Max
                         </option>
-
-                        <option value="iPhone SE 2020">
-                            iPhone SE 2020
-                        </option>
-
                         <option value="iPhone 12">
                             iPhone 12
                         </option>
-
                         <option value="iPhone 12 Mini">
                             iPhone 12 Mini
                         </option>
-
                         <option value="iPhone 12 Pro">
                             iPhone 12 Pro
                         </option>
-
                         <option value="iPhone 12 Pro Max">
                             iPhone 12 Pro Max
                         </option>
-
                         <option value="iPhone 13">
                             iPhone 13
                         </option>
-
                         <option value="iPhone 13 Mini">
                             iPhone 13 Mini
                         </option>
-
                         <option value="iPhone 13 Pro">
                             iPhone 13 Pro
                         </option>
-
                         <option value="iPhone 13 Pro Max">
                             iPhone 13 Pro Max
                         </option>
-
-                        <option value="iPhone SE 2022">
-                            iPhone SE 2022
-                        </option>
-
                         <option value="iPhone 14">
                             iPhone 14
                         </option>
-
                         <option value="iPhone 14 Plus">
                             iPhone 14 Plus
                         </option>
-
                         <option value="iPhone 14 Pro">
                             iPhone 14 Pro
                         </option>
-
                         <option value="iPhone 14 Pro Max">
                             iPhone 14 Pro Max
                         </option>
-
                         <option value="iPhone 15">
                             iPhone 15
                         </option>
-
                         <option value="iPhone 15 Plus">
                             iPhone 15 Plus
                         </option>
-
                         <option value="iPhone 15 Pro">
                             iPhone 15 Pro
                         </option>
-
                         <option value="iPhone 15 Pro Max">
                             iPhone 15 Pro Max
                         </option>
-
                         <option value="iPhone 16">
                             iPhone 16
                         </option>
-
                         <option value="iPhone 16 Plus">
                             iPhone 16 Plus
                         </option>
-
                         <option value="iPhone 16 Pro">
                             iPhone 16 Pro
                         </option>
-
                         <option value="iPhone 16 Pro Max">
                             iPhone 16 Pro Max
                         </option>
-
                     </select>
-
                 </div>
-
-                <!-- MARCA -->
-
+<!-- MARCA -->
                 <div class="campo">
-
                     <label for="marca">
                         Marca
                     </label>
-
                     <input
                         type="text"
                         id="marca"
                         placeholder="Ex: Vizer"
                         required
                     >
-
                 </div>
-
-
-                <!-- CAPACIDADE -->
-
+<!-- CAPACIDADE -->
                 <div class="campo">
-
                     <label for="capacidade">
                         Capacidade
                     </label>
-
                     <select
                         id="capacidade"
                         required
                     >
-
                         <option value="">
                             Selecione
                         </option>
-
-                        <option value="100%">
-                            100%
+                        <option value="Genuína">
+                            Genuína
                         </option>
-
-                        <option value="Alta capacidade">
-                            Alta capacidade
+                        <option value="Global">
+                            Global
                         </option>
-
                         <option value="Padrão">
                             Padrão
                         </option>
-
                     </select>
-
                 </div>
-
-
-
-                <!-- QUANTIDADE -->
-
+<!-- QUANTIDADE -->
                 <div class="campo">
-
                     <label for="quantidade">
                         Quantidade
                     </label>
-
                     <input
                         type="number"
                         id="quantidade"
@@ -535,25 +331,16 @@
                         placeholder="Ex: 5"
                         required
                     >
-
                 </div>
-
-
-
-                <!-- CUSTO -->
-
+<!-- CUSTO -->
                 <div class="campo">
-
                     <label for="custo">
                         Custo unitário
                     </label>
-
                     <div class="input-prefix">
-
                         <span>
                             R$
                         </span>
-
                         <input
                             type="number"
                             id="custo"
@@ -562,38 +349,24 @@
                             placeholder="0,00"
                             required
                         >
-
                     </div>
-
                 </div>
-
-
-
-                <!-- OBSERVAÇÃO -->
-
+<!-- OBSERVAÇÃO -->
                 <div class="campo">
-
                     <label for="observacao">
                         Observação
                         <small>
                             opcional
                         </small>
                     </label>
-
                     <textarea
                         id="observacao"
                         rows="3"
                         placeholder="Ex: Bateria premium, fornecedor X..."
                     ></textarea>
-
                 </div>
-
-
-
-                <!-- BOTÕES -->
-
+<!-- BOTÕES -->
                 <div class="modal-footer">
-
                     <button
                         type="button"
                         class="btn-secondary"
@@ -601,32 +374,18 @@
                     >
                         Cancelar
                     </button>
-
-
                     <button
                         type="submit"
                         class="btn-primary"
                     >
                         Salvar bateria
                     </button>
-
                 </div>
-
-
             </form>
-
         </div>
-
     </div>
-
-
-
-    <!-- JAVASCRIPT -->
-
+<!-- JAVASCRIPT -->
     <script src="config.js"></script>
     <script src="script.js"></script>
-
 </body>
-
 </html>
-
