@@ -1,97 +1,179 @@
+
+/* =====================================================
+   SMARTILIZA - CENTRAL DE ORDENS DE SERVIÇO
+===================================================== */
+
 const URL_SCRIPT = CONFIG.URL_SCRIPT;
 
 let ordensCarregadas = [];
 let ordemSelecionadaPDF = null;
+let carregandoOrdens = false;
+
+const STATUS_OS = [
+    "Em análise",
+    "Aguardando aprovação do cliente",
+    "Aguardando peça",
+    "Finalizado",
+    "Retirado",
+    "Sem conserto"
+];
+
+const CLASSES_STATUS = [
+    "linha-retirado",
+    "linha-aguardando",
+    "linha-sem-conserto",
+    "linha-finalizado",
+    "linha-analise",
+    "linha-aprovacao"
+];
+
+
+/* =====================================================
+   INICIALIZAÇÃO
+===================================================== */
 
 window.addEventListener("load", function(){
+
     definirMesAtual();
     carregarOrdens();
+
 });
 
-// =============================
-// CARREGAR ORDENS
-// =============================
+
+/* =====================================================
+   CARREGAMENTO
+===================================================== */
 
 function esconderLoadingSite(){
 
     const loadingSite = document.getElementById("loadingSite");
 
     if(loadingSite){
+
         loadingSite.classList.add("oculto");
+
     }
 
 }
 
+
 async function carregarOrdens(){
+
+    if(carregandoOrdens) return;
+
+    carregandoOrdens = true;
 
     const lista = document.getElementById("listaOrdens");
     const loading = document.getElementById("loadingOrdens");
 
+    const botaoAtualizar =
+        document.querySelector(".btn-atualizar-lista");
+
+    if(botaoAtualizar){
+
+        botaoAtualizar.disabled = true;
+        botaoAtualizar.textContent = "Atualizando...";
+
+    }
+
     if(loading){
-        loading.style.display = "block";
+
+        loading.style.display = "none";
+
     }
 
     if(lista){
+
         lista.innerHTML = `
             <tr>
                 <td colspan="14" class="mensagem-tabela">
+
                     <div class="loading-tabela">
+
                         <span class="spinner-tabela"></span>
+
                         <span>Carregando ordens...</span>
+
                     </div>
+
                 </td>
             </tr>
         `;
+
     }
 
     try {
 
-        console.log("URL_SCRIPT:", URL_SCRIPT);
-        console.log("URL FINAL:", URL_SCRIPT + "?action=listarOS");
-
-        const resposta = await fetch(URL_SCRIPT + "?action=listarOS");
-
-        const texto = await resposta.text();
-
-        console.log("STATUS DA RESPOSTA:", resposta.status);
-        console.log("RESPOSTA RECEBIDA:", texto);
+        const resposta = await fetch(
+            URL_SCRIPT + "?action=listarOS"
+        );
 
         if(!resposta.ok){
+
             throw new Error("Erro HTTP " + resposta.status);
+
         }
+
+        const texto = await resposta.text();
 
         let ordens;
 
         try {
+
             ordens = JSON.parse(texto);
-        } catch(erroJson) {
-            throw new Error("A resposta não é JSON. Verifique a URL do Apps Script.");
+
+        } catch(erroJson){
+
+            throw new Error(
+                "A resposta não é JSON. Verifique a URL do Apps Script."
+            );
+
         }
 
-        ordensCarregadas = Array.isArray(ordens)
-            ? [...ordens].reverse()
-            : [];
+        if(!Array.isArray(ordens)){
+
+            throw new Error("Formato de resposta inválido.");
+
+        }
+
+        ordensCarregadas = [...ordens].reverse();
 
         aplicarFiltrosOrdens();
 
     } catch(erro){
 
+        console.error("ERRO AO CARREGAR ORDENS:", erro);
+
         if(lista){
+
             lista.innerHTML = `
                 <tr>
                     <td colspan="14" class="mensagem-tabela">
-                        Erro ao carregar ordens. Verifique a URL do Apps Script.
+
+                        Erro ao carregar ordens.
+                        Verifique a conexão com o Apps Script.
+
                     </td>
                 </tr>
             `;
-        }
 
-        console.error("ERRO AO CARREGAR ORDENS:", erro);
+        }
 
     } finally {
 
+        carregandoOrdens = false;
+
         if(loading){
+
             loading.style.display = "none";
+
+        }
+
+        if(botaoAtualizar){
+
+            botaoAtualizar.disabled = false;
+            botaoAtualizar.textContent = "↻ Atualizar lista";
+
         }
 
         esconderLoadingSite();
@@ -101,193 +183,25 @@ async function carregarOrdens(){
 }
 
 
-// =============================
-// MOSTRAR ORDENS NA TABELA
-// =============================
+/* =====================================================
+   SEGURANÇA E FORMATAÇÃO DE TEXTOS
+===================================================== */
 
-function mostrarOrdens(ordens){
+function escaparHTML(valor){
 
-    const lista = document.getElementById("listaOrdens");
-
-    if(!ordens || ordens.length === 0){
-
-        lista.innerHTML = `
-            <tr>
-                <td colspan="14" class="mensagem-tabela">
-                    Nenhuma ordem encontrada.
-                </td>
-            </tr>
-        `;
-
-        return;
-    }
-
-    lista.innerHTML = "";
-
-    ordens.forEach(function(item){
-
-        const linha = document.createElement("tr");
-
-        const classe = classeStatus(item.status);
-
-        if(classe){
-            linha.classList.add(classe);
-        }
-
-        linha.innerHTML = `
-            <td>${item.os || ""}</td>
-            <td>${formatarData(item.data)}</td>
-            <td>${item.cliente || ""}</td>
-            <td>${item.telefone || ""}</td>
-            <td>${item.modelo || ""}</td>
-            <td>R$ ${Number(item.orcamento || 0).toFixed(2)}</td>
-            <td>R$ ${Number(item.custoPeca || 0).toFixed(2)}</td>
-            <td>R$ ${Number(item.lucro || 0).toFixed(2)}</td>
-
-            <td>
-                <select 
-                    class="status-select"
-                    id="status-${item.linha}"
-                    onchange="salvarStatus(${item.linha})"
-                >
-                    <option ${normalizarStatus(item.status) === "em analise" ? "selected" : ""}>
-                        Em análise
-                    </option>
-
-                    <option ${normalizarStatus(item.status) === "aguardando aprovacao do cliente" ? "selected" : ""}>
-                        Aguardando aprovação do cliente
-                    </option>
-
-                    <option ${normalizarStatus(item.status) === "aguardando peca" ? "selected" : ""}>
-                        Aguardando peça
-                    </option>
-
-                    <option ${normalizarStatus(item.status) === "finalizado" ? "selected" : ""}>
-                        Finalizado
-                    </option>
-
-                    <option ${normalizarStatus(item.status) === "retirado" ? "selected" : ""}>
-                        Retirado
-                    </option>
-
-                    <option ${
-                        normalizarStatus(item.status) === "sem conserto" ||
-                        normalizarStatus(item.status) === "sem concerto"
-                        ? "selected"
-                        : ""
-                    }>
-                        Sem conserto
-                    </option>
-                </select>
-            </td>
-
-            <td>${formatarData(item.garantia)}</td>
-
-            <td>
-                <button 
-                    type="button" 
-                    class="btn-tabela"
-                    onclick="abrirDetalhesOS(${item.linha})"
-                >
-                    Ver
-                </button>
-            </td>
-
-            <td>
-                <button 
-                    type="button" 
-                    class="btn-tabela"
-                    onclick="abrirEditarOS(${item.linha})"
-                >
-                    Editar
-                </button>
-            </td>
-
-            <td>
-                <button 
-                    type="button" 
-                    class="btn-whatsapp"
-                    onclick="enviarWhatsAppPorLinha(${item.linha})"
-                >
-                    Avisar
-                </button>
-            </td>
-
-            <td>
-                <button 
-                    type="button" 
-                    class="btn-salvar-status"
-                    onclick="salvarStatus(${item.linha})"
-                >
-                    Salvar
-                </button>
-            </td>
-        `;
-
-        lista.appendChild(linha);
-
-    });
+    return String(valor ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 
 }
 
-function atualizarResumoOrdens(ordens){
 
-    const totalAbertas = document.getElementById("totalAbertas");
-    const totalAguardando = document.getElementById("totalAguardando");
-    const totalFinalizadas = document.getElementById("totalFinalizadas");
-    const totalRetiradas = document.getElementById("totalRetiradas");
-    const totalOrdensMes = document.getElementById("totalOrdensMes");
+function normalizarTexto(texto){
 
-    if(!Array.isArray(ordens)){
-        ordens = [];
-    }
-
-    const abertas = ordens.filter(function(item){
-        const status = normalizarStatus(item.status);
-
-        return (
-            status === "em analise" ||
-            status === "aguardando aprovacao do cliente"
-        );
-    }).length;
-
-    const aguardando = ordens.filter(function(item){
-        return normalizarStatus(item.status) === "aguardando peca";
-    }).length;
-
-    const finalizadas = ordens.filter(function(item){
-        return normalizarStatus(item.status) === "finalizado";
-    }).length;
-
-    const retiradas = ordens.filter(function(item){
-        return normalizarStatus(item.status) === "retirado";
-    }).length;
-
-    if(totalAbertas){
-        totalAbertas.textContent = abertas;
-    }
-
-    if(totalAguardando){
-        totalAguardando.textContent = aguardando;
-    }
-
-    if(totalFinalizadas){
-        totalFinalizadas.textContent = finalizadas;
-    }
-
-    if(totalRetiradas){
-        totalRetiradas.textContent = retiradas;
-    }
-
-    if(totalOrdensMes){
-        totalOrdensMes.textContent = ordens.length;
-    }
-
-}
-
-function normalizarStatus(status){
-
-    return String(status || "")
+    return String(texto ?? "")
         .toLowerCase()
         .trim()
         .normalize("NFD")
@@ -295,9 +209,516 @@ function normalizarStatus(status){
 
 }
 
-// =============================
-// FILTROS
-// =============================
+
+function normalizarStatus(status){
+
+    return normalizarTexto(status);
+
+}
+
+
+function obterStatusPadrao(status){
+
+    const normalizado = normalizarStatus(status);
+
+    if(normalizado === "sem concerto"){
+
+        return "Sem conserto";
+
+    }
+
+    return STATUS_OS.find(function(item){
+
+        return normalizarStatus(item) === normalizado;
+
+    }) || "Em análise";
+
+}
+
+
+/* =====================================================
+   RESUMO DO SERVIÇO
+===================================================== */
+
+function obterResumoServico(item){
+
+    const laudo = String(item.laudo ?? "").trim();
+
+    const defeito = String(item.defeito ?? "").trim();
+
+    if(laudo){
+
+        return {
+
+            texto: laudo.replace(/\s+/g, " "),
+            completo: laudo,
+            vazio: false
+
+        };
+
+    }
+
+    if(defeito){
+
+        return {
+
+            texto: "Defeito: " + defeito.replace(/\s+/g, " "),
+            completo: "Defeito relatado: " + defeito,
+            vazio: false
+
+        };
+
+    }
+
+    return {
+
+        texto: "Não informado",
+        completo: "Nenhum serviço informado.",
+        vazio: true
+
+    };
+
+}
+
+
+/* =====================================================
+   MOSTRAR ORDENS NA TABELA
+===================================================== */
+
+function mostrarOrdens(ordens){
+
+    const lista = document.getElementById("listaOrdens");
+
+    if(!lista) return;
+
+    if(!ordens || ordens.length === 0){
+
+        lista.innerHTML = `
+            <tr>
+
+                <td colspan="14" class="mensagem-tabela">
+
+                    Nenhuma ordem encontrada.
+
+                </td>
+
+            </tr>
+        `;
+
+        return;
+
+    }
+
+    lista.innerHTML = "";
+
+    const fragmento = document.createDocumentFragment();
+
+    ordens.forEach(function(item){
+
+        const linha = document.createElement("tr");
+
+        const numeroLinha = Number(item.linha);
+
+        const classe = classeStatus(item.status);
+
+        const resumo = obterResumoServico(item);
+
+        const lucro = Number(item.lucro || 0);
+
+        const statusAtual = obterStatusPadrao(item.status);
+
+        linha.classList.add("linha-clicavel");
+
+        linha.tabIndex = 0;
+
+        linha.dataset.linha = String(numeroLinha);
+
+        linha.setAttribute(
+            "aria-label",
+            "Abrir ordem de serviço " + (item.os || "")
+        );
+
+        if(classe){
+
+            linha.classList.add(classe);
+
+        }
+
+
+        /* OPÇÕES DO SELECT */
+
+        const opcoesStatus = STATUS_OS.map(function(status){
+
+            const selecionado = status === statusAtual
+                ? "selected"
+                : "";
+
+            return `
+                <option ${selecionado}
+                    value="${escaparHTML(status)}">
+
+                    ${escaparHTML(status)}
+
+                </option>
+            `;
+
+        }).join("");
+
+
+        /* CONTEÚDO DA LINHA */
+
+        linha.innerHTML = `
+
+            <td title="${escaparHTML(item.os)}">
+
+                ${escaparHTML(item.os)}
+
+            </td>
+
+
+            <td>
+
+                ${escaparHTML(formatarData(item.data))}
+
+            </td>
+
+
+            <td title="${escaparHTML(item.cliente)}">
+
+                ${escaparHTML(item.cliente)}
+
+            </td>
+
+
+            <td title="${escaparHTML(item.telefone)}">
+
+                ${escaparHTML(item.telefone)}
+
+            </td>
+
+
+            <td title="${escaparHTML(item.modelo)}">
+
+                ${escaparHTML(item.modelo)}
+
+            </td>
+
+
+            <td>
+
+                <span
+                    class="${resumo.vazio
+                        ? "servico-vazio"
+                        : "servico-resumo"}"
+                    title="${escaparHTML(resumo.completo)}"
+                >
+
+                    ${escaparHTML(resumo.texto)}
+
+                </span>
+
+            </td>
+
+
+            <td>
+
+                ${formatarMoedaPDF(item.orcamento)}
+
+            </td>
+
+
+            <td>
+
+                ${formatarMoedaPDF(item.custoPeca)}
+
+            </td>
+
+
+            <td class="${lucro < 0
+                ? "valor-negativo"
+                : "valor-lucro"}">
+
+                ${formatarMoedaPDF(lucro)}
+
+            </td>
+
+
+            <td>
+
+                <select
+                    class="status-select"
+                    id="status-${numeroLinha}"
+                    aria-label="Status da OS ${escaparHTML(item.os)}"
+                    title="${escaparHTML(statusAtual)}"
+                >
+
+                    ${opcoesStatus}
+
+                </select>
+
+            </td>
+
+
+            <td>
+
+                ${escaparHTML(formatarData(item.garantia))}
+
+            </td>
+
+
+            <td>
+
+                <button
+                    type="button"
+                    class="btn-tabela acao-editar"
+                    title="Editar ordem de serviço"
+                >
+
+                    Editar
+
+                </button>
+
+            </td>
+
+
+            <td>
+
+                <button
+                    type="button"
+                    class="btn-whatsapp acao-whatsapp"
+                    title="Avisar cliente pelo WhatsApp"
+                >
+
+                    Avisar
+
+                </button>
+
+            </td>
+
+
+            <td>
+
+                <button
+                    type="button"
+                    class="btn-salvar-status acao-salvar"
+                    title="Salvar status"
+                >
+
+                    Salvar
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        /* ABRIR OS AO CLICAR NA LINHA */
+
+        linha.addEventListener("click", function(evento){
+
+            if(evento.target.closest(
+                "button, select, option, input, textarea, a, label"
+            )){
+
+                return;
+
+            }
+
+            const selecao = window.getSelection();
+
+            if(selecao && selecao.toString().trim()){
+
+                return;
+
+            }
+
+            abrirDetalhesOS(numeroLinha);
+
+        });
+
+
+        /* ACESSIBILIDADE PELO TECLADO */
+
+        linha.addEventListener("keydown", function(evento){
+
+            if(evento.target !== linha) return;
+
+            if(evento.key === "Enter" || evento.key === " "){
+
+                evento.preventDefault();
+
+                abrirDetalhesOS(numeroLinha);
+
+            }
+
+        });
+
+
+        /* SELECT DE STATUS */
+
+        const select = linha.querySelector(".status-select");
+
+        select.addEventListener("click", function(evento){
+
+            evento.stopPropagation();
+
+        });
+
+        select.addEventListener("change", function(evento){
+
+            evento.stopPropagation();
+
+            salvarStatus(numeroLinha);
+
+        });
+
+
+        /* BOTÃO EDITAR */
+
+        linha.querySelector(".acao-editar")
+            .addEventListener("click", function(evento){
+
+                evento.stopPropagation();
+
+                abrirEditarOS(numeroLinha);
+
+            });
+
+
+        /* BOTÃO WHATSAPP */
+
+        linha.querySelector(".acao-whatsapp")
+            .addEventListener("click", function(evento){
+
+                evento.stopPropagation();
+
+                enviarWhatsAppPorLinha(numeroLinha);
+
+            });
+
+
+        /* BOTÃO SALVAR */
+
+        linha.querySelector(".acao-salvar")
+            .addEventListener("click", function(evento){
+
+                evento.stopPropagation();
+
+                salvarStatus(numeroLinha);
+
+            });
+
+
+        fragmento.appendChild(linha);
+
+    });
+
+    lista.appendChild(fragmento);
+
+}
+
+
+/* =====================================================
+   ATUALIZAR INDICADORES
+===================================================== */
+
+function atualizarResumoOrdens(ordens){
+
+    if(!Array.isArray(ordens)){
+
+        ordens = [];
+
+    }
+
+    const abertas = ordens.filter(function(item){
+
+        const status = normalizarStatus(item.status);
+
+        return (
+            status === "em analise" ||
+            status === "aguardando aprovacao do cliente"
+        );
+
+    }).length;
+
+
+    const aguardando = ordens.filter(function(item){
+
+        return normalizarStatus(item.status) === "aguardando peca";
+
+    }).length;
+
+
+    const finalizadas = ordens.filter(function(item){
+
+        return normalizarStatus(item.status) === "finalizado";
+
+    }).length;
+
+
+    const retiradas = ordens.filter(function(item){
+
+        return normalizarStatus(item.status) === "retirado";
+
+    }).length;
+
+
+    const indicadores = {
+
+        totalOrdensMes: ordens.length,
+        totalAbertas: abertas,
+        totalAguardando: aguardando,
+        totalFinalizadas: finalizadas,
+        totalRetiradas: retiradas
+
+    };
+
+    Object.entries(indicadores).forEach(function([id, valor]){
+
+        const elemento = document.getElementById(id);
+
+        if(elemento){
+
+            elemento.textContent = valor;
+
+        }
+
+    });
+
+}
+
+
+/* =====================================================
+   RESUMO DO MÊS SELECIONADO
+===================================================== */
+
+function atualizarResumoMesSelecionado(){
+
+    const campoMes =
+        document.getElementById("filtroMesDashboard");
+
+    const mesSelecionado = campoMes
+        ? campoMes.value
+        : "";
+
+    const ordensDoMes = ordensCarregadas.filter(function(item){
+
+        return (
+            mesSelecionado === "" ||
+            obterAnoMes(item.data) === mesSelecionado
+        );
+
+    });
+
+    atualizarResumoOrdens(ordensDoMes);
+
+}
+
+
+/* =====================================================
+   FILTROS E PESQUISA
+===================================================== */
 
 function aplicarFiltrosOrdens(){
 
@@ -305,163 +726,307 @@ function aplicarFiltrosOrdens(){
         document.getElementById("campoBusca") ||
         document.getElementById("pesquisaOS");
 
-    const campoStatus = document.getElementById("filtroStatus");
-    const campoMes = document.getElementById("filtroMesDashboard");
+    const campoStatus =
+        document.getElementById("filtroStatus");
+
+    const campoMes =
+        document.getElementById("filtroMesDashboard");
+
 
     const texto = campoBusca
-        ? campoBusca.value.toLowerCase().trim()
+
+        ? normalizarTexto(campoBusca.value)
+
         : "";
+
 
     const statusSelecionado = campoStatus
+
         ? campoStatus.value
+
         : "";
+
 
     const mesSelecionado = campoMes
+
         ? campoMes.value
+
         : "";
 
-    const statusFiltroNormalizado = normalizarStatus(statusSelecionado);
+
+    const statusFiltroNormalizado =
+        normalizarStatus(statusSelecionado);
+
 
     const filtradas = ordensCarregadas.filter(function(item){
 
-        const bateTexto =
-            String(item.os || "").toLowerCase().includes(texto) ||
-            String(item.cliente || "").toLowerCase().includes(texto) ||
-            String(item.telefone || "").toLowerCase().includes(texto) ||
-            String(item.modelo || "").toLowerCase().includes(texto);
+        const camposPesquisa = [
 
-        const statusItemNormalizado = normalizarStatus(item.status);
+            item.os,
+            item.cliente,
+            item.telefone,
+            item.modelo,
+            item.laudo,
+            item.defeito,
+            item.fornecedor
+
+        ];
+
+        const bateTexto = camposPesquisa.some(function(campo){
+
+            return normalizarTexto(campo).includes(texto);
+
+        });
+
+        const statusItem =
+            normalizarStatus(item.status);
 
         const bateStatus =
+
             statusSelecionado === "" ||
-            statusItemNormalizado === statusFiltroNormalizado ||
+
+            statusItem === statusFiltroNormalizado ||
+
             (
                 statusFiltroNormalizado === "sem conserto" &&
-                statusItemNormalizado === "sem concerto"
+                statusItem === "sem concerto"
             );
 
+
+        /* PESQUISA EM TODOS OS MESES */
+
         const bateMes =
+
             texto !== "" ||
+
             mesSelecionado === "" ||
+
             obterAnoMes(item.data) === mesSelecionado;
+
 
         return bateTexto && bateStatus && bateMes;
 
     });
 
-    atualizarResumoOrdens(filtradas);
+
+    atualizarResumoMesSelecionado();
+
     mostrarOrdens(filtradas);
 
 }
+
+
 function filtrarOrdens(){
+
     aplicarFiltrosOrdens();
+
 }
 
-// =============================
-// SALVAR STATUS
-// =============================
+
+/* =====================================================
+   LOCALIZAR ORDEM
+===================================================== */
+
+function localizarOrdem(linha){
+
+    return ordensCarregadas.find(function(item){
+
+        return Number(item.linha) === Number(linha);
+
+    });
+
+}
+
+
+/* =====================================================
+   SALVAR STATUS
+===================================================== */
 
 async function salvarStatus(linha){
 
-    const selectStatus = document.getElementById("status-" + linha);
+    const selectStatus =
+        document.getElementById("status-" + linha);
+
+    if(!selectStatus || selectStatus.disabled){
+
+        return;
+
+    }
+
+    const ordem = localizarOrdem(linha);
+
+    if(!ordem){
+
+        alert("Ordem de serviço não encontrada.");
+
+        return;
+
+    }
+
     const novoStatus = selectStatus.value;
 
+    const statusAnterior = obterStatusPadrao(ordem.status);
+
+    const linhaTabela = selectStatus.closest("tr");
+
+    const botaoSalvar =
+        linhaTabela.querySelector(".btn-salvar-status");
+
+
+    if(novoStatus === statusAnterior){
+
+        return;
+
+    }
+
+
     const dados = {
+
         action: "atualizarStatusOS",
+
         linha: linha,
+
         status: novoStatus
+
     };
+
 
     selectStatus.disabled = true;
 
+    if(botaoSalvar){
+
+        botaoSalvar.disabled = true;
+        botaoSalvar.textContent = "...";
+
+    }
+
+
     try {
 
-        const resposta = await fetch(URL_SCRIPT,{
-            method:"POST",
-            body:JSON.stringify(dados)
+        const resposta = await fetch(URL_SCRIPT, {
+
+            method: "POST",
+
+            body: JSON.stringify(dados)
+
         });
+
+        if(!resposta.ok){
+
+            throw new Error("Erro HTTP " + resposta.status);
+
+        }
 
         const resultado = await resposta.json();
 
-        selectStatus.disabled = false;
+        if(!resultado.sucesso){
 
-        if(resultado.sucesso){
-
-            const linhaTabela = selectStatus.closest("tr");
-
-            linhaTabela.classList.remove(
-                "linha-retirado",
-                "linha-aguardando",
-                "linha-sem-conserto",
-                "linha-finalizado",
-                "linha-analise"
+            throw new Error(
+                resultado.mensagem || "Erro ao atualizar status."
             );
 
-            const novaClasse = classeStatus(novoStatus);
+        }
 
-            if(novaClasse){
-                linhaTabela.classList.add(novaClasse);
-            }
 
-            const ordem = ordensCarregadas.find(function(item){
-                return Number(item.linha) === Number(linha);
-            });
+        /* ATUALIZAR COR DA LINHA */
 
-            if(ordem){
-                ordem.status = novoStatus;
-            }
+        linhaTabela.classList.remove(...CLASSES_STATUS);
 
-            if(novoStatus === "Finalizado"){
-                perguntarEnvioWhatsApp(linha);
-            }
+        const novaClasse = classeStatus(novoStatus);
 
-        } else {
-            alert("Erro ao atualizar status.");
+        if(novaClasse){
+
+            linhaTabela.classList.add(novaClasse);
+
+        }
+
+
+        /* ATUALIZAR DADOS LOCAIS */
+
+        ordem.status = novoStatus;
+
+        selectStatus.title = novoStatus;
+
+
+        /* ATUALIZAR INDICADORES */
+
+        atualizarResumoMesSelecionado();
+
+
+        /* WHATSAPP AO FINALIZAR */
+
+        if(
+
+            novoStatus === "Finalizado" &&
+
+            statusAnterior !== "Finalizado"
+
+        ){
+
+            perguntarEnvioWhatsApp(linha);
+
+        }
+
+
+        /* ATUALIZAR LISTAGEM SE HOUVER FILTRO */
+
+        const filtroStatus =
+            document.getElementById("filtroStatus");
+
+        if(filtroStatus && filtroStatus.value){
+
+            aplicarFiltrosOrdens();
+
         }
 
     } catch(erro){
 
-        selectStatus.disabled = false;
+        selectStatus.value = statusAnterior;
+
         alert("Erro ao atualizar status.");
+
         console.error(erro);
+
+    } finally {
+
+        selectStatus.disabled = false;
+
+        if(botaoSalvar){
+
+            botaoSalvar.disabled = false;
+            botaoSalvar.textContent = "Salvar";
+
+        }
 
     }
 
 }
 
 
-// =============================
-// FORMATAÇÃO
-// =============================
+/* =====================================================
+   FORMATAÇÃO DE DATAS
+===================================================== */
 
 function formatarData(data){
 
     if(!data){
+
         return "";
-    }
-
-    if(typeof data === "string" && data.includes("T")){
-
-        const apenasData = data.split("T")[0];
-        const partes = apenasData.split("-");
-
-        if(partes.length === 3){
-            return `${partes[2]}/${partes[1]}/${partes[0]}`;
-        }
 
     }
 
-    if(typeof data === "string" && data.includes("-")){
+    const texto = String(data);
 
-        const partes = data.split("-");
+    const resultado =
+        texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
 
-        if(partes.length === 3){
-            return `${partes[2]}/${partes[1]}/${partes[0]}`;
-        }
+    if(resultado){
+
+        return `${resultado[3]}/${resultado[2]}/${resultado[1]}`;
 
     }
 
-    return data;
+    return texto;
 
 }
 
@@ -469,15 +1034,29 @@ function formatarData(data){
 function converterDataParaInput(data){
 
     if(!data){
+
         return "";
+
     }
 
-    if(typeof data === "string" && data.includes("T")){
-        return data.split("T")[0];
+    const texto = String(data);
+
+    const formatoISO =
+        texto.match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+    if(formatoISO){
+
+        return `${formatoISO[1]}-${formatoISO[2]}-${formatoISO[3]}`;
+
     }
 
-    if(typeof data === "string" && data.includes("-")){
-        return data;
+    const formatoBR =
+        texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+
+    if(formatoBR){
+
+        return `${formatoBR[3]}-${formatoBR[2]}-${formatoBR[1]}`;
+
     }
 
     return "";
@@ -485,217 +1064,498 @@ function converterDataParaInput(data){
 }
 
 
+/* =====================================================
+   FORMATAÇÃO DE VALORES
+===================================================== */
+
 function formatarMoedaPDF(valor){
 
-    return Number(valor || 0).toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-    });
+    const numero = Number(valor || 0);
+
+    return (Number.isFinite(numero) ? numero : 0)
+        .toLocaleString("pt-BR", {
+
+            style: "currency",
+
+            currency: "BRL"
+
+        });
 
 }
 
 
-// =============================
-// CLASSE POR STATUS
-// =============================
+/* =====================================================
+   CLASSES DOS STATUS
+===================================================== */
 
 function classeStatus(status){
 
     const statusNormalizado = normalizarStatus(status);
 
-    if(statusNormalizado === "retirado"){
-        return "linha-retirado";
+    switch(statusNormalizado){
+
+        case "retirado":
+
+            return "linha-retirado";
+
+        case "aguardando peca":
+
+            return "linha-aguardando";
+
+        case "sem conserto":
+
+        case "sem concerto":
+
+            return "linha-sem-conserto";
+
+        case "finalizado":
+
+            return "linha-finalizado";
+
+        case "em analise":
+
+            return "linha-analise";
+
+        case "aguardando aprovacao do cliente":
+
+            return "linha-aprovacao";
+
+        default:
+
+            return "";
+
     }
 
-    if(statusNormalizado === "aguardando peca"){
-        return "linha-aguardando";
-    }
-
-    if(
-        statusNormalizado === "sem conserto" ||
-        statusNormalizado === "sem concerto"
-    ){
-        return "linha-sem-conserto";
-    }
-
-    if(statusNormalizado === "finalizado"){
-        return "linha-finalizado";
-    }
-
-    if(statusNormalizado === "em analise"){
-        return "linha-analise";
-    }
-
-    if(statusNormalizado === "aguardando aprovacao do cliente"){
-    return "linha-analise";
 }
 
-    return "";
 
-}
-
-// =============================
-// MODAL DETALHES
-// =============================
+/* =====================================================
+   MODAL DE DETALHES
+===================================================== */
 
 function abrirDetalhesOS(linha){
 
-    const ordem = ordensCarregadas.find(function(item){
-        return Number(item.linha) === Number(linha);
-    });
+    const ordem = localizarOrdem(linha);
 
     if(!ordem){
+
         alert("Ordem de serviço não encontrada.");
+
         return;
+
     }
 
     ordemSelecionadaPDF = ordem;
 
-    document.getElementById("detalheOS").textContent = ordem.os || "";
-    document.getElementById("detalheData").textContent = formatarData(ordem.data);
-    document.getElementById("detalheCliente").textContent = ordem.cliente || "";
-    document.getElementById("detalheTelefone").textContent = ordem.telefone || "";
-    document.getElementById("detalheModelo").textContent = ordem.modelo || "";
-    document.getElementById("detalheStatus").textContent = ordem.status || "";
 
-    document.getElementById("detalheOrcamento").textContent =
-        "R$ " + Number(ordem.orcamento || 0).toFixed(2);
+    const campos = {
 
-    document.getElementById("detalheCusto").textContent =
-        "R$ " + Number(ordem.custoPeca || 0).toFixed(2);
+        detalheOS: ordem.os || "",
 
-    document.getElementById("detalheLucro").textContent =
-        "R$ " + Number(ordem.lucro || 0).toFixed(2);
+        detalheData: formatarData(ordem.data),
 
-    document.getElementById("detalheFornecedor").textContent = ordem.fornecedor || "";
-    document.getElementById("detalheGarantia").textContent = formatarData(ordem.garantia);
+        detalheCliente: ordem.cliente || "",
 
-    document.getElementById("detalheDefeito").textContent =
-        ordem.defeito || "Nenhum defeito informado.";
+        detalheTelefone: ordem.telefone || "",
 
-    document.getElementById("detalheLaudo").textContent =
-        ordem.laudo || "Nenhum laudo informado.";
+        detalheModelo: ordem.modelo || "",
 
-    document.getElementById("detalheSubtitulo").textContent =
-        "OS " + (ordem.os || "") + " - " + (ordem.cliente || "");
+        detalheStatus: ordem.status || "",
 
-    document.getElementById("modalDetalhesOS").classList.add("ativo");
+        detalheOrcamento: formatarMoedaPDF(ordem.orcamento),
+
+        detalheCusto: formatarMoedaPDF(ordem.custoPeca),
+
+        detalheLucro: formatarMoedaPDF(ordem.lucro),
+
+        detalheFornecedor: ordem.fornecedor || "Não informado",
+
+        detalheGarantia: formatarData(ordem.garantia),
+
+        detalheDefeito:
+            ordem.defeito || "Nenhum defeito informado.",
+
+        detalheLaudo:
+            ordem.laudo || "Nenhum laudo informado.",
+
+        detalheSubtitulo:
+            "OS " + (ordem.os || "") + " - " + (ordem.cliente || "")
+
+    };
+
+
+    Object.entries(campos).forEach(function([id, valor]){
+
+        const elemento = document.getElementById(id);
+
+        if(elemento){
+
+            elemento.textContent = valor;
+
+        }
+
+    });
+
+
+    const elementoLucro =
+        document.getElementById("detalheLucro");
+
+    if(elementoLucro){
+
+        elementoLucro.classList.toggle(
+            "lucro-negativo",
+            Number(ordem.lucro || 0) < 0
+        );
+
+    }
+
+
+    abrirModal("modalDetalhesOS");
 
 }
 
 
 function fecharDetalhesOS(){
 
-    document
-        .getElementById("modalDetalhesOS")
-        .classList
-        .remove("ativo");
+    fecharModal("modalDetalhesOS");
 
 }
 
 
-// =============================
-// MODAL EDITAR
-// =============================
+/* =====================================================
+   CONTROLE DOS MODAIS
+===================================================== */
+
+let elementoFocoAnterior = null;
+
+function abrirModal(id){
+
+    const modal = document.getElementById(id);
+
+    if(!modal) return;
+
+    elementoFocoAnterior = document.activeElement;
+
+    modal.classList.add("ativo");
+
+    modal.setAttribute("role", "dialog");
+
+    modal.setAttribute("aria-modal", "true");
+
+    modal.setAttribute("aria-hidden", "false");
+
+    document.body.style.overflow = "hidden";
+
+    const conteudo =
+        modal.querySelector(".modal-conteudo");
+
+    if(conteudo){
+
+        conteudo.scrollTop = 0;
+
+    }
+
+    const primeiroBotao =
+        modal.querySelector(".btn-fechar");
+
+    if(primeiroBotao){
+
+        primeiroBotao.focus();
+
+    }
+
+}
+
+
+function fecharModal(id){
+
+    const modal = document.getElementById(id);
+
+    if(!modal) return;
+
+    modal.classList.remove("ativo");
+
+    modal.setAttribute("aria-hidden", "true");
+
+    if(!document.querySelector(".modal.ativo")){
+
+        document.body.style.overflow = "";
+
+    }
+
+    if(elementoFocoAnterior && elementoFocoAnterior.isConnected){
+
+        elementoFocoAnterior.focus();
+
+    }
+
+    elementoFocoAnterior = null;
+
+}
+
+
+/* FECHAR AO CLICAR FORA */
+
+document.querySelectorAll(
+    "#modalDetalhesOS, #modalEditarOS"
+).forEach(function(modal){
+
+    modal.addEventListener("click", function(evento){
+
+        if(evento.target === modal){
+
+            fecharModal(modal.id);
+
+        }
+
+    });
+
+});
+
+
+/* FECHAR COM ESC E MANTER FOCO NO MODAL */
+
+document.addEventListener("keydown", function(evento){
+
+    const modal = document.querySelector(".modal.ativo");
+
+    if(!modal) return;
+
+    if(evento.key === "Escape"){
+
+        fecharModal(modal.id);
+
+        return;
+
+    }
+
+    if(evento.key === "Tab"){
+
+        const elementos = Array.from(
+            modal.querySelectorAll(
+                "button, input, select, textarea, a[href]"
+            )
+        ).filter(function(elemento){
+
+            return !elemento.disabled &&
+                elemento.type !== "hidden" &&
+                elemento.getClientRects().length > 0;
+
+        });
+
+        if(!elementos.length) return;
+
+        const primeiro = elementos[0];
+
+        const ultimo = elementos[elementos.length - 1];
+
+        if(evento.shiftKey && document.activeElement === primeiro){
+
+            evento.preventDefault();
+            ultimo.focus();
+
+        } else if(!evento.shiftKey &&
+            document.activeElement === ultimo){
+
+            evento.preventDefault();
+            primeiro.focus();
+
+        }
+
+    }
+
+});
+
+
+/* =====================================================
+   MODAL EDITAR
+===================================================== */
 
 function abrirEditarOS(linha){
 
-    const ordem = ordensCarregadas.find(function(item){
-        return Number(item.linha) === Number(linha);
-    });
+    const ordem = localizarOrdem(linha);
 
     if(!ordem){
+
         alert("Ordem de serviço não encontrada.");
+
         return;
+
     }
 
-    document.getElementById("editarLinhaOS").value = ordem.linha || "";
-    document.getElementById("editarNumeroOS").value = ordem.os || "";
-    document.getElementById("editarDataOS").value = converterDataParaInput(ordem.data);
-    document.getElementById("editarClienteOS").value = ordem.cliente || "";
-    document.getElementById("editarTelefoneOS").value = ordem.telefone || "";
-    document.getElementById("editarModeloOS").value = ordem.modelo || "";
-    document.getElementById("editarDefeitoOS").value = ordem.defeito || "";
-    document.getElementById("editarLaudoOS").value = ordem.laudo || "";
-    document.getElementById("editarOrcamentoOS").value = ordem.orcamento || "";
-    document.getElementById("editarCustoPecaOS").value = ordem.custoPeca || "";
-    document.getElementById("editarFornecedorOS").value = ordem.fornecedor || "";
 
-        if(normalizarStatus(ordem.status) === "sem concerto"){
-        document.getElementById("editarStatusOS").value = "Sem conserto";
-    } else {
-        document.getElementById("editarStatusOS").value =
-            ordem.status || "Em análise";
-    }
+    const campos = {
+
+        editarLinhaOS: ordem.linha,
+
+        editarNumeroOS: ordem.os,
+
+        editarDataOS: converterDataParaInput(ordem.data),
+
+        editarClienteOS: ordem.cliente,
+
+        editarTelefoneOS: ordem.telefone,
+
+        editarModeloOS: ordem.modelo,
+
+        editarDefeitoOS: ordem.defeito,
+
+        editarLaudoOS: ordem.laudo,
+
+        editarOrcamentoOS: ordem.orcamento,
+
+        editarCustoPecaOS: ordem.custoPeca,
+
+        editarFornecedorOS: ordem.fornecedor,
+
+        editarStatusOS: obterStatusPadrao(ordem.status)
+
+    };
+
+
+    Object.entries(campos).forEach(function([id, valor]){
+
+        const elemento = document.getElementById(id);
+
+        if(elemento){
+
+            elemento.value = valor ?? "";
+
+        }
+
+    });
+
 
     document.getElementById("editarSubtitulo").textContent =
+
         "OS " + (ordem.os || "") + " - " + (ordem.cliente || "");
 
-    document.getElementById("modalEditarOS").classList.add("ativo");
+
+    abrirModal("modalEditarOS");
 
 }
 
 
 function fecharEditarOS(){
 
-    document
-        .getElementById("modalEditarOS")
-        .classList
-        .remove("ativo");
+    fecharModal("modalEditarOS");
 
 }
 
 
-// =============================
-// SALVAR EDIÇÃO DA OS
-// =============================
+/* =====================================================
+   SALVAR EDIÇÃO DA OS
+===================================================== */
 
 const editarOSForm = document.getElementById("editarOSForm");
 
 if(editarOSForm){
 
-    editarOSForm.addEventListener("submit", async function(e){
+    editarOSForm.addEventListener("submit", async function(evento){
 
-        e.preventDefault();
+        evento.preventDefault();
+
+        const botao = editarOSForm.querySelector(
+            'button[type="submit"]'
+        );
+
+        if(botao && botao.disabled){
+
+            return;
+
+        }
+
 
         const dados = {
+
             action: "editarOS",
 
             linha: document.getElementById("editarLinhaOS").value,
+
             os: document.getElementById("editarNumeroOS").value,
+
             data: document.getElementById("editarDataOS").value,
+
             cliente: document.getElementById("editarClienteOS").value,
+
             telefone: document.getElementById("editarTelefoneOS").value,
+
             modelo: document.getElementById("editarModeloOS").value,
+
             defeito: document.getElementById("editarDefeitoOS").value,
+
             laudo: document.getElementById("editarLaudoOS").value,
+
             orcamento: document.getElementById("editarOrcamentoOS").value,
+
             custoPeca: document.getElementById("editarCustoPecaOS").value,
+
             fornecedor: document.getElementById("editarFornecedorOS").value,
+
             status: document.getElementById("editarStatusOS").value
+
         };
+
+
+        if(botao){
+
+            botao.disabled = true;
+
+            botao.textContent = "Salvando...";
+
+        }
+
 
         try {
 
-            const resposta = await fetch(URL_SCRIPT,{
-                method:"POST",
-                body:JSON.stringify(dados)
+            const resposta = await fetch(URL_SCRIPT, {
+
+                method: "POST",
+
+                body: JSON.stringify(dados)
+
             });
+
+            if(!resposta.ok){
+
+                throw new Error("Erro HTTP " + resposta.status);
+
+            }
 
             const resultado = await resposta.json();
 
             if(resultado.sucesso){
-                alert("OS atualizada com sucesso!");
+
                 fecharEditarOS();
-                carregarOrdens();
+
+                await carregarOrdens();
+
+                alert("OS atualizada com sucesso!");
+
             } else {
-                alert(resultado.mensagem || "Erro ao atualizar OS.");
+
+                alert(
+                    resultado.mensagem ||
+                    "Erro ao atualizar OS."
+                );
+
             }
 
         } catch(erro){
 
             alert("Erro ao atualizar OS.");
+
             console.error(erro);
+
+        } finally {
+
+            if(botao){
+
+                botao.disabled = false;
+
+                botao.textContent = "Salvar alterações";
+
+            }
 
         }
 
@@ -704,43 +1564,62 @@ if(editarOSForm){
 }
 
 
-// =============================
-// WHATSAPP
-// =============================
+/* =====================================================
+   WHATSAPP
+===================================================== */
 
 function perguntarEnvioWhatsApp(linha){
 
-    const ordem = ordensCarregadas.find(function(item){
-        return Number(item.linha) === Number(linha);
-    });
+    const ordem = localizarOrdem(linha);
 
     if(!ordem){
-        alert("Ordem de serviço não encontrada para envio da mensagem.");
+
+        alert("Ordem de serviço não encontrada.");
+
         return;
+
     }
 
     const confirmar = confirm(
+
         "OS finalizada. Deseja avisar o cliente pelo WhatsApp?"
+
     );
 
-    if(!confirmar){
-        return;
-    }
+    if(confirmar){
 
-    enviarWhatsAppFinalizado(ordem);
+        enviarWhatsAppFinalizado(ordem);
+
+    }
 
 }
 
 
 function enviarWhatsAppPorLinha(linha){
 
-    const ordem = ordensCarregadas.find(function(item){
-        return Number(item.linha) === Number(linha);
-    });
+    const ordem = localizarOrdem(linha);
 
     if(!ordem){
+
         alert("Ordem de serviço não encontrada.");
+
         return;
+
+    }
+
+    const status = normalizarStatus(ordem.status);
+
+    if(status !== "finalizado" && status !== "retirado"){
+
+        const confirmar = confirm(
+
+            "Esta OS ainda não está finalizada. Deseja enviar " +
+            "a mensagem de serviço finalizado mesmo assim?"
+
+        );
+
+        if(!confirmar) return;
+
     }
 
     enviarWhatsAppFinalizado(ordem);
@@ -754,398 +1633,535 @@ function enviarWhatsAppFinalizado(ordem){
         .replace(/\D/g, "");
 
     if(!telefoneLimpo){
+
         alert("Telefone do cliente não encontrado.");
+
         return;
+
     }
 
-    const telefoneBrasil = telefoneLimpo.startsWith("55")
-        ? telefoneLimpo
-        : "55" + telefoneLimpo;
+    let telefoneBrasil;
 
-    const valorServico = Number(ordem.orcamento || 0)
-        .toFixed(2)
-        .replace(".", ",");
+    if(
 
-    const mensagem =
-`Olá, ${ordem.cliente}! Aqui é da Smartiliza Assistência Técnica.
+        telefoneLimpo.startsWith("55") &&
+
+        (telefoneLimpo.length === 12 ||
+         telefoneLimpo.length === 13)
+
+    ){
+
+        telefoneBrasil = telefoneLimpo;
+
+    } else if(
+
+        telefoneLimpo.length === 10 ||
+
+        telefoneLimpo.length === 11
+
+    ){
+
+        telefoneBrasil = "55" + telefoneLimpo;
+
+    } else {
+
+        alert("Confira o telefone e o DDD do cliente.");
+
+        return;
+
+    }
+
+
+    const valorServico = formatarMoedaPDF(ordem.orcamento);
+
+
+    const mensagem = `Olá, ${ordem.cliente}! Aqui é da Smartiliza Assistência Técnica.
 
 Sua ordem de serviço nº ${ordem.os}, referente ao aparelho ${ordem.modelo}, foi finalizada e já está pronta para retirada.
 
-Valor total do serviço: R$ ${valorServico}
+Valor total do serviço: ${valorServico}
 
 Aguardamos sua retirada. Obrigado!`;
 
+
     const link =
+
         "https://wa.me/" +
+
         telefoneBrasil +
+
         "?text=" +
+
         encodeURIComponent(mensagem);
 
-    window.open(link, "_blank");
+
+    window.open(link, "_blank", "noopener,noreferrer");
 
 }
 
 
-// =============================
-// PDF CLIENTE
-// =============================
+/* =====================================================
+   GERAR PDF PARA O CLIENTE
+===================================================== */
 
 function gerarPDFCliente(){
 
     if(!ordemSelecionadaPDF){
+
         alert("Nenhuma OS selecionada.");
+
         return;
+
     }
 
     const ordem = ordemSelecionadaPDF;
 
+    const campo = function(titulo, valor){
+
+        return `
+            <div class="campo">
+
+                <span>${escaparHTML(titulo)}</span>
+
+                <strong>${escaparHTML(valor)}</strong>
+
+            </div>
+        `;
+
+    };
+
+
     const htmlPDF = `
         <!DOCTYPE html>
         <html lang="pt-BR">
+
         <head>
+
             <meta charset="UTF-8">
-            <title>OS ${ordem.os} - Smartiliza</title>
+
+            <title>
+                OS ${escaparHTML(ordem.os)} - Smartiliza
+            </title>
 
             <style>
-                *{
-                    box-sizing:border-box;
-                    font-family:Arial, sans-serif;
+
+                * {
+                    box-sizing: border-box;
+                    font-family: Arial, sans-serif;
                 }
 
-                @page{
-                    size:A4;
-                    margin:10mm;
+                @page {
+                    size: A4;
+                    margin: 10mm;
                 }
 
-                body{
-                    margin:0;
-                    padding:0;
-                    background:#fff;
-                    color:#222;
-                    font-size:12px;
+                body {
+                    margin: 0;
+                    padding: 0;
+                    background: #fff;
+                    color: #222;
+                    font-size: 12px;
                 }
 
-                .documento{
-                    width:100%;
-                    max-width:760px;
-                    margin:auto;
-                    padding:0;
+                .documento {
+                    width: 100%;
+                    max-width: 760px;
+                    margin: auto;
                 }
 
-                .topo{
-                    display:flex;
-                    justify-content:space-between;
-                    align-items:flex-start;
-                    border-bottom:2px solid #003B73;
-                    padding-bottom:8px;
-                    margin-bottom:10px;
+                .topo {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    border-bottom: 2px solid #003B73;
+                    padding-bottom: 10px;
+                    margin-bottom: 14px;
                 }
 
-                .marca h1{
-                    margin:0;
-                    color:#003B73;
-                    font-size:24px;
-                    line-height:1;
+                .marca h1 {
+                    color: #003B73;
+                    font-size: 25px;
+                    margin: 0;
                 }
 
-                .marca span{
-                    color:#FF7A00;
-                    font-weight:bold;
-                    font-size:12px;
+                .marca span {
+                    color: #C65300;
+                    font-weight: bold;
                 }
 
-                .numero-os{
-                    text-align:right;
-                    font-size:12px;
+                .numero-os {
+                    text-align: right;
                 }
 
-                .numero-os strong{
-                    display:block;
-                    color:#003B73;
-                    font-size:18px;
-                    margin:2px 0;
+                .numero-os strong {
+                    display: block;
+                    font-size: 20px;
+                    margin: 4px 0;
+                    color: #003B73;
                 }
 
-                .secao{
-                    margin-bottom:9px;
-                    page-break-inside:avoid;
+                .secao {
+                    margin-bottom: 14px;
                 }
 
-                .secao h2{
-                    color:#003B73;
-                    font-size:14px;
-                    border-bottom:1px solid #ddd;
-                    padding-bottom:4px;
-                    margin:0 0 6px 0;
+                .secao h2 {
+                    font-size: 14px;
+                    color: #003B73;
+                    border-bottom: 1px solid #ddd;
+                    padding-bottom: 5px;
+                    margin: 0 0 9px;
+                    break-after: avoid;
                 }
 
-                .grid{
-                    display:grid;
-                    grid-template-columns:1fr 1fr;
-                    gap:6px 14px;
+                .grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 8px 16px;
                 }
 
-                .campo{
-                    margin-bottom:4px;
+                .campo {
+                    min-width: 0;
+                    margin-bottom: 4px;
+                    break-inside: avoid;
                 }
 
-                .campo span{
-                    display:block;
-                    font-size:10px;
-                    color:#666;
-                    font-weight:bold;
-                    text-transform:uppercase;
-                    margin-bottom:2px;
+                .campo span {
+                    display: block;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                    color: #64748B;
+                    font-weight: bold;
+                    margin-bottom: 4px;
                 }
 
-                .campo strong{
-                    margin:0;
-                    font-size:12px;
-                    color:#222;
-                    line-height:1.35;
+                .campo strong {
+                    font-size: 12px;
+                    line-height: 1.4;
+                    overflow-wrap: anywhere;
                 }
 
-                .texto-longo{
-                    background:#f7f9fc;
-                    border:1px solid #ddd;
-                    padding:7px;
-                    border-radius:6px;
-                    min-height:35px;
-                    max-height:90px;
-                    overflow:hidden;
-                    white-space:pre-wrap;
-                    font-size:12px;
-                    line-height:1.35;
+                .texto-longo {
+                    background: #F5F8FC;
+                    border: 1px solid #D9E2EC;
+                    padding: 10px;
+                    border-radius: 5px;
+                    min-height: 35px;
+                    white-space: pre-wrap;
+                    overflow-wrap: anywhere;
+                    line-height: 1.5;
                 }
 
-                .garantia{
-                    background:#fff7ed;
-                    border:1px solid #fdba74;
-                    border-radius:8px;
-                    padding:9px;
-                    margin-top:8px;
-                    page-break-inside:avoid;
+                .garantia {
+                    background: #FFF7ED;
+                    border: 1px solid #FDBA74;
+                    border-radius: 6px;
+                    padding: 10px;
+                    margin-top: 12px;
+                    break-inside: avoid;
                 }
 
-                .garantia h2{
-                    color:#9a3412;
-                    border:none;
-                    margin:0 0 5px 0;
-                    padding:0;
-                    font-size:14px;
+                .garantia h2 {
+                    color: #9A3412;
+                    font-size: 14px;
+                    margin: 0 0 7px;
                 }
 
-                .garantia p{
-                    margin:0 0 4px 0;
-                    line-height:1.35;
-                    font-size:11px;
+                .garantia p {
+                    margin: 0 0 5px;
+                    font-size: 11px;
+                    line-height: 1.5;
                 }
 
-                .assinaturas{
-                    display:grid;
-                    grid-template-columns:1fr 1fr;
-                    gap:35px;
-                    margin-top:28px;
-                    page-break-inside:avoid;
+                .assinaturas {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 35px;
+                    margin-top: 40px;
+                    break-inside: avoid;
                 }
 
-                .assinatura{
-                    text-align:center;
-                    border-top:1px solid #222;
-                    padding-top:5px;
-                    font-size:11px;
+                .assinatura {
+                    border-top: 1px solid #222;
+                    padding-top: 7px;
+                    text-align: center;
+                    font-size: 11px;
                 }
 
-                .rodape{
-                    margin-top:12px;
-                    padding-top:7px;
-                    border-top:1px solid #ddd;
-                    font-size:10px;
-                    color:#666;
-                    text-align:center;
-                    line-height:1.3;
+                .rodape {
+                    border-top: 1px solid #ddd;
+                    margin-top: 20px;
+                    padding-top: 9px;
+                    text-align: center;
+                    font-size: 10px;
+                    line-height: 1.5;
+                    color: #64748B;
                 }
 
-                @media print{
-                    body{
-                        padding:0;
-                    }
-
-                    .documento{
-                        border:none;
-                    }
-                }
             </style>
+
         </head>
 
         <body>
 
             <div class="documento">
 
+
                 <div class="topo">
+
                     <div class="marca">
+
                         <h1>Smartiliza</h1>
+
                         <span>Assistência Técnica</span>
+
                     </div>
 
                     <div class="numero-os">
-                        <span>Ordem de Serviço</span>
-                        <strong>${ordem.os || ""}</strong>
-                        <small>Data: ${formatarData(ordem.data)}</small>
+
+                        Ordem de Serviço
+
+                        <strong>
+                            ${escaparHTML(ordem.os)}
+                        </strong>
+
+                        <small>
+                            Data: ${escaparHTML(formatarData(ordem.data))}
+                        </small>
+
                     </div>
+
                 </div>
 
+
                 <div class="secao">
+
                     <h2>Dados do Cliente</h2>
 
                     <div class="grid">
-                        <div class="campo">
-                            <span>Cliente</span>
-                            <strong>${ordem.cliente || ""}</strong>
-                        </div>
 
-                        <div class="campo">
-                            <span>Telefone</span>
-                            <strong>${ordem.telefone || ""}</strong>
-                        </div>
+                        ${campo("Cliente", ordem.cliente)}
+
+                        ${campo("Telefone", ordem.telefone)}
+
                     </div>
+
                 </div>
 
+
                 <div class="secao">
+
                     <h2>Dados do Aparelho</h2>
 
                     <div class="grid">
-                        <div class="campo">
-                            <span>Modelo</span>
-                            <strong>${ordem.modelo || ""}</strong>
-                        </div>
 
-                        <div class="campo">
-                            <span>Status</span>
-                            <strong>${ordem.status || ""}</strong>
-                        </div>
+                        ${campo("Modelo", ordem.modelo)}
+
+                        ${campo("Status", ordem.status)}
+
                     </div>
+
                 </div>
 
+
                 <div class="secao">
+
                     <h2>Defeito Relatado</h2>
-                    <div class="texto-longo">
-                        ${ordem.defeito || "Nenhum defeito informado."}
-                    </div>
+
+                    <div class="texto-longo">${escaparHTML(
+                        ordem.defeito || "Nenhum defeito informado."
+                    )}</div>
+
                 </div>
 
+
                 <div class="secao">
+
                     <h2>Laudo Técnico / Serviço Realizado</h2>
-                    <div class="texto-longo">
-                        ${ordem.laudo || "Nenhum laudo informado."}
-                    </div>
+
+                    <div class="texto-longo">${escaparHTML(
+                        ordem.laudo || "Nenhum laudo informado."
+                    )}</div>
+
                 </div>
 
+
                 <div class="secao">
+
                     <h2>Valores e Garantia</h2>
 
                     <div class="grid">
-                        <div class="campo">
-                            <span>Valor do Serviço</span>
-                            <strong>${formatarMoedaPDF(ordem.orcamento)}</strong>
-                        </div>
 
-                        <div class="campo">
-                            <span>Garantia até</span>
-                            <strong>${formatarData(ordem.garantia)}</strong>
-                        </div>
+                        ${campo(
+                            "Valor do Serviço",
+                            formatarMoedaPDF(ordem.orcamento)
+                        )}
+
+                        ${campo(
+                            "Garantia até",
+                            formatarData(ordem.garantia)
+                        )}
+
                     </div>
+
                 </div>
 
+
                 <div class="garantia">
+
                     <h2>Termo de Garantia</h2>
 
                     <p>
-                        A garantia cobre apenas o serviço realizado e/ou a peça substituída, dentro do prazo informado nesta OS.
+
+                        A garantia cobre apenas o serviço realizado
+                        e/ou a peça substituída, dentro do prazo
+                        informado nesta OS.
+
                     </p>
 
                     <p>
-                        Não cobre queda, mau uso, pressão, trinca, contato com líquido, umidade, oxidação/molhado, violação do aparelho, tentativa de reparo por terceiros ou dano físico após a retirada.
+
+                        Não cobre queda, mau uso, pressão, trinca,
+                        contato com líquido, umidade, oxidação/molhado,
+                        violação do aparelho, tentativa de reparo por
+                        terceiros ou dano físico após a retirada.
+
                     </p>
+
                 </div>
+
 
                 <div class="assinaturas">
+
                     <div class="assinatura">
+
                         Assinatura do Cliente
+
                     </div>
 
                     <div class="assinatura">
+
                         Responsável Técnico
+
                     </div>
+
                 </div>
+
 
                 <div class="rodape">
-                    Smartiliza - Assistência Técnica<br>
-                    Documento gerado automaticamente pela Central de Serviços.
+
+                    Smartiliza - Assistência Técnica
+
+                    <br>
+
+                    Documento gerado automaticamente
+                    pela Central de Serviços.
+
                 </div>
+
 
             </div>
 
-            <script>
-                window.onload = function(){
-                    window.print();
-                }
-            <\/script>
-
         </body>
+
         </html>
     `;
 
+
     const janela = window.open("", "_blank");
 
+    if(!janela){
+
+        alert(
+            "Permita a abertura de pop-ups para gerar o PDF."
+        );
+
+        return;
+
+    }
+
     janela.document.open();
+
     janela.document.write(htmlPDF);
+
     janela.document.close();
+
+    janela.focus();
+
+    if(janela.document.readyState === "complete"){
+
+        janela.print();
+
+    } else {
+
+        janela.addEventListener("load", function(){
+
+            janela.print();
+
+        }, { once: true });
+
+    }
 
 }
 
+
+/* =====================================================
+   DEFINIR MÊS ATUAL
+===================================================== */
+
 function definirMesAtual(){
 
-    const filtroMes = document.getElementById("filtroMesDashboard");
+    const filtroMes =
+        document.getElementById("filtroMesDashboard");
 
     if(!filtroMes){
+
         return;
+
     }
 
     const hoje = new Date();
+
     const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+
+    const mes = String(
+        hoje.getMonth() + 1
+    ).padStart(2, "0");
 
     filtroMes.value = `${ano}-${mes}`;
 
 }
+
+
+/* =====================================================
+   OBTER ANO E MÊS DE UMA DATA
+===================================================== */
+
 function obterAnoMes(data){
 
     if(!data){
+
         return "";
+
     }
 
-    // Caso venha como: 2026-07-08T03:00:00.000Z
-    if(typeof data === "string" && data.includes("T")){
-        return data.split("T")[0].slice(0, 7);
+    const texto = String(data);
+
+    const formatoISO =
+        texto.match(/^(\d{4})-(\d{2})/);
+
+    if(formatoISO){
+
+        return `${formatoISO[1]}-${formatoISO[2]}`;
+
     }
 
-    // Caso venha como: 2026-07-08
-    if(typeof data === "string" && data.includes("-")){
-        return data.slice(0, 7);
-    }
+    const formatoBR =
+        texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
 
-    // Caso venha como: 08/07/2026
-    if(typeof data === "string" && data.includes("/")){
-        const partes = data.split("/");
+    if(formatoBR){
 
-        if(partes.length === 3){
-            const dia = partes[0];
-            const mes = partes[1];
-            const ano = partes[2];
+        return `${formatoBR[3]}-${formatoBR[2]}`;
 
-            return `${ano}-${mes}`;
-        }
     }
 
     return "";

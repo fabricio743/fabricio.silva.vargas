@@ -1,135 +1,425 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Nova OS - Smartiliza</title>
+
     <link rel="stylesheet" href="style.css">
+
 </head>
-<body>
 
-<div class="container">
+<body class="pagina-nova-os">
 
-    <!-- CABEÇALHO -->
-    <div class="header">
+    <div class="container">
 
-        <div class="logo-area">
-            <img src="logo.png" alt="Smartiliza">
-            <div>
-                <h1>Smartiliza</h1>
-                <span>Assistência Técnica</span>
+
+        <!-- ====================================== -->
+        <!-- CABEÇALHO                             -->
+        <!-- ====================================== -->
+
+        <header class="header">
+
+            <div class="logo-area">
+
+                <img src="logo.png" alt="Smartiliza">
+
+                <div>
+
+                    <h1>Smartiliza</h1>
+
+                    <span>Assistência Técnica</span>
+
+                </div>
+
             </div>
-        </div>
 
-        <div class="titulo-pagina">
-            Nova Ordem de Serviço
-        </div>
 
-    </div>
+            <div class="titulo-pagina">
 
-    <!-- MENU -->
-    <nav class="menu-central">
+                Nova Ordem de Serviço
 
-        <a href="index.html">
-            Ordens de Serviço
-        </a>
+            </div>
 
-        <a href="nova.os.html" class="ativo">
-            Nova OS
-        </a>
+        </header>
 
-        <a href="estoque.html" >
-            Estoque
-        </a>
 
-    </nav>
+        <!-- ====================================== -->
+        <!-- MENU PRINCIPAL                        -->
+        <!-- ====================================== -->
 
-    <!-- FORMULÁRIO DE ORDEM DE SERVIÇO -->
-    <div class="card">
+        <nav class="menu-central">
 
-        <form id="osForm">
+            <a href="index.html">
 
-            <div class="grid">
+                Ordens de Serviço
 
-                <div class="grupo">
-                    <label>Nº da OS</label>
-                    <input type="text" id="os">
+            </a>
+
+            <a href="estoque.html">
+
+                Estoque
+
+            </a>
+
+            <a href="nova.os.html" class="ativo">
+
+                + Nova OS
+
+            </a>
+
+        </nav>
+
+
+        <!-- ====================================== -->
+        <!-- FORMULÁRIO                            -->
+        <!-- ====================================== -->
+
+        <section class="card card-formulario">
+
+
+            <!-- TÍTULO -->
+
+            <div class="formulario-topo">
+
+                <span class="modal-etiqueta">
+
+                    CADASTRO DE ATENDIMENTO
+
+                </span>
+
+                <h2>Nova Ordem de Serviço</h2>
+
+                <p>
+
+                    Preencha as informações do cliente,
+                    aparelho e serviço.
+
+                </p>
+
+            </div>
+
+
+            <form id="osForm">
+
+
+                <!-- ====================================== -->
+                <!-- INFORMAÇÕES DA ORDEM                   -->
+                <!-- ====================================== -->
+
+                <div class="formulario-secao">
+
+                    <h3>01. Informações da ordem</h3>
+
+                    <div class="grid">
+
+
+                        <div class="grupo">
+
+                            <label for="os">
+
+                                Nº da OS
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="os"
+                                placeholder="Número da ordem"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="grupo">
+
+                            <label for="data">
+
+                                Data de entrada
+
+                            </label>
+
+                            <input
+                                type="date"
+                                id="data"
+                            >
+
+                        </div>
+
+
+                        <div class="grupo grupo-full">
+
+                            <label for="status">
+
+                                Status inicial
+
+                            </label>
+
+                            <select id="status">
+
+                                <option>Em análise</option>
+
+                                <option>Aguardando aprovação do cliente</option>
+
+                                <option>Aguardando peça</option>
+
+                                <option>Finalizado</option>
+
+                                <option>Retirado</option>
+
+                                <option>Sem conserto</option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="grupo">
-                    <label>Data</label>
-                    <input type="date" id="data">
+
+                <!-- ====================================== -->
+                <!-- CLIENTE E APARELHO                     -->
+                <!-- ====================================== -->
+
+                <div class="formulario-secao">
+
+                    <h3>02. Cliente e aparelho</h3>
+
+                    <div class="grid">
+
+
+                        <div class="grupo">
+
+                            <label for="cliente">
+
+                                Nome do cliente
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="cliente"
+                                placeholder="Nome completo"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="grupo">
+
+                            <label for="telefone">
+
+                                Telefone / WhatsApp
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="telefone"
+                                placeholder="(00) 00000-0000"
+                                inputmode="tel"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+
+                        <div class="grupo grupo-full">
+
+                            <label for="modelo">
+
+                                Modelo do aparelho
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="modelo"
+                                placeholder="Ex: iPhone 12, Galaxy A32..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="grupo">
-                    <label>Nome do Cliente</label>
-                    <input type="text" id="cliente">
+
+                <!-- ====================================== -->
+                <!-- INFORMAÇÕES TÉCNICAS                   -->
+                <!-- ====================================== -->
+
+                <div class="formulario-secao">
+
+                    <h3>03. Informações técnicas</h3>
+
+                    <div class="grid">
+
+
+                        <div class="grupo grupo-full">
+
+                            <label for="defeito">
+
+                                Defeito relatado
+
+                            </label>
+
+                            <textarea
+                                id="defeito"
+                                rows="3"
+                                placeholder="Descreva o problema apresentado pelo cliente..."
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="grupo grupo-full">
+
+                            <label for="laudo">
+
+                                Laudo técnico / Serviço realizado
+
+                            </label>
+
+                            <textarea
+                                id="laudo"
+                                rows="4"
+                                placeholder="Ex: Troca de tela, troca de bateria, reparo no conector de carga..."
+                            ></textarea>
+
+                            <small class="campo-ajuda">
+
+                                Comece com uma breve descrição do serviço.
+                                Esse texto será exibido na listagem de
+                                ordens de serviço.
+
+                            </small>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="grupo">
-                    <label>Telefone</label>
-                    <input type="text" id="telefone">
+
+                <!-- ====================================== -->
+                <!-- INFORMAÇÕES FINANCEIRAS                -->
+                <!-- ====================================== -->
+
+                <div class="formulario-secao">
+
+                    <h3>04. Informações financeiras</h3>
+
+                    <div class="grid">
+
+
+                        <div class="grupo">
+
+                            <label for="orcamento">
+
+                                Orçamento (R$)
+
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                id="orcamento"
+                                placeholder="0,00"
+                            >
+
+                        </div>
+
+
+                        <div class="grupo">
+
+                            <label for="custoPeca">
+
+                                Custo da peça (R$)
+
+                            </label>
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                id="custoPeca"
+                                placeholder="0,00"
+                            >
+
+                        </div>
+
+
+                        <div class="grupo grupo-full">
+
+                            <label for="fornecedor">
+
+                                Fornecedor da peça
+
+                            </label>
+
+                            <input
+                                type="text"
+                                id="fornecedor"
+                                placeholder="Ex: BringIT, AliExpress, Mercado Livre"
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="grupo grupo-full">
-                    <label>Modelo do Aparelho</label>
-                    <input type="text" id="modelo">
-                </div>
 
-                <div class="grupo grupo-full">
-                    <label>Defeito Relatado</label>
-                    <textarea id="defeito"></textarea>
-                </div>
+                <!-- ====================================== -->
+                <!-- AÇÕES                                  -->
+                <!-- ====================================== -->
 
-                <div class="grupo grupo-full">
-                    <label>Laudo Técnico</label>
-                    <textarea id="laudo"></textarea>
-                </div>
+                <div class="formulario-acoes">
 
-                <div class="grupo">
-                    <label>Custo da Peça (R$)</label>
-                    <input type="number" step="0.01" id="custoPeca">
-                </div>
-
-                <div class="grupo">
-                    <label>Orçamento (R$)</label>
-                    <input type="number" step="0.01" id="orcamento">
-                </div>
-
-                <div class="grupo">
-                    <label>Fornecedor da Peça</label>
-                    <input 
-                        type="text" 
-                        id="fornecedor" 
-                        placeholder="Ex: BringIT, AliExpress, Mercado Livre"
+                    <a
+                        href="index.html"
+                        class="btn-cancelar-os"
                     >
+
+                        Cancelar
+
+                    </a>
+
+                    <button
+                        type="submit"
+                        class="btn-principal"
+                    >
+
+                        Salvar Ordem de Serviço
+
+                    </button>
+
                 </div>
 
-                <div class="grupo">
-                    <label>Status</label>
-                    <select id="status">
-                        <option>Em análise</option>
-                        <option>Aguardando peça</option>
-                        <option>Finalizado</option>
-                        <option>Retirado</option>
-                        <option>Sem conserto</option>
-                    </select>
-                </div>
 
-            </div>
+            </form>
 
-            <button type="submit">
-                Salvar Ordem de Serviço
-            </button>
-
-        </form>
+        </section>
 
     </div>
 
-</div>
 
-<script src="js/config.js"></script>
-<script src="js/os.js"></script>
+    <!-- JAVASCRIPT -->
+
+    <script src="js/config.js"></script>
+
+    <script src="js/os.js"></script>
 
 </body>
+
 </html>
