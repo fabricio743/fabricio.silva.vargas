@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Financeiro | Gestão de Baterias</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="financeiro.css?v=2">
+
+    <link rel="icon" href="./favicon.ico?v=2">
+
+    <link rel="apple-touch-icon"
+          href="./apple-touch-icon.png">
+
+    <meta name="apple-mobile-web-app-capable"
+          content="yes">
+
+    <meta name="apple-mobile-web-app-status-bar-style"
+          content="black">
+
+    <meta name="apple-mobile-web-app-title"
+          content="Financeiro">
+
+</head>
+
+<body class="layout-sistema pagina-financeiro">
+
+
+    <!-- ==================================================
+         MENU MOBILE
+    =================================================== -->
+
+    <input
+        type="checkbox"
+        id="menuNavegacao"
+        class="menu-toggle"
+        aria-label="Abrir ou fechar menu"
+    >
+
+    <label for="menuNavegacao" class="menu-mobile">
+
+        ☰ <span>Gestão de baterias</span>
+
+    </label>
+
+    <label
+        for="menuNavegacao"
+        class="menu-fundo"
+        aria-label="Fechar menu"
+    ></label>
+
+
+    <!-- ==================================================
+         MENU LATERAL
+    =================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="marca-sistema">
+
+            <span class="marca-icone">B</span>
+
+            <div>
+
+                <strong>GESTÃO</strong>
+
+                <small>CONTROLE DE BATERIAS</small>
+
+            </div>
+
+        </div>
+
+
+        <nav class="menu-sistema"
+             aria-label="Menu principal">
+
+            <span class="menu-titulo">
+
+                MENU PRINCIPAL
+
+            </span>
+
+
+            <span class="menu-futuro"
+                  aria-disabled="true">
+
+                <span aria-hidden="true">▦</span>
+
+                Visão geral
+
+                <small>Em breve</small>
+
+            </span>
+
+
+            <a href="index.html">
+
+                <span aria-hidden="true">▣</span>
+
+                Estoque
+
+            </a>
+
+
+            <a href="vendas.html">
+
+                <span aria-hidden="true">▤</span>
+
+                Vendas
+
+            </a>
+
+
+            <a
+                href="financeiro.html"
+                class="ativo"
+                aria-current="page"
+            >
+
+                <span aria-hidden="true">▥</span>
+
+                Financeiro
+
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- ==================================================
+         CONTEÚDO PRINCIPAL
+    =================================================== -->
+
+    <main class="container">
+
+
+        <!-- ==============================================
+             CABEÇALHO
+        =============================================== -->
+
+        <header class="header">
+
+            <div>
+
+                <h1>Financeiro</h1>
+
+                <p>
+                    Acompanhe o faturamento, os custos e
+                    a lucratividade das vendas de baterias.
+                </p>
+
+            </div>
+
+
+            <div class="header-acoes">
+
+                <button
+                    type="button"
+                    id="atualizar"
+                    class="btn-atualizar"
+                >
+
+                    🔄 Atualizar
+
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <!-- ==============================================
+             FILTROS FINANCEIROS
+        =============================================== -->
+
+        <section class="estoque fin-filtros">
+
+            <label for="ano">
+
+                Ano
+
+                <select id="ano"></select>
+
+            </label>
+
+
+            <label for="mes">
+
+                Período
+
+                <select id="mes"></select>
+
+            </label>
+
+
+            <p id="situacao" role="status">
+
+                Carregando informações financeiras...
+
+            </p>
+
+        </section>
+
+
+        <!-- ==============================================
+             INDICADORES FINANCEIROS
+        =============================================== -->
+
+        <section class="resumo fin-resumo">
+
+
+            <!-- FATURAMENTO -->
+
+            <div class="resumo-item">
+
+                <span>Faturamento</span>
+
+                <strong id="receita">
+
+                    —
+
+                </strong>
+
+                <small>
+
+                    Total das vendas ativas
+
+                </small>
+
+            </div>
+
+
+            <!-- CUSTOS -->
+
+            <div class="resumo-item">
+
+                <span>Custos das vendas</span>
+
+                <strong id="custos">
+
+                    —
+
+                </strong>
+
+                <small>
+
+                    Mercadorias, taxas e fretes
+
+                </small>
+
+            </div>
+
+
+            <!-- LUCRO -->
+
+            <div class="resumo-item">
+
+                <span>Lucro das vendas</span>
+
+                <strong id="lucro">
+
+                    —
+
+                </strong>
+
+                <small>
+
+                    Antes das despesas gerais
+
+                </small>
+
+            </div>
+
+
+            <!-- MARGEM -->
+
+            <div class="resumo-item">
+
+                <span>Margem de lucro</span>
+
+                <strong id="margem">
+
+                    —
+
+                </strong>
+
+                <small>
+
+                    Percentual de lucro das vendas
+
+                </small>
+
+            </div>
+
+
+            <!-- QUANTIDADE VENDIDA -->
+
+            <div class="resumo-item">
+
+                <span>Unidades vendidas</span>
+
+                <strong id="unidades">
+
+                    —
+
+                </strong>
+
+                <small>
+
+                    Total de baterias vendidas
+
+                </small>
+
+            </div>
+
+
+            <!-- CUSTO DAS MERCADORIAS -->
+
+            <div class="resumo-item">
+
+                <span>Custo das mercadorias</span>
+
+                <strong id="cmv">
+
+                    —
+
+                </strong>
+
+                <small>
+
+                    Custo dos lotes vendidos
+
+                </small>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==============================================
+             OBSERVAÇÃO FINANCEIRA
+        =============================================== -->
+
+        <p class="fin-nota">
+
+            Os resultados consideram os custos registrados
+            nas vendas. Despesas gerais e compras de estoque
+            ainda não estão integradas.
+
+        </p>
+
+
+        <!-- ==============================================
+             GRÁFICOS E RANKING
+        =============================================== -->
+
+        <div class="fin-paineis">
+
+
+            <!-- ==========================================
+                 GRÁFICO COMPARATIVO MENSAL
+            =========================================== -->
+
+            <section class="estoque">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+
+                            Desempenho financeiro mensal
+
+                        </h2>
+
+                        <p>
+
+                            Compare o faturamento, os custos,
+                            o lucro e a margem de cada mês
+                            com movimentação no ano selecionado.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LEGENDA DO GRÁFICO -->
+
+                <div class="fin-legenda">
+
+                    <span>
+
+                        ■ Faturamento
+
+                    </span>
+
+                    <span>
+
+                        ■ Custos
+
+                    </span>
+
+                    <span>
+
+                        ■ Lucro
+
+                    </span>
+
+                </div>
+
+
+                <!-- GRÁFICO GERADO PELO JAVASCRIPT -->
+
+                <div
+                    id="grafico"
+                    class="fin-grafico"
+                    aria-label="Comparativo financeiro mensal"
+                >
+
+                    Carregando gráfico...
+
+                </div>
+
+
+                <!-- EXPLICAÇÃO DO GRÁFICO -->
+
+                <div style="padding: 0 16px 16px;">
+
+                    <p style="
+                        font-size: 11px;
+                        color: #666666;
+                        line-height: 1.7;
+                    ">
+
+                        <strong>Faturamento:</strong>
+                        valor total das vendas realizadas.
+
+                        <br>
+
+                        <strong>Custos:</strong>
+                        mercadorias, taxas, fretes pagos
+                        pela empresa e outros custos das vendas.
+
+                        <br>
+
+                        <strong>Lucro:</strong>
+                        faturamento menos os custos das vendas.
+
+                        <br>
+
+                        <strong>Margem:</strong>
+                        percentual do faturamento convertido
+                        em lucro.
+
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ==========================================
+                 MODELOS MAIS VENDIDOS
+            =========================================== -->
+
+            <section class="estoque">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <h2>
+
+                            Modelos mais vendidos
+
+                        </h2>
+
+                        <p>
+
+                            Ranking dos 10 modelos com maior
+                            quantidade de vendas no período.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="ranking"
+                    class="fin-ranking"
+                >
+
+                    Carregando ranking...
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- ==============================================
+             RESULTADOS MENSAIS
+        =============================================== -->
+
+        <section class="estoque fin-tabela">
+
+            <div class="section-header">
+
+                <div>
+
+                    <h2>
+
+                        Resultados mês a mês
+
+                    </h2>
+
+                    <p>
+
+                        Histórico financeiro consolidado
+                        dos 12 meses do ano selecionado.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- TABELA FINANCEIRA -->
+
+            <div class="tabela-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Mês</th>
+
+                            <th>Unidades</th>
+
+                            <th>Faturamento</th>
+
+                            <th>Custos</th>
+
+                            <th>Lucro</th>
+
+                            <th>Margem</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="mensal">
+
+                        <tr>
+
+                            <td colspan="6"
+                                style="text-align: center;">
+
+                                Carregando resultados...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ==================================================
+         ARQUIVOS JAVASCRIPT
+    =================================================== -->
+
+    <script src="config.js"></script>
+
+    <script src="financeiro.js?v=2"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,612 @@
+/* =========================================================
+   PAINEL FINANCEIRO
+   IDENTIDADE VISUAL — PRETO + DOURADO
+========================================================= */
+
+
+/* =========================================================
+   FILTROS
+========================================================= */
+
+.pagina-financeiro .fin-filtros {
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 14px;
+
+    padding: 16px;
+    margin-bottom: 18px;
+
+}
+
+.fin-filtros label {
+
+    display: grid;
+    gap: 5px;
+
+    font-size: 12px;
+    color: var(--cinza-5);
+
+}
+
+.fin-filtros select {
+
+    min-width: 130px;
+    height: 40px;
+
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+
+    background: var(--branco);
+
+    padding: 0 10px;
+
+    outline: none;
+
+}
+
+.fin-filtros select:focus {
+
+    border-color: var(--dourado);
+
+}
+
+.fin-filtros p {
+
+    font-size: 12px;
+    color: var(--cinza-5);
+    align-self: center;
+
+}
+
+
+/* =========================================================
+   INDICADORES
+========================================================= */
+
+.pagina-financeiro .fin-resumo {
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+}
+
+.fin-resumo strong {
+
+    font-size: clamp(16px, 2vw, 23px);
+    overflow-wrap: anywhere;
+
+}
+
+.fin-nota {
+
+    font-size: 12px;
+    color: #555;
+
+    margin: 0 0 18px;
+
+}
+
+
+/* =========================================================
+   PAINÉIS
+========================================================= */
+
+.fin-paineis {
+
+    display: grid;
+
+    grid-template-columns:
+
+        minmax(0, 1.5fr)
+        minmax(0, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 18px;
+
+}
+
+
+/* =========================================================
+   GRÁFICO COMPARATIVO
+========================================================= */
+
+.fin-legenda {
+
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 12px;
+    padding: 14px;
+
+    font-size: 11px;
+
+}
+
+.fin-legenda span:nth-child(1) {
+
+    color: #856b13;
+
+}
+
+.fin-legenda span:nth-child(2) {
+
+    color: #666;
+
+}
+
+.fin-legenda span:nth-child(3) {
+
+    color: #26734a;
+
+}
+
+.fin-grafico {
+
+    padding: 8px 14px 18px;
+
+    overflow-x: auto;
+
+}
+
+.fin-grafico svg {
+
+    display: block;
+
+    width: 100%;
+    min-width: 420px;
+    height: auto;
+
+}
+
+
+/* =========================================================
+   RANKING DE MODELOS
+========================================================= */
+
+.fin-ranking {
+
+    display: grid;
+    gap: 14px;
+
+    padding: 16px;
+
+}
+
+.fin-ranking .rank-label {
+
+    display: flex;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    font-size: 13px;
+
+}
+
+.fin-ranking .rank-track {
+
+    height: 8px;
+
+    background: #eee;
+    border-radius: 5px;
+
+    overflow: hidden;
+
+    margin-top: 5px;
+
+}
+
+.fin-ranking .rank-fill {
+
+    height: 100%;
+
+    background: var(--dourado);
+
+}
+
+.fin-ranking small {
+
+    color: #666;
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   TABELA FINANCEIRA
+========================================================= */
+
+.pagina-financeiro .fin-tabela table {
+
+    display: table;
+
+    min-width: 680px;
+
+}
+
+.pagina-financeiro .fin-tabela thead {
+
+    display: table-header-group;
+
+}
+
+.pagina-financeiro .fin-tabela tbody {
+
+    display: table-row-group;
+
+}
+
+.pagina-financeiro .fin-tabela tr {
+
+    display: table-row;
+
+    border: 0;
+
+    padding: 0;
+    margin: 0;
+
+}
+
+.pagina-financeiro .fin-tabela td,
+.pagina-financeiro .fin-tabela th {
+
+    display: table-cell;
+
+    padding: 12px;
+
+    white-space: nowrap;
+    text-align: left;
+
+}
+
+.pagina-financeiro .fin-tabela td::before {
+
+    content: none !important;
+
+}
+
+.fin-negativo {
+
+    color: var(--vermelho);
+
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 1050px) {
+
+    .fin-paineis {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+@media (max-width: 599px) {
+
+    .pagina-financeiro .fin-resumo {
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    }
+
+    .fin-filtros label {
+
+        flex: 1;
+
+        min-width: 120px;
+
+    }
+
+    .fin-filtros select {
+
+        width: 100%;
+
+        min-width: 0;
+
+    }
+
+}
+/* =========================================================
+   GRÁFICO FINANCEIRO — VERSÃO APRIMORADA
+========================================================= */
+
+.pagina-financeiro .fin-grafico {
+
+    width: 100%;
+
+    padding: 8px 16px 16px;
+
+    overflow: hidden;
+
+}
+
+
+/* =========================================================
+   ÁREA DO GRÁFICO
+========================================================= */
+
+.fin-grafico-area {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    padding-bottom: 6px;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: thin;
+
+    scrollbar-color: #bbbbbb transparent;
+
+}
+
+.fin-grafico-area svg {
+
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+
+/* =========================================================
+   BARRAS INTERATIVAS
+========================================================= */
+
+.fin-barra {
+
+    cursor: pointer;
+
+    transition: opacity .2s ease;
+
+}
+
+.fin-barra:hover {
+
+    opacity: .75;
+
+}
+
+.fin-barra:focus {
+
+    outline: none;
+
+    stroke: #222222;
+
+    stroke-width: 2;
+
+}
+
+
+/* =========================================================
+   LEGENDA
+========================================================= */
+
+.pagina-financeiro .fin-legenda {
+
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 18px;
+
+    padding: 18px 16px 10px;
+
+    font-size: 12px;
+
+    font-weight: 500;
+
+}
+
+
+/* =========================================================
+   INFORMAÇÕES DO GRÁFICO
+========================================================= */
+
+.fin-grafico-info {
+
+    background: #f7f7f7;
+
+    border: 1px solid #e7e7e7;
+
+    border-left: 3px solid var(--dourado);
+
+    border-radius: 6px;
+
+    padding: 12px;
+
+    margin-top: 12px;
+
+    font-size: 12px;
+
+    color: #555555;
+
+    line-height: 1.5;
+
+    min-height: 46px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .pagina-financeiro .fin-grafico {
+
+        padding: 8px 10px 12px;
+
+    }
+
+    .pagina-financeiro .fin-legenda {
+
+        font-size: 11px;
+
+        gap: 12px;
+
+        padding: 14px 12px;
+
+    }
+
+    .fin-grafico-info {
+
+        font-size: 11px;
+
+    }
+
+}
+/* =========================================================
+   NOVO GRÁFICO FINANCEIRO
+========================================================= */
+
+.pagina-financeiro .fin-grafico {
+
+    width: 100%;
+    min-width: 0;
+    padding: 8px 16px 16px;
+    overflow: hidden;
+
+}
+
+.fin-paineis > section {
+
+    min-width: 0;
+
+}
+
+.fin-grafico-area {
+
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom: 8px;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: thin;
+
+    scrollbar-color: #bbbbbb transparent;
+
+}
+
+.fin-grafico-area svg {
+
+    display: block;
+    width: 100%;
+    height: auto;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+
+
+/* BARRAS */
+
+.fin-barra {
+
+    cursor: pointer;
+    transition: opacity .2s ease;
+
+}
+
+.fin-barra:hover {
+
+    opacity: .75;
+
+}
+
+.fin-barra:focus {
+
+    outline: none;
+    stroke: #222222;
+    stroke-width: 2;
+
+}
+
+
+/* LEGENDA */
+
+.pagina-financeiro .fin-legenda {
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 18px;
+    padding: 18px 16px 10px;
+
+    font-size: 12px;
+    font-weight: 500;
+
+}
+
+
+/* INFORMAÇÕES DO GRÁFICO */
+
+.fin-grafico-info {
+
+    background: #f7f7f7;
+
+    border: 1px solid #e7e7e7;
+
+    border-left: 3px solid var(--dourado);
+
+    border-radius: 6px;
+
+    padding: 12px;
+    margin-top: 12px;
+
+    font-size: 12px;
+    color: #555555;
+
+    line-height: 1.5;
+    min-height: 46px;
+
+}
+
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 600px) {
+
+    .pagina-financeiro .fin-grafico {
+
+        padding: 8px 10px 12px;
+
+    }
+
+    .pagina-financeiro .fin-legenda {
+
+        font-size: 11px;
+        gap: 12px;
+        padding: 14px 12px;
+
+    }
+
+    .fin-grafico-info {
+
+        font-size: 11px;
+
+    }
+
+}
