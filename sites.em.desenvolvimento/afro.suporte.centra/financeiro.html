@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -67,8 +66,6 @@
 
         <main class="main-content">
 
-            <!-- CABEÇALHO -->
-
             <header class="topbar">
 
                 <div>
@@ -89,8 +86,6 @@
             </header>
 
 
-            <!-- CONTEÚDO -->
-
             <section class="content">
 
                 <!-- RESUMO FINANCEIRO -->
@@ -99,7 +94,7 @@
 
                     <div>
                         <h2>Resumo financeiro</h2>
-                        <p>Movimentações do período selecionado.</p>
+                        <p>Movimentações do período selecionado. Pendências de todos os meses.</p>
                     </div>
 
                     <select class="period-select" id="periodoFinanceiro">
@@ -120,7 +115,8 @@
                             <div class="stat-icon green">↓</div>
                         </div>
 
-                        <h3 id="financeiroRecebido">R$ 0,00</h3>
+                        <h3 id="financeiroRecebido">—</h3>
+
                         <p>Pagamentos recebidos no período</p>
 
                     </div>
@@ -133,7 +129,8 @@
                             <div class="stat-icon red">−</div>
                         </div>
 
-                        <h3 id="financeiroCustos">R$ 0,00</h3>
+                        <h3 id="financeiroCustos">—</h3>
+
                         <p>Custos dos trabalhos do período</p>
 
                     </div>
@@ -146,21 +143,103 @@
                             <div class="stat-icon gold">★</div>
                         </div>
 
-                        <h3 id="financeiroResultado">R$ 0,00</h3>
+                        <h3 id="financeiroResultado">—</h3>
+
                         <p>Recebimentos menos custos</p>
 
                     </div>
 
 
-                    <div class="stat-card">
+                    <div class="stat-card pending-card">
 
                         <div class="stat-top">
                             <span>Valores pendentes</span>
-                            <div class="stat-icon blue">R$</div>
+                            <div class="stat-icon orange">◷</div>
                         </div>
 
-                        <h3 id="financeiroPendente">R$ 0,00</h3>
-                        <p>Valores ainda não recebidos</p>
+                        <h3 id="financeiroPendente">—</h3>
+
+                        <p>Saldo de todos os meses</p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CONTAS A RECEBER -->
+
+                <div class="panel recent-panel" id="contasReceber">
+
+                    <div class="panel-header">
+
+                        <div>
+                            <h2>Contas a receber</h2>
+                            <p>Trabalhos com pagamentos pendentes de todos os meses.</p>
+                        </div>
+
+                        <span class="today">
+                            <strong id="quantidadePendencias">0</strong>
+                            pendências
+                        </span>
+
+                    </div>
+
+
+                    <div class="form-group pending-search">
+
+                        <label for="buscaPendencias">
+                            Pesquisar cliente ou serviço
+                        </label>
+
+                        <input
+                            type="search"
+                            id="buscaPendencias"
+                            placeholder="Digite o nome do cliente ou serviço..."
+                        >
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Cliente</th>
+                                    <th>Trabalho</th>
+                                    <th>Valor total</th>
+                                    <th>Recebido</th>
+                                    <th>Pendente</th>
+                                    <th>Ação</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="corpoPendencias">
+
+                                <tr>
+                                    <td colspan="7" class="empty-state">
+                                        Carregando pendências...
+                                    </td>
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <div class="pending-total">
+
+                        <span>Total da lista:</span>
+
+                        <strong id="totalListaPendencias">
+                            —
+                        </strong>
 
                     </div>
 
@@ -314,9 +393,13 @@
                 <!-- RODAPÉ -->
 
                 <footer class="footer">
+
                     Sistema de Gestão de Trabalhos
+
                     <span>•</span>
+
                     Versão 1.0
+
                 </footer>
 
             </section>
@@ -333,4 +416,5 @@
     <script src="js/financeiro.js"></script>
 
 </body>
+
 </html>

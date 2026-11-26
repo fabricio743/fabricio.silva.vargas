@@ -1313,3 +1313,257 @@ tbody tr:hover {
     }
 
 }
+/* =====================================================
+   ATUALIZAÇÃO - CONTAS A RECEBER
+===================================================== */
+
+:root {
+
+    --orange: #ffad55;
+
+}
+
+
+/* CARD DE VALORES PENDENTES */
+
+.stat-card.pending-card {
+
+    border-color: #79512e;
+
+    background: linear-gradient(
+        135deg,
+        #172131,
+        #2b211b
+    );
+
+}
+
+
+.stat-card.pending-card h3 {
+
+    color: var(--orange);
+
+}
+
+
+.stat-icon.orange {
+
+    background: #49301d;
+
+    color: var(--orange);
+
+}
+
+
+.pending-text {
+
+    color: var(--orange) !important;
+
+    font-weight: 600;
+
+}
+
+
+/* ATALHO PARA O FINANCEIRO */
+
+.pending-link {
+
+    display: inline-block;
+
+    margin-top: 12px;
+
+    color: var(--orange);
+
+    font-size: 11px;
+
+    text-decoration: none;
+
+}
+
+
+.pending-link:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* PESQUISA DE PENDÊNCIAS */
+
+.pending-search {
+
+    max-width: 400px;
+
+    width: 100%;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* TOTAL DAS PENDÊNCIAS */
+
+.pending-total {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    padding-top: 20px;
+
+    margin-top: 15px;
+
+    border-top: 1px solid var(--border);
+
+    font-size: 12px;
+
+    color: var(--muted);
+
+}
+
+
+.pending-total strong {
+
+    color: var(--orange);
+
+    font-size: 19px;
+
+}
+
+
+/* BOTÃO REGISTRAR PAGAMENTO */
+
+.btn-pending {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    background: rgba(255, 173, 85, 0.08);
+
+    border-color: #79512e;
+
+    color: var(--orange);
+
+}
+
+
+.btn-pending:hover {
+
+    background: #49301d;
+
+    color: #ffffff;
+
+}
+
+
+#contasReceber {
+
+    scroll-margin-top: 20px;
+
+}
+
+
+/* =====================================================
+   CINCO CARDS NA VISÃO GERAL
+===================================================== */
+
+.stats-grid.dashboard-stats {
+
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+}
+
+
+.dashboard-stats .stat-card {
+
+    padding: 18px;
+
+}
+
+
+.dashboard-stats .stat-card h3 {
+
+    font-size: clamp(17px, 1.5vw, 23px);
+
+}
+
+
+.dashboard-stats .stat-icon {
+
+    flex-shrink: 0;
+
+}
+
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+
+@media (max-width: 1250px) {
+
+    .stats-grid.dashboard-stats {
+
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    }
+
+}
+
+
+@media (max-width: 950px) {
+
+    .stats-grid.dashboard-stats {
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    }
+
+    .dashboard-stats .pending-card {
+
+        grid-column: span 2;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .pending-search {
+
+        max-width: 100%;
+
+    }
+
+    .pending-total {
+
+        justify-content: space-between;
+
+    }
+
+    .dashboard-stats .stat-card {
+
+        padding: 13px;
+
+    }
+
+    .dashboard-stats .stat-card h3 {
+
+        font-size: 17px;
+
+    }
+
+}

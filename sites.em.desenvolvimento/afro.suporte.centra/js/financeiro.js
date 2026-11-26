@@ -1,6 +1,5 @@
-
 /* =========================================================
-   FINANCEIRO
+   FINANCEIRO - GESTÃO DE TRABALHOS
 ========================================================= */
 
 let dadosFinanceiros = {
@@ -25,7 +24,6 @@ function converterData(valor) {
 
     const texto = String(valor);
 
-    // Formato yyyy-MM-dd
     if (/^\d{4}-\d{2}-\d{2}/.test(texto)) {
 
         const partes = texto.substring(0, 10).split("-");
@@ -35,9 +33,9 @@ function converterData(valor) {
             Number(partes[1]) - 1,
             Number(partes[2])
         );
+
     }
 
-    // Formato dd/MM/yyyy
     if (/^\d{2}\/\d{2}\/\d{4}$/.test(texto)) {
 
         const partes = texto.split("/");
@@ -47,11 +45,13 @@ function converterData(valor) {
             Number(partes[1]) - 1,
             Number(partes[0])
         );
+
     }
 
     const data = new Date(valor);
 
     return isNaN(data.getTime()) ? null : data;
+
 }
 
 
@@ -60,9 +60,13 @@ function obterMes(data) {
     if (!data) return "";
 
     const ano = data.getFullYear();
-    const mes = String(data.getMonth() + 1).padStart(2, "0");
+
+    const mes = String(
+        data.getMonth() + 1
+    ).padStart(2, "0");
 
     return `${ano}-${mes}`;
+
 }
 
 
@@ -73,24 +77,29 @@ function formatarData(valor) {
     if (!data) return "-";
 
     return data.toLocaleDateString("pt-BR");
+
 }
 
 
 function formatarMoeda(valor) {
 
     return moeda.format(Number(valor) || 0);
+
 }
 
 
 function escaparHTML(valor) {
 
     return String(valor ?? "").replace(/[&<>"']/g, caractere => ({
+
         "&": "&amp;",
         "<": "&lt;",
         ">": "&gt;",
         '"': "&quot;",
         "'": "&#039;"
+
     })[caractere]);
+
 }
 
 
@@ -104,6 +113,18 @@ function obterNomeMes(mes) {
         month: "long",
         year: "numeric"
     });
+
+}
+
+
+function normalizarTexto(valor) {
+
+    return String(valor || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
 }
 
 
@@ -118,12 +139,21 @@ async function carregarFinanceiro() {
         const resposta = await apiGet("obterDadosDashboard");
 
         if (!resposta || !resposta.sucesso) {
-            throw new Error("Não foi possível carregar os dados financeiros.");
+
+            throw new Error(
+                "Não foi possível carregar os dados financeiros."
+            );
+
         }
 
-        dadosFinanceiros.trabalhos = resposta.trabalhos || [];
-        dadosFinanceiros.pagamentos = resposta.pagamentos || [];
-        dadosFinanceiros.custos = resposta.custos || [];
+        dadosFinanceiros.trabalhos =
+            resposta.trabalhos || [];
+
+        dadosFinanceiros.pagamentos =
+            resposta.pagamentos || [];
+
+        dadosFinanceiros.custos =
+            resposta.custos || [];
 
         prepararFiltros();
 
@@ -133,13 +163,40 @@ async function carregarFinanceiro() {
 
         console.error("Erro ao carregar financeiro:", erro);
 
-        document.getElementById("corpoRecebimentos").innerHTML =
-            `<tr><td colspan="5">Erro ao carregar recebimentos.</td></tr>`;
+        document.getElementById("corpoRecebimentos").innerHTML = `
+            <tr>
+                <td colspan="5" class="empty-state">
+                    Erro ao carregar recebimentos.
+                </td>
+            </tr>
+        `;
 
-        document.getElementById("corpoCustos").innerHTML =
-            `<tr><td colspan="4">Erro ao carregar custos.</td></tr>`;
+        document.getElementById("corpoCustos").innerHTML = `
+            <tr>
+                <td colspan="4" class="empty-state">
+                    Erro ao carregar custos.
+                </td>
+            </tr>
+        `;
+
+        document.getElementById("corpoPendencias").innerHTML = `
+            <tr>
+                <td colspan="7" class="empty-state">
+                    Erro ao carregar pendências.
+                </td>
+            </tr>
+        `;
+
+        document.getElementById("corpoComparativoFinanceiro").innerHTML = `
+            <tr>
+                <td colspan="4" class="empty-state">
+                    Erro ao carregar comparativo.
+                </td>
+            </tr>
+        `;
 
     }
+
 }
 
 
@@ -149,110 +206,187 @@ async function carregarFinanceiro() {
 
 function prepararFiltros() {
 
-    const seletorPeriodo = document.getElementById("periodoFinanceiro");
-    const seletorAno = document.getElementById("anoFinanceiro");
+    const seletorPeriodo =
+        document.getElementById("periodoFinanceiro");
+
+    const seletorAno =
+        document.getElementById("anoFinanceiro");
 
     const hoje = new Date();
 
     const mesAtual = obterMes(hoje);
+
     const anoAtual = String(hoje.getFullYear());
 
     const meses = new Set([mesAtual]);
+
     const anos = new Set([anoAtual]);
+
 
     dadosFinanceiros.pagamentos.forEach(pagamento => {
 
         const data = converterData(pagamento.data);
 
         if (data) {
+
             meses.add(obterMes(data));
+
             anos.add(String(data.getFullYear()));
+
         }
+
     });
+
 
     dadosFinanceiros.trabalhos.forEach(trabalho => {
 
         const data = converterData(trabalho.data);
 
         if (data) {
+
             meses.add(obterMes(data));
+
             anos.add(String(data.getFullYear()));
+
         }
+
     });
+
 
     const mesesOrdenados = [...meses].sort().reverse();
 
     seletorPeriodo.innerHTML = mesesOrdenados.map(mes => `
+
         <option value="${mes}">
             ${escaparHTML(obterNomeMes(mes))}
         </option>
+
     `).join("");
 
     seletorPeriodo.value = mesAtual;
 
+
     const anosOrdenados = [...anos].sort().reverse();
 
     seletorAno.innerHTML = anosOrdenados.map(ano => `
-        <option value="${ano}">${ano}</option>
+
+        <option value="${ano}">
+            ${ano}
+        </option>
+
     `).join("");
 
     seletorAno.value = anoAtual;
 
-    seletorPeriodo.addEventListener("change", atualizarFinanceiro);
+    seletorPeriodo.onchange = atualizarFinanceiro;
 
-    seletorAno.addEventListener("change", atualizarComparativo);
+    seletorAno.onchange = atualizarComparativo;
+
 }
 
 
 /* =========================================================
-   ATUALIZAR PÁGINA
+   OBTER TRABALHOS PENDENTES
+========================================================= */
+
+function obterPendencias() {
+
+    return dadosFinanceiros.trabalhos.filter(trabalho => {
+
+        const status = normalizarTexto(trabalho.status);
+
+        const pendente = Number(trabalho.pendente) || 0;
+
+        return status !== "cancelado" && pendente > 0;
+
+    });
+
+}
+
+
+/* =========================================================
+   ATUALIZAR FINANCEIRO
 ========================================================= */
 
 function atualizarFinanceiro() {
 
-    const periodo = document.getElementById("periodoFinanceiro").value;
+    const periodo =
+        document.getElementById("periodoFinanceiro").value;
 
-    const trabalhosDoPeriodo = dadosFinanceiros.trabalhos.filter(trabalho => {
 
-        return obterMes(converterData(trabalho.data)) === periodo;
-    });
+    const trabalhosDoPeriodo =
+        dadosFinanceiros.trabalhos.filter(trabalho => {
 
-    const pagamentosDoPeriodo = dadosFinanceiros.pagamentos.filter(pagamento => {
+            return obterMes(
+                converterData(trabalho.data)
+            ) === periodo;
 
-        return obterMes(converterData(pagamento.data)) === periodo;
-    });
+        });
+
+
+    const pagamentosDoPeriodo =
+        dadosFinanceiros.pagamentos.filter(pagamento => {
+
+            return obterMes(
+                converterData(pagamento.data)
+            ) === periodo;
+
+        });
+
 
     const idsTrabalhos = new Set(
-        trabalhosDoPeriodo.map(trabalho => String(trabalho.id))
+
+        trabalhosDoPeriodo.map(
+            trabalho => String(trabalho.id)
+        )
+
     );
 
-    const custosDoPeriodo = dadosFinanceiros.custos.filter(custo => {
 
-        return idsTrabalhos.has(String(custo.idTrabalho));
-    });
+    const custosDoPeriodo =
+        dadosFinanceiros.custos.filter(custo => {
+
+            return idsTrabalhos.has(
+                String(custo.idTrabalho)
+            );
+
+        });
+
 
     const totalRecebido = pagamentosDoPeriodo.reduce(
-        (total, pagamento) => total + (Number(pagamento.valor) || 0),
+
+        (total, pagamento) =>
+            total + (Number(pagamento.valor) || 0),
+
         0
+
     );
+
 
     const totalCustos = custosDoPeriodo.reduce(
-        (total, custo) => total + (Number(custo.valor) || 0),
+
+        (total, custo) =>
+            total + (Number(custo.valor) || 0),
+
         0
+
     );
 
-    // Pendências de todos os trabalhos não cancelados.
-    const totalPendente = dadosFinanceiros.trabalhos.reduce((total, trabalho) => {
 
-        if (String(trabalho.status).toLowerCase() === "cancelado") {
-            return total;
-        }
+    // Pendências acumuladas de todos os meses.
 
-        return total + (Number(trabalho.pendente) || 0);
+    const totalPendente = obterPendencias().reduce(
 
-    }, 0);
+        (total, trabalho) =>
+            total + (Number(trabalho.pendente) || 0),
+
+        0
+
+    );
+
 
     const resultado = totalRecebido - totalCustos;
+
 
     document.getElementById("financeiroRecebido").textContent =
         formatarMoeda(totalRecebido);
@@ -266,10 +400,158 @@ function atualizarFinanceiro() {
     document.getElementById("financeiroPendente").textContent =
         formatarMoeda(totalPendente);
 
+
+    renderizarPendencias();
+
     renderizarRecebimentos(pagamentosDoPeriodo);
+
     renderizarCustos(custosDoPeriodo);
 
     atualizarComparativo();
+
+}
+
+
+/* =========================================================
+   CONTAS A RECEBER
+========================================================= */
+
+function renderizarPendencias() {
+
+    const corpo =
+        document.getElementById("corpoPendencias");
+
+    const busca = normalizarTexto(
+
+        document.getElementById("buscaPendencias").value
+
+    );
+
+
+    const pendencias = obterPendencias();
+
+
+    const lista = pendencias.filter(trabalho => {
+
+        const texto = normalizarTexto(
+
+            `${trabalho.cliente || ""} ${trabalho.servico || ""}`
+
+        );
+
+        return texto.includes(busca);
+
+    });
+
+
+    // Trabalhos mais antigos primeiro.
+
+    lista.sort((a, b) => {
+
+        const dataA = converterData(a.data);
+
+        const dataB = converterData(b.data);
+
+        return (dataA?.getTime() || 0) -
+               (dataB?.getTime() || 0);
+
+    });
+
+
+    const totalLista = lista.reduce(
+
+        (total, trabalho) =>
+            total + (Number(trabalho.pendente) || 0),
+
+        0
+
+    );
+
+
+    document.getElementById("quantidadePendencias").textContent =
+        lista.length;
+
+    document.getElementById("totalListaPendencias").textContent =
+        formatarMoeda(totalLista);
+
+
+    if (lista.length === 0) {
+
+        const mensagem = pendencias.length === 0
+
+            ? "Nenhum pagamento pendente."
+
+            : "Nenhum trabalho encontrado na pesquisa.";
+
+
+        corpo.innerHTML = `
+
+            <tr>
+
+                <td colspan="7" class="empty-state">
+
+                    <strong>${mensagem}</strong>
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    corpo.innerHTML = lista.map(trabalho => {
+
+        const id = encodeURIComponent(trabalho.id);
+
+        return `
+
+            <tr>
+
+                <td>
+                    ${formatarData(trabalho.data)}
+                </td>
+
+                <td>
+                    ${escaparHTML(trabalho.cliente)}
+                </td>
+
+                <td>
+                    ${escaparHTML(trabalho.servico)}
+                </td>
+
+                <td>
+                    ${formatarMoeda(trabalho.valorServico)}
+                </td>
+
+                <td class="valor-recebido">
+                    ${formatarMoeda(trabalho.totalRecebido)}
+                </td>
+
+                <td class="pending-text">
+                    ${formatarMoeda(trabalho.pendente)}
+                </td>
+
+                <td>
+
+                    <a
+                        href="detalhes.html?id=${id}"
+                        class="btn-secondary btn-pending"
+                    >
+                        Registrar pagamento
+                    </a>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }).join("");
+
 }
 
 
@@ -279,49 +561,88 @@ function atualizarFinanceiro() {
 
 function renderizarRecebimentos(pagamentos) {
 
-    const corpo = document.getElementById("corpoRecebimentos");
+    const corpo =
+        document.getElementById("corpoRecebimentos");
+
 
     const trabalhos = new Map(
+
         dadosFinanceiros.trabalhos.map(trabalho => [
+
             String(trabalho.id),
+
             trabalho
+
         ])
+
     );
+
 
     const ordenados = [...pagamentos].sort((a, b) => {
 
-        return (converterData(b.data) || 0) - (converterData(a.data) || 0);
+        return (converterData(b.data) || 0) -
+               (converterData(a.data) || 0);
+
     });
+
 
     document.getElementById("quantidadeRecebimentos").textContent =
         ordenados.length;
 
+
     if (ordenados.length === 0) {
 
         corpo.innerHTML = `
+
             <tr>
-                <td colspan="5">Nenhum recebimento neste período.</td>
+                <td colspan="5" class="empty-state">
+                    Nenhum recebimento neste período.
+                </td>
             </tr>
+
         `;
 
         return;
+
     }
+
 
     corpo.innerHTML = ordenados.map(pagamento => {
 
-        const trabalho = trabalhos.get(String(pagamento.idTrabalho));
+        const trabalho =
+            trabalhos.get(String(pagamento.idTrabalho));
+
 
         return `
+
             <tr>
-                <td>${formatarData(pagamento.data)}</td>
-                <td>${escaparHTML(trabalho?.cliente || "-")}</td>
-                <td>${escaparHTML(trabalho?.servico || "-")}</td>
-                <td>${escaparHTML(pagamento.forma || "-")}</td>
-                <td>${formatarMoeda(pagamento.valor)}</td>
+
+                <td>
+                    ${formatarData(pagamento.data)}
+                </td>
+
+                <td>
+                    ${escaparHTML(trabalho?.cliente || "-")}
+                </td>
+
+                <td>
+                    ${escaparHTML(trabalho?.servico || "-")}
+                </td>
+
+                <td>
+                    ${escaparHTML(pagamento.forma || "-")}
+                </td>
+
+                <td>
+                    ${formatarMoeda(pagamento.valor)}
+                </td>
+
             </tr>
+
         `;
 
     }).join("");
+
 }
 
 
@@ -331,52 +652,93 @@ function renderizarRecebimentos(pagamentos) {
 
 function renderizarCustos(custos) {
 
-    const corpo = document.getElementById("corpoCustos");
+    const corpo =
+        document.getElementById("corpoCustos");
+
 
     const trabalhos = new Map(
+
         dadosFinanceiros.trabalhos.map(trabalho => [
+
             String(trabalho.id),
+
             trabalho
+
         ])
+
     );
+
 
     const ordenados = [...custos].sort((a, b) => {
 
-        const trabalhoA = trabalhos.get(String(a.idTrabalho));
-        const trabalhoB = trabalhos.get(String(b.idTrabalho));
+        const trabalhoA =
+            trabalhos.get(String(a.idTrabalho));
+
+        const trabalhoB =
+            trabalhos.get(String(b.idTrabalho));
+
 
         return (converterData(trabalhoB?.data) || 0) -
                (converterData(trabalhoA?.data) || 0);
+
     });
+
 
     document.getElementById("quantidadeCustos").textContent =
         ordenados.length;
 
+
     if (ordenados.length === 0) {
 
         corpo.innerHTML = `
+
             <tr>
-                <td colspan="4">Nenhum custo neste período.</td>
+
+                <td colspan="4" class="empty-state">
+                    Nenhum custo neste período.
+                </td>
+
             </tr>
+
         `;
 
         return;
+
     }
+
 
     corpo.innerHTML = ordenados.map(custo => {
 
-        const trabalho = trabalhos.get(String(custo.idTrabalho));
+        const trabalho =
+            trabalhos.get(String(custo.idTrabalho));
+
 
         return `
+
             <tr>
-                <td>${escaparHTML(trabalho?.servico || "-")}</td>
-                <td>${escaparHTML(trabalho?.cliente || "-")}</td>
-                <td>${escaparHTML(custo.descricao || "-")}</td>
-                <td>${formatarMoeda(custo.valor)}</td>
+
+                <td>
+                    ${escaparHTML(trabalho?.servico || "-")}
+                </td>
+
+                <td>
+                    ${escaparHTML(trabalho?.cliente || "-")}
+                </td>
+
+                <td>
+                    ${escaparHTML(custo.descricao || "-")}
+                </td>
+
+                <td>
+                    ${formatarMoeda(custo.valor)}
+                </td>
+
             </tr>
+
         `;
 
     }).join("");
+
 }
 
 
@@ -386,59 +748,121 @@ function renderizarCustos(custos) {
 
 function atualizarComparativo() {
 
-    const ano = Number(document.getElementById("anoFinanceiro").value);
+    const ano = Number(
 
-    const corpo = document.getElementById("corpoComparativoFinanceiro");
+        document.getElementById("anoFinanceiro").value
+
+    );
+
+
+    const corpo =
+        document.getElementById("corpoComparativoFinanceiro");
+
 
     if (!ano || !corpo) return;
 
+
     const linhas = [];
+
 
     for (let mes = 0; mes < 12; mes++) {
 
-        const chaveMes = `${ano}-${String(mes + 1).padStart(2, "0")}`;
+        const chaveMes =
+
+            `${ano}-${String(mes + 1).padStart(2, "0")}`;
+
 
         const recebimentos = dadosFinanceiros.pagamentos
+
             .filter(pagamento => {
-                return obterMes(converterData(pagamento.data)) === chaveMes;
+
+                return obterMes(
+                    converterData(pagamento.data)
+                ) === chaveMes;
+
             })
+
             .reduce((total, pagamento) => {
+
                 return total + (Number(pagamento.valor) || 0);
+
             }, 0);
+
 
         const trabalhosDoMes = new Set(
+
             dadosFinanceiros.trabalhos
+
                 .filter(trabalho => {
-                    return obterMes(converterData(trabalho.data)) === chaveMes;
+
+                    return obterMes(
+                        converterData(trabalho.data)
+                    ) === chaveMes;
+
                 })
+
                 .map(trabalho => String(trabalho.id))
+
         );
 
+
         const custos = dadosFinanceiros.custos
+
             .filter(custo => {
-                return trabalhosDoMes.has(String(custo.idTrabalho));
+
+                return trabalhosDoMes.has(
+                    String(custo.idTrabalho)
+                );
+
             })
+
             .reduce((total, custo) => {
+
                 return total + (Number(custo.valor) || 0);
+
             }, 0);
+
 
         const resultado = recebimentos - custos;
 
-        const nomeMes = new Date(ano, mes, 1).toLocaleDateString("pt-BR", {
-            month: "long"
-        });
+
+        const nomeMes = new Date(ano, mes, 1)
+            .toLocaleDateString("pt-BR", {
+
+                month: "long"
+
+            });
+
 
         linhas.push(`
+
             <tr>
-                <td>${nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1)}</td>
-                <td>${formatarMoeda(recebimentos)}</td>
-                <td>${formatarMoeda(custos)}</td>
-                <td>${formatarMoeda(resultado)}</td>
+
+                <td>
+                    ${nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1)}
+                </td>
+
+                <td>
+                    ${formatarMoeda(recebimentos)}
+                </td>
+
+                <td>
+                    ${formatarMoeda(custos)}
+                </td>
+
+                <td>
+                    ${formatarMoeda(resultado)}
+                </td>
+
             </tr>
+
         `);
+
     }
 
+
     corpo.innerHTML = linhas.join("");
+
 }
 
 
@@ -447,6 +871,9 @@ function atualizarComparativo() {
 ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    document.getElementById("buscaPendencias")
+        .addEventListener("input", renderizarPendencias);
 
     carregarFinanceiro();
 
