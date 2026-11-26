@@ -1620,3 +1620,544 @@ body {
     }
 
 }
+
+/* =====================================================
+   SMARTILIZA - TEMA GRAFITE
+===================================================== */
+
+:root {
+    --azul: #003B73;
+    --azul-sec: #005AA7;
+    --laranja: #F97316;
+
+    --fundo: #20252D;
+    --grafite: #2C333D;
+    --grafite-claro: #39424E;
+
+    --branco: #FFFFFF;
+    --borda: #D6DDE5;
+
+    --texto: #1E293B;
+    --texto-secundario: #64748B;
+}
+
+
+/* =====================================================
+   FUNDO PRINCIPAL
+===================================================== */
+
+html,
+body {
+    background: #20252D;
+    color: var(--texto);
+}
+
+body.pagina-ordens,
+body.pagina-nova-os,
+body.pagina-estoque {
+    background: #20252D;
+}
+
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+
+.header,
+.pagina-estoque .cabecalho {
+    background: #2C333D;
+    border: 1px solid #404956;
+    border-radius: 12px;
+    box-shadow: none;
+}
+
+.logo-area h1,
+.pagina-estoque .identidade h1 {
+    color: #FFFFFF;
+}
+
+.logo-area span,
+.pagina-estoque .identidade p {
+    color: #FB923C;
+}
+
+.logo-area img,
+.pagina-estoque .logo {
+    background: #FFFFFF;
+    border-radius: 8px;
+}
+
+.titulo-pagina {
+    color: #FFFFFF;
+}
+
+
+/* =====================================================
+   MENU PRINCIPAL
+===================================================== */
+
+.menu-central,
+.pagina-estoque .navegacao {
+    background: #2C333D;
+    border: 1px solid #404956;
+    box-shadow: none;
+}
+
+.menu-central a,
+.pagina-estoque .navegacao a {
+    color: #E2E8F0;
+    text-decoration: none;
+}
+
+.menu-central a:hover,
+.pagina-estoque .navegacao a:hover {
+    background: #39424E;
+    color: #FFFFFF;
+}
+
+.menu-central a.ativo,
+.pagina-estoque .navegacao a.ativo {
+    background: #003B73;
+    color: #FFFFFF;
+}
+
+.menu-central a.btn-nova-os,
+.pagina-nova-os .menu-central a.ativo {
+    background: #F97316;
+    color: #20252D;
+}
+
+.menu-central a.btn-nova-os:hover,
+.pagina-nova-os .menu-central a.ativo:hover {
+    background: #FB923C;
+}
+
+
+/* =====================================================
+   RESUMO MENSAL
+===================================================== */
+
+.filtro-dashboard {
+    background: #2C333D;
+    border: 1px solid #404956;
+    box-shadow: none;
+}
+
+.filtro-dashboard h2 {
+    color: #FFFFFF;
+}
+
+.filtro-dashboard p {
+    color: #B8C2CF;
+}
+
+.filtro-dashboard label {
+    color: #E2E8F0;
+}
+
+.grupo-filtro-mes input {
+    background: #20252D;
+    border: 1px solid #505B69;
+    color: #FFFFFF;
+    color-scheme: dark;
+}
+
+
+/* =====================================================
+   CARDS PRINCIPAIS
+===================================================== */
+
+.card:not(.filtro-dashboard) {
+    background: #FFFFFF;
+    border: 1px solid #D6DDE5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+}
+
+.topo-secao h2 {
+    color: #20252D;
+}
+
+.filtro-dashboard .topo-secao h2 {
+    color: #FFFFFF;
+}
+
+.topo-secao p {
+    color: #64748B;
+}
+
+.filtro-dashboard .topo-secao p {
+    color: #B8C2CF;
+}
+
+
+/* =====================================================
+   INDICADORES DO DASHBOARD
+===================================================== */
+
+.dash-card {
+    background: #FFFFFF;
+    border: 1px solid #D6DDE5;
+    border-top: 4px solid var(--cor-card);
+    box-shadow: none;
+}
+
+.dash-total {
+    --cor-card: #003B73;
+}
+
+.dash-abertas {
+    --cor-card: #EA580C;
+}
+
+.dash-aguardando {
+    --cor-card: #7E22CE;
+}
+
+.dash-finalizadas {
+    --cor-card: #2563EB;
+}
+
+.dash-retiradas {
+    --cor-card: #15803D;
+}
+
+.dash-card .dash-label,
+.dash-card strong {
+    color: var(--cor-card);
+}
+
+.dash-card p {
+    color: #64748B;
+}
+
+.dash-total .dash-label,
+.dash-total strong {
+    color: #003B73;
+}
+
+.dash-total p {
+    color: #64748B;
+}
+
+
+/* =====================================================
+   TABELA DE ORDENS DE SERVIÇO
+===================================================== */
+
+.pagina-ordens .tabela-container {
+    background: #FFFFFF;
+    border: 1px solid #D6DDE5;
+    scrollbar-color: #64748B #E5E7EB;
+}
+
+.pagina-ordens .tabela-ordens {
+    background: #FFFFFF;
+}
+
+.pagina-ordens .tabela-ordens th {
+    background: #003B73;
+    color: #FFFFFF;
+}
+
+.pagina-ordens .tabela-ordens td {
+    color: #334155;
+    border-bottom-color: #E2E8F0;
+}
+
+.tabela-ordens .linha-clicavel {
+    background: #FFFFFF;
+}
+
+.tabela-ordens .linha-clicavel:nth-child(even) {
+    background: #F8FAFC;
+}
+
+.tabela-ordens .linha-clicavel:hover {
+    background: #E8EEF5;
+}
+
+.tabela-ordens .linha-clicavel td:first-child {
+    color: #003B73;
+}
+
+
+/* =====================================================
+   CORES DOS STATUS
+===================================================== */
+
+.tabela-ordens .linha-analise {
+    --cor-status: #C2410C;
+    --fundo-status: #FFEDD5;
+}
+
+.tabela-ordens .linha-aprovacao {
+    --cor-status: #A16207;
+    --fundo-status: #FEF3C7;
+}
+
+.tabela-ordens .linha-aguardando {
+    --cor-status: #7E22CE;
+    --fundo-status: #F3E8FF;
+}
+
+.tabela-ordens .linha-finalizado {
+    --cor-status: #1D4ED8;
+    --fundo-status: #DBEAFE;
+}
+
+.tabela-ordens .linha-retirado {
+    --cor-status: #15803D;
+    --fundo-status: #DCFCE7;
+}
+
+.tabela-ordens .linha-sem-conserto {
+    --cor-status: #B91C1C;
+    --fundo-status: #FEE2E2;
+}
+
+.tabela-ordens .status-select {
+    background: var(--fundo-status);
+    color: var(--cor-status);
+    border-color: var(--cor-status);
+}
+
+
+/* =====================================================
+   BOTÕES
+===================================================== */
+
+button,
+.btn-principal {
+    background: #F97316;
+    color: #20252D;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+button:hover,
+.btn-principal:hover {
+    background: #FB923C;
+    color: #20252D;
+    box-shadow: none;
+    transform: none;
+}
+
+.tabela-ordens .btn-tabela {
+    background: #2C333D;
+    color: #FFFFFF;
+    border-color: #2C333D;
+}
+
+.tabela-ordens .btn-tabela:hover {
+    background: #39424E;
+    color: #FFFFFF;
+}
+
+.tabela-ordens .btn-whatsapp {
+    background: #15803D;
+    color: #FFFFFF;
+}
+
+.tabela-ordens .btn-whatsapp:hover {
+    background: #166534;
+    color: #FFFFFF;
+}
+
+.tabela-ordens .btn-salvar-status {
+    background: #F97316;
+    color: #20252D;
+}
+
+.tabela-ordens .btn-salvar-status:hover {
+    background: #FB923C;
+    color: #20252D;
+}
+
+.btn-atualizar-lista,
+.btn-secundario,
+.btn-cancelar-os {
+    background: #FFFFFF;
+    color: #2C333D;
+    border: 1px solid #CBD5E1;
+    text-decoration: none;
+}
+
+.btn-atualizar-lista:hover,
+.btn-secundario:hover,
+.btn-cancelar-os:hover {
+    background: #E2E8F0;
+    color: #20252D;
+}
+
+
+/* =====================================================
+   MODAIS
+===================================================== */
+
+#modalDetalhesOS,
+#modalEditarOS {
+    background: rgba(0, 0, 0, .70);
+    backdrop-filter: blur(4px);
+}
+
+#modalDetalhesOS .modal-conteudo,
+#modalEditarOS .modal-conteudo {
+    background: #FFFFFF;
+    border: 1px solid #404956;
+}
+
+.modal-topo h2 {
+    color: #20252D;
+}
+
+.modal-etiqueta {
+    color: #C2410C;
+}
+
+.detalhes-secao h3 {
+    color: #2C333D;
+}
+
+.detalhe-item,
+.detalhe-bloco {
+    background: #F4F6F8;
+    border-color: #DCE2E8;
+}
+
+.detalhe-item strong {
+    color: #20252D;
+}
+
+.detalhe-lucro {
+    background: #F0FDF4;
+    border-color: #BBF7D0;
+}
+
+.detalhe-lucro strong {
+    color: #15803D;
+}
+
+.detalhe-lucro strong.lucro-negativo {
+    color: #B91C1C;
+}
+
+.btn-fechar {
+    background: #2C333D;
+    color: #FFFFFF;
+}
+
+.btn-fechar:hover {
+    background: #39424E;
+    color: #FFFFFF;
+}
+
+
+/* =====================================================
+   FORMULÁRIO DE NOVA OS
+===================================================== */
+
+.formulario-topo h2 {
+    color: #20252D;
+}
+
+.formulario-secao h3 {
+    color: #2C333D;
+    border-left-color: #F97316;
+}
+
+.grupo label {
+    color: #334155;
+}
+
+input,
+textarea,
+select {
+    border-color: #CBD5E1;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #F97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, .15);
+}
+
+
+/* =====================================================
+   ESTOQUE
+===================================================== */
+
+.pagina-estoque .estoque-topo h2 {
+    color: #FFFFFF;
+}
+
+.pagina-estoque .estoque-topo p {
+    color: #B8C2CF;
+}
+
+.pagina-estoque .estoque-secao,
+.pagina-estoque .estoque-resumo > div,
+.pagina-estoque .peca-card {
+    background: #FFFFFF;
+    border-color: #D6DDE5;
+}
+
+.pagina-estoque .estoque-menu {
+    background: #2C333D;
+    border-color: #404956;
+    box-shadow: none;
+}
+
+.pagina-estoque .estoque-menu a,
+.pagina-estoque .estoque-menu .estoque-menu-item {
+    color: #E2E8F0;
+}
+
+.pagina-estoque .estoque-menu a:hover,
+.pagina-estoque .estoque-menu .estoque-menu-item:hover {
+    background: #39424E;
+    color: #FFFFFF;
+}
+
+.pagina-estoque .estoque-menu .ativo {
+    background: #F97316;
+    color: #20252D;
+}
+
+.pagina-estoque button:not(.btn-secundario):not(.secundario) {
+    background: #F97316;
+    color: #20252D;
+}
+
+.pagina-estoque .mensagem-vazia {
+    background: #F1F5F9;
+}
+
+
+/* =====================================================
+   TELA DE CARREGAMENTO
+===================================================== */
+
+#loadingSite {
+    background: #20252D;
+}
+
+.loading-card {
+    background: #2C333D;
+    border: 1px solid #404956;
+    box-shadow: none;
+}
+
+.loading-card h2 {
+    color: #FFFFFF;
+}
+
+.loading-card p {
+    color: #B8C2CF;
+}
+
+.spinner {
+    border-color: #505B69;
+    border-top-color: #F97316;
+}
+
